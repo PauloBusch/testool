@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TesTool
+namespace TesTool.Cli
 {
     class Program
     {
