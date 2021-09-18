@@ -1,17 +1,13 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using TesTool.Core.Interfaces.Services;
 using TesTool.IntegrationTests.Common;
 using Xunit;
 
 namespace TesTool.IntegrationTests.Services
 {
-    public class SettingsServiceTests : TestBase
+    public class SettingsServiceTests : ServiceTestBase<ISettingsService>
     {
-        private readonly ISettingsService _service;
-        public SettingsServiceTests(TesToolFixture fixture) : base(fixture) { 
-            _service = Services.GetRequiredService<ISettingsService>();
-        }
+        public SettingsServiceTests(TesToolFixture fixture) : base(fixture) { }
 
         [Theory]
         [InlineData("NUMBER", "123")]
