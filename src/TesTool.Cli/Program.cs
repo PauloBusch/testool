@@ -8,8 +8,8 @@ namespace TesTool.Cli
     {
         static void Main(string[] args)
         {
-            var serviceProvider = new ServiceCollection()
-                .AddLogging(options => options.AddConsole())
+            using var serviceProvider = new ServiceCollection()
+                .AddLogging(options => options.AddSimpleConsole())
                 .AddServices()
                 .BuildServiceProvider();
 

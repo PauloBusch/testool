@@ -1,14 +1,13 @@
-﻿using System.Threading.Tasks;
-using TesTool.Core.Attributes;
+﻿using TesTool.Core.Attributes;
+using TesTool.Core.Interfaces.Services;
 
 namespace TesTool.Core.Commands.Configure
 {
     [Command("--project", "-p")]
     public class ConfigureProjectCommand : ConfigureCommandBase
     {
-        public override Task ExecuteAsync()
-        {
-            throw new System.NotImplementedException();
-        }
+        static ConfigureProjectCommand() { SETTINGS_KEY = "PROJECT_DIRECTORY"; }
+
+        public ConfigureProjectCommand(ISettingsService settingsService) : base(settingsService) { }
     }
 }
