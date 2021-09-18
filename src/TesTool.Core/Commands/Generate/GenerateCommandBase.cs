@@ -2,10 +2,10 @@
 using TesTool.Core.Attributes;
 using TesTool.Core.Interfaces;
 
-namespace TesTool.Core.Commands.Configure
+namespace TesTool.Core.Commands.Generate
 {
-    [Command("configure", "c")]
-    public abstract class ConfigureCommandBase : ICommand
+    [Command("generate", "g")]
+    public abstract class GenerateCommandBase : ICommand
     {
         public abstract Task ExecuteAsync();
     }

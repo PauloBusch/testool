@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
-using TesTool.Core.Interfaces.Services;
+using TesTool.Infra.Services;
 using TesTool.IntegrationTests.Common;
 using Xunit;
 
 namespace TesTool.IntegrationTests.Services
 {
-    public class SettingsServiceTests : ServiceTestBase<ISettingsService>
+    public class SettingsServiceTests : TestBase
     {
         public SettingsServiceTests(TesToolFixture fixture) : base(fixture) { }
 
@@ -15,8 +15,10 @@ namespace TesTool.IntegrationTests.Services
         [InlineData("TEXT", "Lorem Ipsum é simplesmente uma simulação de texto...")]
         public async Task ShouldSaveAndReturnStringAsync(string key, string value)
         {
-            await _service.SetStringAsync(key, value);
-            var result = await _service.GetStringAsync(key);
+            var service = new SettingsService();
+
+            await service.SetStringAsync(key, value);
+            var result = await service.GetStringAsync(key);
 
             Assert.Equal(value, result);
         }

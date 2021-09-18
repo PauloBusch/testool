@@ -8,7 +8,9 @@ namespace TesTool.Cli
     {
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
-            return services.AddSingleton<ISettingsService, SettingsService>();
+            return services
+                .AddSingleton<ISettingsService, SettingsService>()
+                .AddSingleton<ICommandFactoryService, CommandFactoryService>();
         }
     }
 }

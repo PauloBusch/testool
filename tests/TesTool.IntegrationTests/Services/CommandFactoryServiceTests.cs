@@ -1,17 +1,27 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using Moq;
+using System;
 using System.Threading.Tasks;
 using TesTool.Core.Commands.Configure;
-using TesTool.Core.Interfaces.Services;
+using TesTool.Infra.Services;
 using TesTool.IntegrationTests.Common;
 using Xunit;
 
 namespace TesTool.IntegrationTests.Services
 {
-    public class ArgumentsServiceTests : ServiceTestBase<IArgumentsService>
+    public class CommandFactoryServiceTests : TestBase
     {
-        public ArgumentsServiceTests(TesToolFixture fixture) : base(fixture) { }
+        private readonly Mock<ILogger<CommandFactoryService>> _loggerMock;
+        private readonly CommandFactoryService _service;
+
+        public CommandFactoryServiceTests(TesToolFixture fixture) : base(fixture) { 
+            _loggerMock = new Mock<ILogger<CommandFactoryService>>();
+            _service = new CommandFactoryService(_loggerMock.Object);
+        }
 
         [Theory]
+        [InlineData("")]
+        [InlineData(null)]
         [InlineData("move")]
         [InlineData("create")]
         [InlineData("m c u")]
@@ -19,9 +29,10 @@ namespace TesTool.IntegrationTests.Services
         {
             var arguments = rawArguments.Split(" ");
 
-            var command = await _service.GetCommandAsync(arguments);
+            var command = await _service.CreateCommandAsync(arguments);
 
             Assert.Null(command);
+            _loggerMock.Verify(l => l.LogError(It.IsAny<string>()), Times.Once);
         }
 
         [Theory]
@@ -31,10 +42,11 @@ namespace TesTool.IntegrationTests.Services
         {
             var arguments = rawArguments.Split(" ");
 
-            var command = await _service.GetCommandAsync(arguments);
+            var command = await _service.CreateCommandAsync(arguments);
 
             Assert.NotNull(command);
             Assert.Equal(type, command.GetType());
+            _loggerMock.Verify(l => l.LogError(It.IsAny<string>()), Times.Never);
         }
 
         [Fact]
@@ -43,11 +55,12 @@ namespace TesTool.IntegrationTests.Services
             var directory = @"C:\Projetos\Api";
             var arguments = new [] { "--configure", "--project", directory };
 
-            var command = await _service.GetCommandAsync(arguments);
+            var command = await _service.CreateCommandAsync(arguments);
             var configureProjectCommand = command as ConfigureProjectCommand;
 
             Assert.NotNull(configureProjectCommand);
             Assert.Equal(directory, configureProjectCommand.Directory);
+            _loggerMock.Verify(l => l.LogError(It.IsAny<string>()), Times.Never);
         }
     }
 }
