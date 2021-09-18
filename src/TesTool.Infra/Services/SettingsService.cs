@@ -21,7 +21,7 @@ namespace TesTool.Infra.Services
 
         public async Task SetStringAsync(string key, string value)
         {
-            var dictionary = null as Dictionary<string, string>;
+            var dictionary = new Dictionary<string, string>();
             if (File.Exists(FILE_PATH))
             {
                 var json = await File.ReadAllTextAsync(FILE_PATH);
