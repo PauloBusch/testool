@@ -1,9 +1,5 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using TesTool.Core.Attributes;
-using TesTool.Core.Commands.Configure;
-using TesTool.Infra.Service;
+﻿using Microsoft.Extensions.DependencyInjection;
+using TesTool.Core.Interfaces.Services;
 
 namespace TesTool.Cli
 {
@@ -11,15 +7,13 @@ namespace TesTool.Cli
     {
         static void Main(string[] args)
         {
-            var command = new ConfigureProjectCommand();
+            var serviceProvider = new ServiceCollection()
+                .AddLogging()
+                .AddServices()
+                .BuildServiceProvider();
 
-            var commands = command.GetType().GetCustomAttributes<CommandAttribute>();
-
-            Console.WriteLine(commands.Select(c => $"Name: {c.Name}, Alias: {c.Alias}, TypeId: {c.TypeId}"));
-
-            var settings = new SettingsInfraService();
-            settings.SetStringAsync("PROJECT_DIRECTORY", "C:/Projetos").Wait();
-            var test = settings.GetStringAsync("PROJECT_DIRECTORY").Result;
+            var argumentsCoreService = serviceProvider.GetService<IArgumentsService>();
+            argumentsCoreService.GetCommandAsync(args).Result?.ExecuteAsync().Wait();
         }
     }
 }

@@ -2,11 +2,11 @@
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
-using TesTool.Core.Interfaces;
+using TesTool.Core.Interfaces.Services;
 
-namespace TesTool.Infra.Service
+namespace TesTool.Infra.Services
 {
-    public class SettingsInfraService : ISettingsService
+    public class SettingsService : ISettingsService
     {
         private static string FILE_PATH = "config.json";
 
