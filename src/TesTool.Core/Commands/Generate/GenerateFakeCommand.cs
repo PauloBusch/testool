@@ -4,7 +4,7 @@ using TesTool.Core.Attributes;
 
 namespace TesTool.Core.Commands.Generate
 {
-    [Command("fake", "f")]
+    [Command("--fake", "-f")]
     public class GenerateFakeCommand : GenerateCommandBase
     {
         [Parameter(IsDefault = true)]
@@ -12,9 +12,6 @@ namespace TesTool.Core.Commands.Generate
 
         [Parameter(IsDefault = true)]
         public string FactoryName { get; set; }
-
-        [Flag]
-        public string Static { get; set; }
 
         public override Task ExecuteAsync()
         {

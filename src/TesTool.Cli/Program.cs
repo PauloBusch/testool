@@ -14,7 +14,7 @@ namespace TesTool.Cli
                 .BuildServiceProvider();
 
             var argumentsCoreService = serviceProvider.GetService<ICommandFactoryService>();
-            argumentsCoreService.CreateCommandAsync(args).Result?.ExecuteAsync().Wait();
+            argumentsCoreService.CreateCommand(args)?.ExecuteAsync().Wait();
         }
     }
 }

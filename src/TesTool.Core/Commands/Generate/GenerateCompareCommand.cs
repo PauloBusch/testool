@@ -3,7 +3,7 @@ using TesTool.Core.Attributes;
 
 namespace TesTool.Core.Commands.Generate
 {
-    [Command("compare", "c")]
+    [Command("--compare", "-c")]
     public class GenerateCompareCommand : GenerateCommandBase
     {
         [Parameter(IsDefault = true)]
@@ -14,9 +14,6 @@ namespace TesTool.Core.Commands.Generate
 
         [Parameter(IsDefault = true)]
         public string ComparatorName { get; set; }
-
-        [Flag]
-        public string Static { get; set; }
         
         public override Task ExecuteAsync()
         {
