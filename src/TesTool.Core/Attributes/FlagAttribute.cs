@@ -2,6 +2,7 @@
 
 namespace TesTool.Core.Attributes
 {
+    [AttributeUsage(AttributeTargets.Property)]
     public class FlagAttribute : Attribute
     {
         public FlagAttribute(string name)

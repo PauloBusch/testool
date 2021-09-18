@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection;
+using TesTool.Core.Attributes;
+using TesTool.Core.Commands.Configure;
 
 namespace TesTool.Cli
 {
@@ -6,7 +10,11 @@ namespace TesTool.Cli
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var command = new ConfigureProjectCommand();
+
+            var commands = command.GetType().GetCustomAttributes<CommandAttribute>();
+
+            Console.WriteLine(commands.Select(c => $"Name: {c.Name}, Alias: {c.Alias}, TypeId: {c.TypeId}"));
         }
     }
 }
