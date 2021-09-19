@@ -24,4 +24,8 @@
     <ProjectReference Include="..\..\src\TesTool.Core\TesTool.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Commands\" />
+  </ItemGroup>
+
 </Project>

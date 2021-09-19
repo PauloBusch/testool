@@ -9,18 +9,18 @@ namespace TesTool.Core.Commands.Options
     [Command("--version", "-v")]
     public class VersionCommand : ICommand
     {
-        private readonly ILoggerService<VersionCommand> _logger;
+        private readonly ILoggerService _loggerService;
 
-        public VersionCommand(ILoggerService<VersionCommand> logger)
+        public VersionCommand(ILoggerService loggerService)
         {
-            _logger = logger;
+            _loggerService = loggerService;
         }
 
         public Task ExecuteAsync()
         {
             var assembly = Assembly.GetExecutingAssembly();
             var version = FileVersionInfo.GetVersionInfo(assembly.Location).FileVersion;
-            _logger.LogInformation(version);
+            _loggerService.LogInformation(version);
             return Task.CompletedTask;
         }
     }

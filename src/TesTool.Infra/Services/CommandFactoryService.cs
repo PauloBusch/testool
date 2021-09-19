@@ -10,15 +10,15 @@ namespace TesTool.Infra.Services
 {
     public class CommandFactoryService : ICommandFactoryService
     {
-        private readonly ILoggerService<CommandFactoryService> _logger;
+        private readonly ILoggerService _loggerService;
         private readonly IServiceProvider _serviceProvider;
 
         public CommandFactoryService(
-            ILoggerService<CommandFactoryService> logger,
+            ILoggerService loggerService,
             IServiceProvider serviceProvider
         )
         {
-            _logger = logger;
+            _loggerService = loggerService;
             _serviceProvider = serviceProvider;
         }
 
@@ -26,7 +26,7 @@ namespace TesTool.Infra.Services
         {
             if (args == null || !args.Any())
             {
-                _logger.LogError("Require any argument.");
+                _loggerService.LogError("Require any argument.");
                 return default;
             }
 
@@ -46,7 +46,7 @@ namespace TesTool.Infra.Services
             });
             if (commandType == null)
             {
-                _logger.LogError("Command not found.");
+                _loggerService.LogError("Command not found.");
                 return default;
             }
             var command = _serviceProvider.GetService(commandType) as ICommand;
@@ -70,7 +70,7 @@ namespace TesTool.Infra.Services
                         && !propertyAttribute.IsDefault 
                     )
                     {
-                        _logger.LogError($"Property {property.Name} is required.");
+                        _loggerService.LogError($"Property {property.Name} is required.");
                         return default;
                     }
                 }
@@ -88,7 +88,7 @@ namespace TesTool.Infra.Services
                         arguments.RemoveAll(a => a == value);
                     } else if (propertyAttribute.IsRequired)
                     {
-                        _logger.LogError($"No value provied from {property.Name} property.");
+                        _loggerService.LogError($"No value provied from {property.Name} property.");
                         return default;
                     }
                 }
@@ -97,7 +97,7 @@ namespace TesTool.Infra.Services
 
             if (arguments.Any())
             {
-                _logger.LogError($"Unrecognized arguments {string.Join(", ", arguments)}.");
+                _loggerService.LogError($"Unrecognized arguments {string.Join(", ", arguments)}.");
                 return default;
             }
 

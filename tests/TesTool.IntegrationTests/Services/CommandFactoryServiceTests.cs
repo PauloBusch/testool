@@ -2,11 +2,9 @@
 using Moq;
 using System;
 using System.Linq;
-using TesTool.Cli;
 using TesTool.Core.Commands.Configure;
 using TesTool.Core.Commands.Generate;
-using TesTool.Core.Interfaces;
-using TesTool.Infra.Services;
+using TesTool.Core.Interfaces.Services;
 using TesTool.IntegrationTests._Common;
 using Xunit;
 
@@ -14,13 +12,10 @@ namespace TesTool.IntegrationTests.Services
 {
     public class CommandFactoryServiceTests : TestBase
     {
-        private readonly Mock<ILoggerService<CommandFactoryService>> _loggerMock;
-        private readonly CommandFactoryService _service;
+        private readonly ICommandFactoryService _factory;
 
         public CommandFactoryServiceTests(TesToolFixture fixture) : base(fixture) { 
-            var serviceProvider = new ServiceCollection().AddServices().BuildServiceProvider();
-            _loggerMock = new Mock<ILoggerService<CommandFactoryService>>();
-            _service = new CommandFactoryService(_loggerMock.Object, serviceProvider);
+            _factory = _services.GetRequiredService<ICommandFactoryService>();
         }
 
         [Theory]
@@ -36,10 +31,10 @@ namespace TesTool.IntegrationTests.Services
         {
             var arguments = rawArguments?.Split(" ");
 
-            var command = _service.CreateCommand(arguments);
+            var command = _factory.CreateCommand(arguments);
 
             Assert.Null(command);
-            _loggerMock.Verify(logger => logger.LogError(It.IsAny<string>()), Times.Once);
+            _loggerServiceMock.Verify(logger => logger.LogError(It.IsAny<string>()), Times.Once);
         }
 
         [Theory]
@@ -51,11 +46,11 @@ namespace TesTool.IntegrationTests.Services
         {
             var arguments = rawArguments.Split(" ");
 
-            var command = _service.CreateCommand(arguments);
+            var command = _factory.CreateCommand(arguments);
 
             Assert.NotNull(command);
             Assert.Equal(type, command.GetType());
-            _loggerMock.Verify(logger => logger.LogError(It.IsAny<string>()), Times.Never);
+            _loggerServiceMock.Verify(logger => logger.LogError(It.IsAny<string>()), Times.Never);
         }
 
         [Theory]
@@ -65,12 +60,12 @@ namespace TesTool.IntegrationTests.Services
         {
             var arguments = new[] { "--generate", "--project", "Project", flag };
 
-            var command = _service.CreateCommand(arguments.ToArray());
+            var command = _factory.CreateCommand(arguments.ToArray());
             var configureProjectCommand = command as GenerateProjectCommand;
 
             Assert.NotNull(configureProjectCommand);
             Assert.True(configureProjectCommand.Static);
-            _loggerMock.Verify(logger => logger.LogError(It.IsAny<string>()), Times.Never);
+            _loggerServiceMock.Verify(logger => logger.LogError(It.IsAny<string>()), Times.Never);
         }
 
         [Theory]
@@ -84,12 +79,12 @@ namespace TesTool.IntegrationTests.Services
                 parameter, output 
             };
 
-            var command = _service.CreateCommand(arguments.ToArray());
+            var command = _factory.CreateCommand(arguments.ToArray());
             var configureProjectCommand = command as GenerateProjectCommand;
 
             Assert.NotNull(configureProjectCommand);
             Assert.Equal(output, configureProjectCommand.Output);
-            _loggerMock.Verify(logger => logger.LogError(It.IsAny<string>()), Times.Never);
+            _loggerServiceMock.Verify(logger => logger.LogError(It.IsAny<string>()), Times.Never);
         }
 
         [Fact]
@@ -103,14 +98,14 @@ namespace TesTool.IntegrationTests.Services
                 sourceClassName, targetClassName, comparatorName 
             };
 
-            var command = _service.CreateCommand(arguments.ToArray());
+            var command = _factory.CreateCommand(arguments.ToArray());
             var configureProjectCommand = command as GenerateCompareCommand;
 
             Assert.NotNull(configureProjectCommand);
             Assert.Equal(sourceClassName, configureProjectCommand.SourceClassName);
             Assert.Equal(targetClassName, configureProjectCommand.TargetClassName);
             Assert.Equal(comparatorName, configureProjectCommand.ComparatorName);
-            _loggerMock.Verify(logger => logger.LogError(It.IsAny<string>()), Times.Never);
+            _loggerServiceMock.Verify(logger => logger.LogError(It.IsAny<string>()), Times.Never);
         }
     }
 }

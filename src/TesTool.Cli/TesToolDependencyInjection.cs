@@ -12,7 +12,7 @@ namespace TesTool.Cli
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             services
-                .AddSingleton(typeof(ILoggerService<>), typeof(LoggerService<>))
+                .AddSingleton<ILoggerService, LoggerService>()
                 .AddSingleton<ISettingsService, SettingsService>()
                 .AddSingleton<ICommandFactoryService, CommandFactoryService>();
 

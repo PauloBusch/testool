@@ -1,28 +1,35 @@
 ﻿using System.Threading.Tasks;
 using TesTool.Core.Attributes;
+using TesTool.Core.Enums;
 using TesTool.Core.Interfaces;
 using TesTool.Core.Interfaces.Services;
 
 namespace TesTool.Core.Commands.Configure
 {
     [Command("--configure", "-c")]
-    [Help("")]
     public abstract class ConfigureCommandBase : ICommand
     {
         [Parameter(IsDefault = true)]
-        public string Directory { get; set; }
+        public string Path { get; set; }
 
-        public static string SETTINGS_KEY;
-        private readonly ISettingsService _settingsService;
+        protected readonly Setting _setting;
+        protected readonly ILoggerService _loggerService;
+        protected readonly ISettingsService _settingsService;
 
-        public ConfigureCommandBase(ISettingsService settingsService)
+        public ConfigureCommandBase(
+            ILoggerService loggerService,
+            ISettingsService settingsService,
+            Setting setting
+        )
         {
+            _loggerService = loggerService;
             _settingsService = settingsService;
+            _setting = setting;
         }
 
-        public async Task ExecuteAsync()
+        public virtual async Task ExecuteAsync()
         {
-            await _settingsService.SetStringAsync(SETTINGS_KEY, Directory);
+            await _settingsService.SetStringAsync(_setting.ToString(), Path);
         }
     }
 }

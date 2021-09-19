@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
+using TesTool.Core.Interfaces.Services;
 using TesTool.Infra.Services;
 using TesTool.IntegrationTests._Common;
 using Xunit;
@@ -7,7 +9,11 @@ namespace TesTool.IntegrationTests.Services
 {
     public class SettingsServiceTests : TestBase
     {
-        public SettingsServiceTests(TesToolFixture fixture) : base(fixture) { }
+        private readonly ISettingsService _service;
+
+        public SettingsServiceTests(TesToolFixture fixture) : base(fixture) { 
+            _service = _services.GetRequiredService<ISettingsService>();    
+        }
 
         [Theory]
         [InlineData("NUMBER", "123")]
@@ -15,10 +21,8 @@ namespace TesTool.IntegrationTests.Services
         [InlineData("TEXT", "Lorem Ipsum é simplesmente uma simulação de texto...")]
         public async Task ShouldSaveAndReturnStringAsync(string key, string value)
         {
-            var service = new SettingsService();
-
-            await service.SetStringAsync(key, value);
-            var result = await service.GetStringAsync(key);
+            await _service.SetStringAsync(key, value);
+            var result = await _service.GetStringAsync(key);
 
             Assert.Equal(value, result);
         }
