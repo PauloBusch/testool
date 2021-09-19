@@ -1,25 +1,25 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.Linq;
 using TesTool.Cli;
 using TesTool.Core.Commands.Configure;
 using TesTool.Core.Commands.Generate;
+using TesTool.Core.Interfaces;
 using TesTool.Infra.Services;
-using TesTool.IntegrationTests.Common;
+using TesTool.IntegrationTests._Common;
 using Xunit;
 
 namespace TesTool.IntegrationTests.Services
 {
     public class CommandFactoryServiceTests : TestBase
     {
-        private readonly Mock<ILogger<CommandFactoryService>> _loggerMock;
+        private readonly Mock<ILoggerService<CommandFactoryService>> _loggerMock;
         private readonly CommandFactoryService _service;
 
         public CommandFactoryServiceTests(TesToolFixture fixture) : base(fixture) { 
             var serviceProvider = new ServiceCollection().AddServices().BuildServiceProvider();
-            _loggerMock = new Mock<ILogger<CommandFactoryService>>();
+            _loggerMock = new Mock<ILoggerService<CommandFactoryService>>();
             _service = new CommandFactoryService(_loggerMock.Object, serviceProvider);
         }
 
@@ -39,16 +39,7 @@ namespace TesTool.IntegrationTests.Services
             var command = _service.CreateCommand(arguments);
 
             Assert.Null(command);
-            _loggerMock.Verify(logger => logger.Log
-                (
-                    It.Is<LogLevel>(logLevel => logLevel == LogLevel.Error),
-                    It.IsAny<EventId>(),
-                    It.IsAny<It.IsAnyType>(),
-                    It.IsAny<Exception>(),
-                    It.IsAny<Func<It.IsAnyType, Exception, string>>()
-                ),
-                Times.Once
-            );
+            _loggerMock.Verify(logger => logger.LogError(It.IsAny<string>()), Times.Once);
         }
 
         [Theory]
@@ -64,16 +55,7 @@ namespace TesTool.IntegrationTests.Services
 
             Assert.NotNull(command);
             Assert.Equal(type, command.GetType());
-            _loggerMock.Verify(logger => logger.Log
-                (
-                    It.Is<LogLevel>(logLevel => logLevel == LogLevel.Error),
-                    It.IsAny<EventId>(),
-                    It.IsAny<It.IsAnyType>(),
-                    It.IsAny<Exception>(),
-                    It.IsAny<Func<It.IsAnyType, Exception, string>>()
-                ),
-                Times.Never
-            );
+            _loggerMock.Verify(logger => logger.LogError(It.IsAny<string>()), Times.Never);
         }
 
         [Theory]
@@ -88,16 +70,7 @@ namespace TesTool.IntegrationTests.Services
 
             Assert.NotNull(configureProjectCommand);
             Assert.True(configureProjectCommand.Static);
-            _loggerMock.Verify(logger => logger.Log
-                (
-                    It.Is<LogLevel>(logLevel => logLevel == LogLevel.Error),
-                    It.IsAny<EventId>(),
-                    It.IsAny<It.IsAnyType>(),
-                    It.IsAny<Exception>(),
-                    It.IsAny<Func<It.IsAnyType, Exception, string>>()
-                ),
-                Times.Never
-            );
+            _loggerMock.Verify(logger => logger.LogError(It.IsAny<string>()), Times.Never);
         }
 
         [Theory]
@@ -116,16 +89,7 @@ namespace TesTool.IntegrationTests.Services
 
             Assert.NotNull(configureProjectCommand);
             Assert.Equal(output, configureProjectCommand.Output);
-            _loggerMock.Verify(logger => logger.Log
-                (
-                    It.Is<LogLevel>(logLevel => logLevel == LogLevel.Error),
-                    It.IsAny<EventId>(),
-                    It.IsAny<It.IsAnyType>(),
-                    It.IsAny<Exception>(),
-                    It.IsAny<Func<It.IsAnyType, Exception, string>>()
-                ),
-                Times.Never
-            );
+            _loggerMock.Verify(logger => logger.LogError(It.IsAny<string>()), Times.Never);
         }
 
         [Fact]
@@ -146,16 +110,7 @@ namespace TesTool.IntegrationTests.Services
             Assert.Equal(sourceClassName, configureProjectCommand.SourceClassName);
             Assert.Equal(targetClassName, configureProjectCommand.TargetClassName);
             Assert.Equal(comparatorName, configureProjectCommand.ComparatorName);
-            _loggerMock.Verify(logger => logger.Log
-                (
-                    It.Is<LogLevel>(logLevel => logLevel == LogLevel.Error),
-                    It.IsAny<EventId>(),
-                    It.IsAny<It.IsAnyType>(),
-                    It.IsAny<Exception>(),
-                    It.IsAny<Func<It.IsAnyType, Exception, string>>()
-                ),
-                Times.Never
-            );
+            _loggerMock.Verify(logger => logger.LogError(It.IsAny<string>()), Times.Never);
         }
     }
 }

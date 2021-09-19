@@ -13,5 +13,12 @@ namespace TesTool.Core.Attributes
 
         public string Name { get; private set; }
         public string Alias { get; private set; }
+
+        public bool Equals(string value)
+        {
+            if (Name.Equals(value)) return true;
+            if (!string.IsNullOrWhiteSpace(Alias)) return Alias.Equals(value);
+            return false;
+        }
     }
 }

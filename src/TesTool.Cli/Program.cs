@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using TesTool.Core.Interfaces.Services;
 
 namespace TesTool.Cli
@@ -9,7 +8,6 @@ namespace TesTool.Cli
         static void Main(string[] args)
         {
             using var serviceProvider = new ServiceCollection()
-                .AddLogging(options => options.AddSimpleConsole())
                 .AddServices()
                 .BuildServiceProvider();
 

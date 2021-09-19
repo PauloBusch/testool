@@ -1,6 +1,6 @@
 ﻿using Xunit;
 
-namespace TesTool.UnitTests.Common
+namespace TesTool.UnitTests._Common
 {
     public class TestBase : IClassFixture<TesToolFixture>
     {

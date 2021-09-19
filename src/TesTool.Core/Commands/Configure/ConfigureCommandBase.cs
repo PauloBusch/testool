@@ -6,6 +6,7 @@ using TesTool.Core.Interfaces.Services;
 namespace TesTool.Core.Commands.Configure
 {
     [Command("--configure", "-c")]
+    [Help("")]
     public abstract class ConfigureCommandBase : ICommand
     {
         [Parameter(IsDefault = true)]

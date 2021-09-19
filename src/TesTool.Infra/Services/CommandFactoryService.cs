@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -11,11 +10,11 @@ namespace TesTool.Infra.Services
 {
     public class CommandFactoryService : ICommandFactoryService
     {
-        private readonly ILogger<CommandFactoryService> _logger;
+        private readonly ILoggerService<CommandFactoryService> _logger;
         private readonly IServiceProvider _serviceProvider;
 
         public CommandFactoryService(
-            ILogger<CommandFactoryService> logger,
+            ILoggerService<CommandFactoryService> logger,
             IServiceProvider serviceProvider
         )
         {
@@ -43,9 +42,7 @@ namespace TesTool.Infra.Services
                 if (args.Length < commands.Count()) return false;
                 return commands
                     .Select((c, i) => new { Command = c, Index = i })
-                    .All(p => new [] { p.Command.Name, p.Command.Alias }
-                        .Contains(args.ElementAt(p.Index))
-                    );
+                    .All(p => p.Command.Equals(args.ElementAt(p.Index)));
             });
             if (commandType == null)
             {

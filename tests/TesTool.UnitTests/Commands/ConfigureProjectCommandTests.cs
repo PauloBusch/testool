@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using TesTool.Core.Commands.Configure;
 using TesTool.Core.Interfaces.Services;
-using TesTool.UnitTests.Common;
+using TesTool.UnitTests._Common;
 using Xunit;
 
 namespace TesTool.UnitTests.Commands

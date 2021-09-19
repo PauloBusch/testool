@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using TesTool.Infra.Services;
-using TesTool.IntegrationTests.Common;
+using TesTool.IntegrationTests._Common;
 using Xunit;
 
 namespace TesTool.IntegrationTests.Services
