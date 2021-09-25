@@ -13,17 +13,17 @@ namespace TesTool.IntegrationTests.Commands.Configure
     public class ConfigureConventionCommandTests : TestBase
     {
         private readonly ICommandFactoryService _factory;
-        private readonly ISettingsService _settingsService;
+        private readonly ISettingInfraService _settingsService;
 
         public ConfigureConventionCommandTests(TesToolFixture fixture) : base(fixture)
         {
             _factory = _services.GetRequiredService<ICommandFactoryService>();
-            _settingsService = _services.GetRequiredService<ISettingsService>();
+            _settingsService = _services.GetRequiredService<ISettingInfraService>();
         }
 
         [Theory]
-        [InlineData(@"-c -c convention.json")]
-        [InlineData(@"--configure --convention convention.json")]
+        [InlineData(@"c c convention.json")]
+        [InlineData(@"configure convention convention.json")]
         public async Task ShouldRejectConfigureConventionAsync(string rawCommand)
         {
             var arguments = rawCommand.Split(" ");
@@ -37,8 +37,8 @@ namespace TesTool.IntegrationTests.Commands.Configure
         }
 
         [Theory]
-        [InlineData(@"-c -c Assets\convention.json")]
-        [InlineData(@"--configure --convention Assets\convention.json")]
+        [InlineData(@"c c Assets\convention.json")]
+        [InlineData(@"configure convention Assets\convention.json")]
         public async Task ShouldAcceptConfigureConventionAsync(string rawCommand)
         {
             var arguments = rawCommand.Split(" ");

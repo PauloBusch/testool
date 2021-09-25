@@ -13,18 +13,18 @@ namespace TesTool.IntegrationTests.Commands.Configure
     public class ConfigureProjectCommandTests : TestBase
     {
         private readonly ICommandFactoryService _factory;
-        private readonly ISettingsService _settingsService;
+        private readonly ISettingInfraService _settingsService;
 
         public ConfigureProjectCommandTests(TesToolFixture fixture) : base(fixture)
         {
             _factory = _services.GetRequiredService<ICommandFactoryService>();
-            _settingsService = _services.GetRequiredService<ISettingsService>();
+            _settingsService = _services.GetRequiredService<ISettingInfraService>();
         }
 
         [Theory]
-        [InlineData(@"-c -p Project")]
-        [InlineData(@"-c -p sample.csproj")]
-        [InlineData(@"--configure --project Project")]
+        [InlineData(@"c p Project")]
+        [InlineData(@"c p sample.csproj")]
+        [InlineData(@"configure project Project")]
         public async Task ShouldRejectConfigureProjectAsync(string rawCommand)
         {
             var arguments = rawCommand.Split(" ");
@@ -38,9 +38,9 @@ namespace TesTool.IntegrationTests.Commands.Configure
         }
 
         [Theory]
-        [InlineData(@"-c -p Assets")]
-        [InlineData(@"-c -p Assets/sample.csproj")]
-        [InlineData(@"--configure --project Assets")]
+        [InlineData(@"c p Assets")]
+        [InlineData(@"c p Assets/sample.csproj")]
+        [InlineData(@"configure project Assets")]
         public async Task ShouldAcceptConfigureProjectAsync(string rawCommand)
         {
             var command = _factory.CreateCommand(rawCommand.Split(" ")) as ConfigureProjectCommand;

@@ -23,9 +23,9 @@ namespace TesTool.IntegrationTests.Services
         [InlineData("test")]
         [InlineData("--move")]
         [InlineData("--create")]
-        [InlineData("-m -c -u")]
-        [InlineData("-c -c")]
-        [InlineData("-c -c path reject")]
+        [InlineData("c -c")]
+        [InlineData("m c u")]
+        [InlineData("-c c path reject")]
         public void ShouldRejectCommand(string rawArguments)
         {
             var arguments = rawArguments?.Split(" ");
@@ -51,10 +51,10 @@ namespace TesTool.IntegrationTests.Services
         }
 
         [Theory]
-        [InlineData(@"-c -c C:\Projetos\Tests\convention.json", typeof(ConfigureConventionCommand))]
-        [InlineData(@"-c -p C:\Projetos\Api", typeof(ConfigureProjectCommand))]
-        [InlineData(@"--configure --convention C:\Projetos\Tests\convention.json", typeof(ConfigureConventionCommand))]
-        [InlineData(@"--configure --project C:\Projetos\Api", typeof(ConfigureProjectCommand))]
+        [InlineData(@"c c C:\Projetos\Tests\convention.json", typeof(ConfigureConventionCommand))]
+        [InlineData(@"c p C:\Projetos\Api", typeof(ConfigureProjectCommand))]
+        [InlineData(@"configure convention C:\Projetos\Tests\convention.json", typeof(ConfigureConventionCommand))]
+        [InlineData(@"configure project C:\Projetos\Api", typeof(ConfigureProjectCommand))]
         public void ShouldReturnCommandInstance(string rawArguments, Type type)
         {
             var arguments = rawArguments.Split(" ");
@@ -71,7 +71,7 @@ namespace TesTool.IntegrationTests.Services
         [InlineData("--static")]
         public void ShouldReturnCommandWithFlags(string flag)
         {
-            var arguments = new[] { "--generate", "--project", "Project", flag };
+            var arguments = new[] { "generate", "project", "Project", flag };
 
             var command = _factory.CreateCommand(arguments.ToArray());
             var configureProjectCommand = command as GenerateProjectCommand;
@@ -88,7 +88,7 @@ namespace TesTool.IntegrationTests.Services
         {
             var output = @"C:\Projetos\Tests";
             var arguments = new [] { 
-                "--generate", "--project", "Project",
+                "generate", "project", "Project",
                 parameter, output 
             };
 
@@ -107,12 +107,12 @@ namespace TesTool.IntegrationTests.Services
             var targetClassName = "ContactResponse";
             var comparatorName = "ObjectComparator";
             var arguments = new [] { 
-                "--generate", "--compare", 
+                "generate", "equal", 
                 sourceClassName, targetClassName, comparatorName 
             };
 
             var command = _factory.CreateCommand(arguments.ToArray());
-            var configureProjectCommand = command as GenerateCompareCommand;
+            var configureProjectCommand = command as GenerateEqualCommand;
 
             Assert.NotNull(configureProjectCommand);
             Assert.Equal(sourceClassName, configureProjectCommand.SourceClassName);

@@ -3,8 +3,8 @@ using TesTool.Core.Attributes;
 
 namespace TesTool.Core.Commands.Generate
 {
-    [Command("--compare", "-c", HelpText = "Gera código de comparação entre objetos.")]
-    public class GenerateCompareCommand : GenerateCommandBase
+    [Command("equal", "e", HelpText = "Gerar código de comparação entre objetos.")]
+    public class GenerateEqualCommand : GenerateCommandBase
     {
         [Parameter(IsDefault = true, HelpText = "Nome da classe de origem.")]
         public string SourceClassName { get; set; }

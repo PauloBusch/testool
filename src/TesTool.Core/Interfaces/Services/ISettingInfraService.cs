@@ -2,7 +2,7 @@
 
 namespace TesTool.Core.Interfaces.Services
 {
-    public interface ISettingsService
+    public interface ISettingInfraService
     {
         Task<string> GetStringAsync(string key);
         Task SetStringAsync(string key, string value);

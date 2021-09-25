@@ -4,7 +4,7 @@ using TesTool.Core.Attributes;
 
 namespace TesTool.Core.Commands.Generate
 {
-    [Command("--fake", "-f", HelpText = "Gera código de fabricação de objeto.")]
+    [Command("fake", "f", HelpText = "Gerar código de fabricação de objeto.")]
     public class GenerateFakeCommand : GenerateCommandBase
     {
         [Parameter(IsDefault = true, HelpText = "Nome da classe a ser fábricada.")]

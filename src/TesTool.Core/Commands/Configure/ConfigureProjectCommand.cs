@@ -3,31 +3,33 @@ using System.Linq;
 using System.Threading.Tasks;
 using TesTool.Core.Attributes;
 using TesTool.Core.Enumerations;
-using TesTool.Core.Interfaces;
 using TesTool.Core.Interfaces.Services;
 
 namespace TesTool.Core.Commands.Configure
 {
-    [Command("--project", "-p", HelpText = "Definir globalmente um projeto de trabalho.")]
+    [Command("project", "p", HelpText = "Definir globalmente um projeto de trabalho.")]
     public class ConfigureProjectCommand : ConfigureCommandBase
     {
         [Parameter(IsDefault = true, HelpText = "Diretório do projeto.")]
-        public override string Path { get; set; }
+        public string ProjectPath { get; set; }
+        
+        private readonly ILoggerInfraService _loggerService;
+        private readonly ISettingInfraService _settingsService;
 
         public ConfigureProjectCommand(
-            ILoggerService loggerService,
-            ISettingsService settingsService
-        ) : base(
-            loggerService, 
-            settingsService,
-            SettingEnumerator.PROJECT_DIRECTORY
-        ) { }
+            ILoggerInfraService loggerService,
+            ISettingInfraService settingsService
+        ) : base() 
+        {
+            _loggerService = loggerService;
+            _settingsService = settingsService;
+        }
 
         public override async Task ExecuteAsync()
         {
-            if (Directory.Exists(Path))
+            if (Directory.Exists(ProjectPath))
             {
-                var projectFiles = Directory.GetFiles(Path, "*.csproj");
+                var projectFiles = Directory.GetFiles(ProjectPath, "*.csproj");
                 if (!projectFiles.Any())
                 {
                     _loggerService.LogError("Project file is not found.");
@@ -37,22 +39,22 @@ namespace TesTool.Core.Commands.Configure
                     _loggerService.LogError("Exist many projects in current directory.");
                     return;
                 }
-                Path = projectFiles.Single();
-            } else if (File.Exists(Path))
+                ProjectPath = projectFiles.Single();
+            } else if (File.Exists(ProjectPath))
             {
-                if (System.IO.Path.GetExtension(Path) != ".csproj")
+                if (Path.GetExtension(ProjectPath) != ".csproj")
                 {
                     _loggerService.LogError("This file is not a project.");
                     return;
                 }
-                Path = Path.Replace("/", @"\");
+                ProjectPath = ProjectPath.Replace("/", @"\");
             } else
             {
                 _loggerService.LogError("Project file is not found.");
                 return;
             }
 
-            await base.ExecuteAsync();
+            await _settingsService.SetStringAsync(SettingEnumerator.PROJECT_DIRECTORY.Key, ProjectPath);
         }
     }
 }

@@ -3,15 +3,16 @@ using System.Reflection;
 using System.Threading.Tasks;
 using TesTool.Core.Attributes;
 using TesTool.Core.Interfaces;
+using TesTool.Core.Interfaces.Services;
 
 namespace TesTool.Core.Commands.Options
 {
-    [Command("--version", "-v", HelpText = "Exibir a versão do TesTool em uso.")]
+    [Command("--version", "-v", IsOption = true, HelpText = "Exiba a versão do TesTool em uso.")]
     public class VersionCommand : ICommand
     {
-        private readonly ILoggerService _loggerService;
+        private readonly ILoggerInfraService _loggerService;
 
-        public VersionCommand(ILoggerService loggerService)
+        public VersionCommand(ILoggerInfraService loggerService)
         {
             _loggerService = loggerService;
         }

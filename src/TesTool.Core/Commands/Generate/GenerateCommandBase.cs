@@ -4,7 +4,7 @@ using TesTool.Core.Interfaces;
 
 namespace TesTool.Core.Commands.Generate
 {
-    [Command("--generate", "-g")]
+    [Command("generate", "g", HelpText = "Gerar código C#.")]
     public abstract class GenerateCommandBase : ICommand
     {
         [Parameter(IsRequired = false, HelpText = "Diretório de saída.")]

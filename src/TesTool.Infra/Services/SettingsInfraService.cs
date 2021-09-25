@@ -6,7 +6,7 @@ using TesTool.Core.Interfaces.Services;
 
 namespace TesTool.Infra.Services
 {
-    public class SettingsService : ISettingsService
+    public class SettingsInfraService : ISettingInfraService
     {
         private static string FILE_PATH = "config.json";
 

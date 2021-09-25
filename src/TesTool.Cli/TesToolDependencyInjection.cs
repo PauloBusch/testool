@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using TesTool.Core.Interfaces;
 using TesTool.Core.Interfaces.Services;
+using TesTool.Core.Services;
 using TesTool.Infra.Services;
 
 namespace TesTool.Cli
@@ -12,8 +13,9 @@ namespace TesTool.Cli
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             services
-                .AddSingleton<ILoggerService, LoggerService>()
-                .AddSingleton<ISettingsService, SettingsService>()
+                .AddSingleton<ILoggerInfraService, LoggerInfraService>()
+                .AddSingleton<ISettingInfraService, SettingsInfraService>()
+                .AddSingleton<ICommandExplorerService, CommandExplorerService>()
                 .AddSingleton<ICommandFactoryService, CommandFactoryService>();
 
             var commandTypes = AppDomain.CurrentDomain

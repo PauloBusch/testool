@@ -3,7 +3,7 @@ using TesTool.Core.Attributes;
 
 namespace TesTool.Core.Commands.Generate
 {
-    [Command("--controller", "-c", HelpText = "Gera código de teste a partir de controlador.")]
+    [Command("controller", "c", HelpText = "Gerar código de teste a partir de controlador.")]
     public class GenerateControllerCommand : GenerateCommandBase
     {
         [Parameter(IsDefault = true, HelpText = "Nome da classe controlador.")]

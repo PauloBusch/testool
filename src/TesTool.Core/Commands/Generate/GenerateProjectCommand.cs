@@ -3,7 +3,7 @@ using TesTool.Core.Attributes;
 
 namespace TesTool.Core.Commands.Generate
 {
-    [Command("--project", "-p", HelpText = "Gera código de teste a partir de projeto.")]
+    [Command("project", "p", HelpText = "Gerar código de teste a partir de projeto.")]
     public class GenerateProjectCommand : GenerateCommandBase
     {
         [Parameter(IsDefault = true, HelpText = "Diretório do projeto.")]

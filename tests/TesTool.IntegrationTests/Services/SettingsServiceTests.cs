@@ -9,10 +9,10 @@ namespace TesTool.IntegrationTests.Services
 {
     public class SettingsServiceTests : TestBase
     {
-        private readonly ISettingsService _service;
+        private readonly ISettingInfraService _service;
 
         public SettingsServiceTests(TesToolFixture fixture) : base(fixture) { 
-            _service = _services.GetRequiredService<ISettingsService>();    
+            _service = _services.GetRequiredService<ISettingInfraService>();    
         }
 
         [Theory]

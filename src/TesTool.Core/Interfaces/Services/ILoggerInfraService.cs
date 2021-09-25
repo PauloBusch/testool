@@ -1,6 +1,6 @@
-﻿namespace TesTool.Core.Interfaces
+﻿namespace TesTool.Core.Interfaces.Services
 {
-    public interface ILoggerService
+    public interface ILoggerInfraService
     {
         void LogError(string message, params object[] args);
         void LogWarning(string message, params object[] args);
