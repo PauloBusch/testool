@@ -3,7 +3,7 @@ using Moq;
 using System.Linq;
 using System.Threading.Tasks;
 using TesTool.Core.Commands.Configure;
-using TesTool.Core.Enums;
+using TesTool.Core.Enumerations;
 using TesTool.Core.Interfaces.Services;
 using TesTool.IntegrationTests._Common;
 using Xunit;
@@ -32,7 +32,7 @@ namespace TesTool.IntegrationTests.Commands.Configure
 
             await command.ExecuteAsync();
 
-            Assert.NotEqual(expectedPath, await _settingsService.GetStringAsync(Setting.CONVENTION_PATH_FILE.ToString()));
+            Assert.NotEqual(expectedPath, await _settingsService.GetStringAsync(SettingEnumerator.CONVENTION_PATH_FILE.Key));
             _loggerServiceMock.Verify(l => l.LogError(It.IsAny<string>()), Times.Once);
         }
 
@@ -47,7 +47,7 @@ namespace TesTool.IntegrationTests.Commands.Configure
 
             await command.ExecuteAsync();
 
-            Assert.Equal(expectedPath, await _settingsService.GetStringAsync(Setting.CONVENTION_PATH_FILE.ToString()));
+            Assert.Equal(expectedPath, await _settingsService.GetStringAsync(SettingEnumerator.CONVENTION_PATH_FILE.Key));
             _loggerServiceMock.Verify(l => l.LogError(It.IsAny<string>()), Times.Never);
         }
     }

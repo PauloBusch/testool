@@ -24,18 +24,27 @@ namespace TesTool.Infra.Services
 
         public ICommand CreateCommand(string[] args)
         {
-            if (args == null || !args.Any())
-            {
-                _loggerService.LogError("Require any argument.");
-                return default;
-            }
-
             var commandTypes = AppDomain.CurrentDomain
                 .GetAssemblies()
                 .SelectMany(a => a.GetTypes())
                 .Where(t => t.IsClass && !t.IsAbstract)
                 .Where(t => typeof(ICommand).IsAssignableFrom(t))
                 .ToList();
+
+            if (args == null || !args.Any() || args.All(a => string.IsNullOrWhiteSpace(a)))
+            {
+                var defaultCommandType = commandTypes.SingleOrDefault(type => {
+                    var commands = type.GetCustomAttributes<CommandAttribute>().Reverse();
+                    return commands.Any(c => c.IsDefault);
+                });
+                if (defaultCommandType != null)
+                {
+                    var defaultCommand = _serviceProvider.GetService(defaultCommandType) as ICommand;
+                    if (defaultCommand != null) return defaultCommand;
+                }
+                _loggerService.LogError("Require any argument.");
+                return default;
+            }
 
             var commandType = commandTypes.SingleOrDefault(type => {
                 var commands = type.GetCustomAttributes<CommandAttribute>().Reverse();
@@ -44,6 +53,7 @@ namespace TesTool.Infra.Services
                     .Select((c, i) => new { Command = c, Index = i })
                     .All(p => p.Command.Equals(args.ElementAt(p.Index)));
             });
+
             if (commandType == null)
             {
                 _loggerService.LogError("Command not found.");

@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using TesTool.Core.Commands.Configure;
 using TesTool.Core.Commands.Generate;
+using TesTool.Core.Commands.Help;
 using TesTool.Core.Interfaces.Services;
 using TesTool.IntegrationTests._Common;
 using Xunit;
@@ -19,8 +20,6 @@ namespace TesTool.IntegrationTests.Services
         }
 
         [Theory]
-        [InlineData("")]
-        [InlineData(null)]
         [InlineData("test")]
         [InlineData("--move")]
         [InlineData("--create")]
@@ -35,6 +34,20 @@ namespace TesTool.IntegrationTests.Services
 
             Assert.Null(command);
             _loggerServiceMock.Verify(logger => logger.LogError(It.IsAny<string>()), Times.Once);
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(null)]
+        public void ShouldReturnDefaultCommand(string rawArguments)
+        {
+            var arguments = rawArguments?.Split(" ");
+
+            var command = _factory.CreateCommand(arguments);
+
+            Assert.NotNull(command);
+            Assert.Equal(typeof(HelpCommand), command.GetType());
+            _loggerServiceMock.Verify(logger => logger.LogError(It.IsAny<string>()), Times.Never);
         }
 
         [Theory]

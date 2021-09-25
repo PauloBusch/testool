@@ -3,7 +3,8 @@
 namespace TesTool.Core.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class ParameterAttribute : Attribute {
+    public class ParameterAttribute : AttributeBase
+    {
         public ParameterAttribute()
         {
             IsRequired = true;

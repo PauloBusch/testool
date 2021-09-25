@@ -7,10 +7,10 @@ namespace TesTool.Core.Commands.Generate
     [Command("--generate", "-g")]
     public abstract class GenerateCommandBase : ICommand
     {
-        [Parameter(IsRequired = false)]
+        [Parameter(IsRequired = false, HelpText = "Diretório de saída.")]
         public string Output { get; set; }
 
-        [Flag]
+        [Flag(HelpText = "Habilita modo estático de geração de código.")]
         public bool Static { get; set; }
 
         public abstract Task ExecuteAsync();

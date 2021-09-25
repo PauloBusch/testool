@@ -2,22 +2,25 @@
 using System.Linq;
 using System.Threading.Tasks;
 using TesTool.Core.Attributes;
-using TesTool.Core.Enums;
+using TesTool.Core.Enumerations;
 using TesTool.Core.Interfaces;
 using TesTool.Core.Interfaces.Services;
 
 namespace TesTool.Core.Commands.Configure
 {
-    [Command("--project", "-p")]
+    [Command("--project", "-p", HelpText = "Definir globalmente um projeto de trabalho.")]
     public class ConfigureProjectCommand : ConfigureCommandBase
     {
+        [Parameter(IsDefault = true, HelpText = "Diretório do projeto.")]
+        public override string Path { get; set; }
+
         public ConfigureProjectCommand(
             ILoggerService loggerService,
             ISettingsService settingsService
         ) : base(
             loggerService, 
-            settingsService, 
-            Setting.PROJECT_DIRECTORY
+            settingsService,
+            SettingEnumerator.PROJECT_DIRECTORY
         ) { }
 
         public override async Task ExecuteAsync()
