@@ -9,7 +9,7 @@ namespace TesTool.Core.Commands.Configure
     [Command("convention", "c", HelpText = "Definir arquivo de configuração de conveção.")]
     public class ConfigureConventionCommand : ConfigureCommandBase
     {
-        [Parameter(IsDefault = true, HelpText = "Diretório do arquivo de configuração.")]
+        [Parameter(HelpText = "Diretório do arquivo de configuração.")]
         public string ConfigurationPath { get; set; }
 
         private readonly ILoggerInfraService _loggerService;

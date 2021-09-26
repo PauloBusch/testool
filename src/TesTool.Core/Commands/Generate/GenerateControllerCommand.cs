@@ -6,7 +6,7 @@ namespace TesTool.Core.Commands.Generate
     [Command("controller", "c", HelpText = "Gerar código de teste a partir de controlador.")]
     public class GenerateControllerCommand : GenerateCommandBase
     {
-        [Parameter(IsDefault = true, HelpText = "Nome da classe controlador.")]
+        [Parameter(HelpText = "Nome da classe controlador.")]
         public string Controller { get; set; }
 
         public override Task ExecuteAsync()

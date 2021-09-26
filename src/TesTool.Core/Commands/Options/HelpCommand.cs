@@ -10,11 +10,11 @@ using TesTool.Core.Interfaces.Services;
 
 namespace TesTool.Core.Commands.Help
 {
-    [Command("--help", "-h", IsDefault = true, IsOption = true, HelpText = "Mostrar ajuda de linha de comando.")]
+    [Option] [Default]
+    [Command("--help", "-h", HelpText = "Mostrar ajuda de linha de comando.")]
     public class HelpCommand : ICommand
     {
         [Parameter(
-            IsDefault = true,
             IsRequired = false,
             IsCumulative = true,
             HelpText = "Ajuda para comando específico."
@@ -65,22 +65,30 @@ namespace TesTool.Core.Commands.Help
         {
             var template = "  {0,-20} {1}";
             var commandTypes = _commandExplorerService.GetAllCommandTypes();
-            var helperTexts = commandTypes
+            var optionHelperTexts = commandTypes
+                .Where(type => type.GetCustomAttributes<OptionAttribute>().Any())
                 .Select(type => type.GetCustomAttributes<CommandAttribute>().Reverse())
                 .Select(commands => commands.First())
                 .Distinct()
                 .Select(command =>
                 {
                     var commandOptions = !string.IsNullOrWhiteSpace(command.Alias) ? $"{command.Alias}|{command.Name}" : command.Name;
-                    return new { command.IsOption, HelpText = string.Format(template, commandOptions, command.HelpText) };
+                    return string.Format(template, commandOptions, command.HelpText);
+                })
+                .ToArray();
+            var commandHelperTexts = commandTypes
+                .Where(type => !type.GetCustomAttributes<OptionAttribute>().Any())
+                .Select(type => type.GetCustomAttributes<CommandAttribute>().Reverse())
+                .Select(commands => commands.First())
+                .Distinct()
+                .Select(command =>
+                {
+                    var commandOptions = !string.IsNullOrWhiteSpace(command.Alias) ? $"{command.Alias}|{command.Name}" : command.Name;
+                    return string.Format(template, commandOptions, command.HelpText);
                 })
                 .ToArray();
 
-            LogConsole(
-                default, new string[0],
-                options: helperTexts.Where(h => h.IsOption).Select(h => h.HelpText).ToArray(),
-                commands: helperTexts.Where(h => !h.IsOption).Select(h => h.HelpText).ToArray()
-            );
+            LogConsole(default, new string[0], options: optionHelperTexts, commands: commandHelperTexts);
         }
 
         private void LogSearchCommands(IEnumerable<Type> commandTypes)
@@ -88,10 +96,10 @@ namespace TesTool.Core.Commands.Help
             var template = "  {0,-30} {1}";
             var commandBaseType = commandTypes.FirstOrDefault()?.BaseType;
             var commandHelperTexts = commandTypes
+                .Where(type => !type.GetCustomAttributes<OptionAttribute>().Any())
                 .Select(type => type.GetCustomAttributes<CommandAttribute>().Reverse())
                 .Select(command => command.Last())
                 .Distinct()
-                .Where(command => !command.IsOption)
                 .Select(command =>
                 {
                     var commandOptions = !string.IsNullOrWhiteSpace(command.Alias) ? $"{command.Alias}|{command.Name}" : command.Name;
@@ -112,12 +120,17 @@ namespace TesTool.Core.Commands.Help
                 .Select(p => string.Format(template, $"<{p.Name.ToSnakeCase().ToUpper()}>", p.Parameter.HelpText))
                 .ToArray();
             var optionsHelperTexts = commandProperties
+                .Select(p => new { Name = p.Name, Option = p.GetCustomAttribute<OptionAttribute>() })
+                .Where(p => p.Option is not null)
+                .Select(p => string.Format(template, $"-{p.Name.ToLower().First()}, --{p.Name.ToLower()} <{p.Name.ToSnakeCase().ToUpper()}>", p.Option.HelpText))
+                .ToArray();
+            var flagsHelperTexts = commandProperties
                 .Select(p => new { Name = p.Name, Flag = p.GetCustomAttribute<FlagAttribute>() })
                 .Where(p => p.Flag is not null)
-                .Select(p => string.Format(template, $"-{p.Name.ToLower().First()}|--{p.Name.ToLower()}", p.Flag.HelpText))
+                .Select(p => string.Format(template, $"-{p.Name.ToLower().First()}, --{p.Name.ToLower()}", p.Flag.HelpText))
                 .ToArray();
 
-            LogConsole(commandType, argumentHelperTexts, optionsHelperTexts, new string[0]);
+            LogConsole(commandType, argumentHelperTexts, optionsHelperTexts.Concat(flagsHelperTexts), new string[0]);
         }
 
         private void LogConsole(
@@ -145,7 +158,7 @@ namespace TesTool.Core.Commands.Help
             if (arguments.Any())
             {
                 _loggerService.LogInformation("\nArgumentos:");
-                _loggerService.LogInformation(string.Join("\n", arguments.OrderBy(a => a)));
+                _loggerService.LogInformation(string.Join("\n", arguments));
             }
 
             if (options.Any())

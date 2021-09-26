@@ -7,7 +7,7 @@ namespace TesTool.Core.Commands.Generate
     [Command("generate", "g", HelpText = "Gerar código C#.")]
     public abstract class GenerateCommandBase : ICommand
     {
-        [Parameter(IsRequired = false, HelpText = "Diretório de saída.")]
+        [Option(HelpText = "Diretório de saída.")]
         public string Output { get; set; }
 
         [Flag(HelpText = "Habilita modo estático de geração de código.")]

@@ -10,7 +10,7 @@ namespace TesTool.Core.Commands.Configure
     [Command("project", "p", HelpText = "Definir globalmente um projeto de trabalho.")]
     public class ConfigureProjectCommand : ConfigureCommandBase
     {
-        [Parameter(IsDefault = true, HelpText = "Diretório do projeto.")]
+        [Parameter(HelpText = "Diretório do projeto.")]
         public string ProjectPath { get; set; }
         
         private readonly ILoggerInfraService _loggerService;

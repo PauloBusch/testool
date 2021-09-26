@@ -50,14 +50,5 @@ namespace TesTool.Core.Services
                     .All(props => args.Length > props.Index ? props.Command.Equals(args.ElementAt(props.Index)) : true);
             }).ToArray();
         }
-
-        public Type GetDefaultCommandType()
-        {
-            return GetAllCommandTypes().SingleOrDefault(type =>
-            {
-                var commands = type.GetCustomAttributes<CommandAttribute>().Reverse();
-                return commands.Any(c => c.IsDefault);
-            });
-        }
     }
 }

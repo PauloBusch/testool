@@ -11,7 +11,6 @@ namespace TesTool.Core.Attributes
         }
 
         public bool IsRequired { get; set; }
-        public bool IsDefault { get; set; }
         public bool IsCumulative { get; set; }
     }
 }

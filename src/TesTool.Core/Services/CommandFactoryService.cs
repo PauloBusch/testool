@@ -30,7 +30,8 @@ namespace TesTool.Core.Services
         {
             if (args == null || !args.Any() || args.All(a => string.IsNullOrWhiteSpace(a)))
             {
-                var defaultCommandType = _commandExplorerService.GetDefaultCommandType();
+                var defaultCommandType = _commandExplorerService.GetAllCommandTypes()
+                    .SingleOrDefault(type => type.GetCustomAttributes<DefaultAttribute>().Any());
                 if (defaultCommandType != null) return _serviceProvider.GetService(defaultCommandType) as ICommand;
                 _loggerService.LogError("Nenhum parâmetro foi informado.");
                 return default;
@@ -60,54 +61,64 @@ namespace TesTool.Core.Services
             {
                 var flagAttribute = property.GetCustomAttribute<FlagAttribute>();
                 var propertyAttribute = property.GetCustomAttribute<ParameterAttribute>();
-                if (flagAttribute == null && propertyAttribute == null) continue;
+                var optionAttribute = property.GetCustomAttribute<OptionAttribute>();
 
-                var matchArguments = new[] {
-                    $"--{property.Name.ToLower()}",
-                    $"-{property.Name.ToLower().First()}"
-                };
-                if (!arguments.Any(a => matchArguments.Contains(a)))
+                if (optionAttribute is not null || flagAttribute is not null)
                 {
-                    if (flagAttribute != null) continue;
-                    if (propertyAttribute != null
-                        && propertyAttribute.IsRequired
-                        && !propertyAttribute.IsDefault
-                    )
+                    var matchArguments = new[] {
+                        $"--{property.Name.ToLower()}",
+                        $"-{property.Name.ToLower().First()}"
+                    };
+
+                    if (!arguments.Any(a => matchArguments.Contains(a))) continue;
+
+                    if (flagAttribute is not null) property.SetValue(command, true, null);
+                    if (optionAttribute is not null)
                     {
-                        _loggerService.LogError($"Parâmetro obrigatório <{property.Name.ToSnakeCase().ToUpper()}>.");
-                        return default;
+                        var existIndex = arguments.Count >= 2;
+                        var validArgument = existIndex && !arguments.ElementAt(1).StartsWith("-");
+                        if (validArgument)
+                        {
+                            var value = arguments.ElementAt(1);
+                            property.SetValue(command, value, null);
+                            arguments.RemoveAll(a => a == value);
+                        } else
+                        {
+                            _loggerService.LogError($"Valor inválid para a opção --{property.Name.ToLower()}.");
+                            return default;
+                        }
                     }
+
+                    arguments.RemoveAll(a => matchArguments.Contains(a));
+                    continue;
                 }
 
-                if (flagAttribute != null) property.SetValue(command, true, null);
-                if (propertyAttribute != null)
+                if (propertyAttribute is not null)
                 {
-                    var valueIndex = propertyAttribute.IsDefault ? 0 : 1;
-                    var existIndex = arguments.Count >= valueIndex + 1;
+                    var existIndex = arguments.Count >= 1;
                     var validArgument = existIndex && (propertyAttribute.IsCumulative 
-                        ? true : !arguments.ElementAt(valueIndex).StartsWith("-")
+                        ? true : !arguments.ElementAt(0).StartsWith("-")
                     );
                     if (validArgument)
                     {
                         if (propertyAttribute.IsCumulative)
                         {
-                            var values = arguments.GetRange(valueIndex, arguments.Count - valueIndex);
+                            var values = arguments.GetRange(0, arguments.Count);
                             property.SetValue(command, string.Join(" ", values), null);
                             arguments.RemoveAll(a => values.Contains(a));
                         } else
                         {
-                            var value = arguments.ElementAt(valueIndex);
+                            var value = arguments.ElementAt(0);
                             property.SetValue(command, value, null);
                             arguments.RemoveAll(a => a == value);
                         }
                     }
                     else if (propertyAttribute.IsRequired)
                     {
-                        _loggerService.LogError($"Nenhum valor foi fornecido para o parâmetro <{property.Name.ToSnakeCase().ToUpper()}>.");
+                        _loggerService.LogError($"Parâmetro obrigatório <{property.Name.ToSnakeCase().ToUpper()}> não fornecido.");
                         return default;
                     }
                 }
-                arguments.RemoveAll(a => matchArguments.Contains(a));
             }
 
             if (arguments.Any())
