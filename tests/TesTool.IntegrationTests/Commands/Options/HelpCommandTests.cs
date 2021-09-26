@@ -18,8 +18,8 @@ namespace TesTool.IntegrationTests.Commands.Options
         }
 
         [Theory]
-        [InlineData("-h g")]
-        [InlineData("-h c")]
+        [InlineData("-h o")]
+        [InlineData("-h p")]
         [InlineData("-h s")]
         [InlineData("--help test")]
         [InlineData("--help configure projet")]

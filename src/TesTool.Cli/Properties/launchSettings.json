@@ -1,8 +1,7 @@
 {
   "profiles": {
     "TesTool.Cli": {
-      "commandName": "Project",
-      "commandLineArgs": "-h c"
+      "commandName": "Project"
     }
   }
 }
