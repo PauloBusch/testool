@@ -7,7 +7,7 @@ using TesTool.Core.Interfaces.Services;
 
 namespace TesTool.Core.Commands.Options
 {
-    [Option]
+    [Flag]
     [Command("--version", "-v", HelpText = "Exiba a versão do TesTool em uso.")]
     public class VersionCommand : ICommand
     {

@@ -26,28 +26,35 @@ namespace TesTool.Core.Services
             return _commandTypes;
         }
 
-        public Type GetCommandTypeExact(string[] args)
+        public Type GetCommandTypeExact(string[] arguments)
         {
-            if (args is null || args.Length == 0) return default;
-            return GetAllCommandTypes().SingleOrDefault(type =>
+            if (arguments is null || arguments.Length == 0) return default;
+            foreach (var type in GetAllCommandTypes())
             {
+                var isDefault = type.GetCustomAttributes<DefaultAttribute>().Any();
                 var commands = type.GetCustomAttributes<CommandAttribute>().Reverse();
-                if (args.Length < commands.Count()) return false;
-                return commands
+                if (isDefault && commands.Any(c => arguments.Any(a => c.Equals(a)))) return type;
+                if (arguments.Length < commands.Count()) continue;
+                
+                var matched = commands
                     .Select((c, i) => new { Command = c, Index = i })
-                    .All(props => props.Command.Equals(args.ElementAt(props.Index)));
-            });
+                    .All(props => props.Command.Equals(arguments.ElementAt(props.Index)));
+                if (matched) return type;
+            }
+            return default;
         }
 
-        public IEnumerable<Type> GetCommandTypesMatched(string[] args)
+        public IEnumerable<Type> GetCommandTypesMatched(string[] arguments)
         {
-            if (args is null || args.Length == 0) return default;
+            if (arguments is null || arguments.Length == 0) return default;
             return GetAllCommandTypes().Where(type =>
             {
+                var isDefault = type.GetCustomAttributes<DefaultAttribute>().Any();
                 var commands = type.GetCustomAttributes<CommandAttribute>().Reverse();
+                if (isDefault && commands.Any(c => arguments.Any(a => c.Equals(a)))) return true;
                 return commands
                     .Select((c, i) => new { Command = c, Index = i })
-                    .All(props => args.Length > props.Index ? props.Command.Equals(args.ElementAt(props.Index)) : true);
+                    .All(props => arguments.Length > props.Index ? props.Command.Equals(arguments.ElementAt(props.Index)) : true);
             }).ToArray();
         }
     }

@@ -2,6 +2,6 @@
 
 namespace TesTool.Core.Attributes
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Property)]
     public class OptionAttribute : AttributeBase { }
 }

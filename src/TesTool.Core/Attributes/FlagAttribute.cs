@@ -2,6 +2,6 @@
 
 namespace TesTool.Core.Attributes
 {
-    [AttributeUsage(AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property)]
     public class FlagAttribute : AttributeBase { }
 }

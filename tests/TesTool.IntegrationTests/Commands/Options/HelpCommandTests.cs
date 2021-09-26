@@ -41,11 +41,21 @@ namespace TesTool.IntegrationTests.Commands.Options
         [InlineData("-h g c")]
         [InlineData("-h c p")]
         [InlineData("-h c c")]
+        [InlineData("g -h")]
+        [InlineData("c -h")]
+        [InlineData("g c -h")]
+        [InlineData("c p -h")]
+        [InlineData("c c -h")]
         [InlineData("--help generate")]
         [InlineData("--help configure")]
         [InlineData("--help generate controller")]
         [InlineData("--help configure project")]
         [InlineData("--help configure convention")]
+        [InlineData("generate --help")]
+        [InlineData("configure --help")]
+        [InlineData("generate controller --help")]
+        [InlineData("configure project --help")]
+        [InlineData("configure convention --help")]
         public async Task ShouldLogHelpTextAsync(string rawCommand)
         {
             var command = _factory.CreateCommand(rawCommand.Split(" ")) as HelpCommand;

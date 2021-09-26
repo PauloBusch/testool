@@ -26,18 +26,18 @@ namespace TesTool.Core.Services
             _loggerService = loggerService;
         }
 
-        public ICommand CreateCommand(string[] args)
+        public ICommand CreateCommand(string[] arguments)
         {
-            if (args == null || !args.Any() || args.All(a => string.IsNullOrWhiteSpace(a)))
+            if (arguments == null || !arguments.Any() || arguments.All(a => string.IsNullOrWhiteSpace(a)))
             {
                 var defaultCommandType = _commandExplorerService.GetAllCommandTypes()
                     .SingleOrDefault(type => type.GetCustomAttributes<DefaultAttribute>().Any());
-                if (defaultCommandType != null) return _serviceProvider.GetService(defaultCommandType) as ICommand;
+                if (defaultCommandType is not null) return _serviceProvider.GetService(defaultCommandType) as ICommand;
                 _loggerService.LogError("Nenhum parâmetro foi informado.");
                 return default;
             }
 
-            var commandTypesMatched = _commandExplorerService.GetCommandTypesMatched(args);
+            var commandTypesMatched = _commandExplorerService.GetCommandTypesMatched(arguments);
             if (!commandTypesMatched.Any())
             {
                 _loggerService.LogError("Comando não encontrado.");
@@ -45,7 +45,7 @@ namespace TesTool.Core.Services
                 return default;
             }
 
-            var commandType = _commandExplorerService.GetCommandTypeExact(args);
+            var commandType = _commandExplorerService.GetCommandTypeExact(arguments);
             if (commandType == null)
             {
                 _loggerService.LogError("Comando incompleto.");
@@ -55,8 +55,12 @@ namespace TesTool.Core.Services
 
             var command = _serviceProvider.GetService(commandType) as ICommand;
             var properties = commandType.GetProperties();
-            var arguments = new List<string>(args);
-            arguments.RemoveRange(0, commandType.GetCustomAttributes<CommandAttribute>().Count());
+            var argumentsStack = new List<string>(arguments);
+            if (commandType.GetCustomAttributes<DefaultAttribute>().Any())
+            {
+                var commands = commandType.GetCustomAttributes<CommandAttribute>();
+                argumentsStack.RemoveAll(a => commands.Any(c => c.Equals(a)));
+            } else argumentsStack.RemoveRange(0, commandType.GetCustomAttributes<CommandAttribute>().Count());
             foreach (var property in properties)
             {
                 var flagAttribute = property.GetCustomAttribute<FlagAttribute>();
@@ -70,18 +74,18 @@ namespace TesTool.Core.Services
                         $"-{property.Name.ToLower().First()}"
                     };
 
-                    if (!arguments.Any(a => matchArguments.Contains(a))) continue;
+                    if (!argumentsStack.Any(a => matchArguments.Contains(a))) continue;
 
                     if (flagAttribute is not null) property.SetValue(command, true, null);
                     if (optionAttribute is not null)
                     {
-                        var existIndex = arguments.Count >= 2;
-                        var validArgument = existIndex && !arguments.ElementAt(1).StartsWith("-");
+                        var existIndex = argumentsStack.Count >= 2;
+                        var validArgument = existIndex && !argumentsStack.ElementAt(1).StartsWith("-");
                         if (validArgument)
                         {
-                            var value = arguments.ElementAt(1);
+                            var value = argumentsStack.ElementAt(1);
                             property.SetValue(command, value, null);
-                            arguments.RemoveAll(a => a == value);
+                            argumentsStack.RemoveAll(a => a == value);
                         } else
                         {
                             _loggerService.LogError($"Valor inválid para a opção --{property.Name.ToLower()}.");
@@ -89,28 +93,28 @@ namespace TesTool.Core.Services
                         }
                     }
 
-                    arguments.RemoveAll(a => matchArguments.Contains(a));
+                    argumentsStack.RemoveAll(a => matchArguments.Contains(a));
                     continue;
                 }
 
                 if (propertyAttribute is not null)
                 {
-                    var existIndex = arguments.Count >= 1;
+                    var existIndex = argumentsStack.Count >= 1;
                     var validArgument = existIndex && (propertyAttribute.IsCumulative 
-                        ? true : !arguments.ElementAt(0).StartsWith("-")
+                        ? true : !argumentsStack.ElementAt(0).StartsWith("-")
                     );
                     if (validArgument)
                     {
                         if (propertyAttribute.IsCumulative)
                         {
-                            var values = arguments.GetRange(0, arguments.Count);
+                            var values = argumentsStack.GetRange(0, argumentsStack.Count);
                             property.SetValue(command, string.Join(" ", values), null);
-                            arguments.RemoveAll(a => values.Contains(a));
+                            argumentsStack.RemoveAll(a => values.Contains(a));
                         } else
                         {
-                            var value = arguments.ElementAt(0);
+                            var value = argumentsStack.ElementAt(0);
                             property.SetValue(command, value, null);
-                            arguments.RemoveAll(a => a == value);
+                            argumentsStack.RemoveAll(a => a == value);
                         }
                     }
                     else if (propertyAttribute.IsRequired)
@@ -121,9 +125,9 @@ namespace TesTool.Core.Services
                 }
             }
 
-            if (arguments.Any())
+            if (argumentsStack.Any())
             {
-                _loggerService.LogError($"Argumento(s) não reconhecido(s) {string.Join(", ", arguments)}.");
+                _loggerService.LogError($"Argumento(s) não reconhecido(s) {string.Join(", ", argumentsStack)}.");
                 return default;
             }
 

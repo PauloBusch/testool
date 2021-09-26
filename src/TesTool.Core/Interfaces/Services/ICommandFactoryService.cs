@@ -2,6 +2,6 @@
 {
     public interface ICommandFactoryService
     {
-        ICommand CreateCommand(string[] args);
+        ICommand CreateCommand(string[] arguments);
     }
 }

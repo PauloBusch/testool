@@ -10,7 +10,7 @@ using TesTool.Core.Interfaces.Services;
 
 namespace TesTool.Core.Commands.Help
 {
-    [Option] [Default]
+    [Flag] [Default]
     [Command("--help", "-h", HelpText = "Mostrar ajuda de linha de comando.")]
     public class HelpCommand : ICommand
     {
@@ -66,18 +66,18 @@ namespace TesTool.Core.Commands.Help
             var template = "  {0,-20} {1}";
             var commandTypes = _commandExplorerService.GetAllCommandTypes();
             var optionHelperTexts = commandTypes
-                .Where(type => type.GetCustomAttributes<OptionAttribute>().Any())
+                .Where(type => type.GetCustomAttributes<FlagAttribute>().Any())
                 .Select(type => type.GetCustomAttributes<CommandAttribute>().Reverse())
                 .Select(commands => commands.First())
                 .Distinct()
                 .Select(command =>
                 {
-                    var commandOptions = !string.IsNullOrWhiteSpace(command.Alias) ? $"{command.Alias}|{command.Name}" : command.Name;
+                    var commandOptions = !string.IsNullOrWhiteSpace(command.Alias) ? $"{command.Alias}, {command.Name}" : command.Name;
                     return string.Format(template, commandOptions, command.HelpText);
                 })
                 .ToArray();
             var commandHelperTexts = commandTypes
-                .Where(type => !type.GetCustomAttributes<OptionAttribute>().Any())
+                .Where(type => !type.GetCustomAttributes<FlagAttribute>().Any())
                 .Select(type => type.GetCustomAttributes<CommandAttribute>().Reverse())
                 .Select(commands => commands.First())
                 .Distinct()
@@ -114,23 +114,30 @@ namespace TesTool.Core.Commands.Help
         {
             var template = "  {0,-30} {1}";
             var commandProperties = commandType.GetProperties();
+            var commandTypes = _commandExplorerService.GetAllCommandTypes();
             var argumentHelperTexts = commandProperties
                 .Select(p => new { Name = p.Name, Parameter = p.GetCustomAttribute<ParameterAttribute>() })
                 .Where(p => p.Parameter is not null)
                 .Select(p => string.Format(template, $"<{p.Name.ToSnakeCase().ToUpper()}>", p.Parameter.HelpText))
                 .ToArray();
             var optionsHelperTexts = commandProperties
+                .Where(t => t.GetCustomAttributes<OptionAttribute>().Any())
                 .Select(p => new { Name = p.Name, Option = p.GetCustomAttribute<OptionAttribute>() })
-                .Where(p => p.Option is not null)
                 .Select(p => string.Format(template, $"-{p.Name.ToLower().First()}, --{p.Name.ToLower()} <{p.Name.ToSnakeCase().ToUpper()}>", p.Option.HelpText))
                 .ToArray();
+            var globalFalgsHelperTexts = commandTypes
+                .Where(t => t.GetCustomAttributes<DefaultAttribute>().Any())
+                .Where(t => t.GetCustomAttributes<FlagAttribute>().Any())
+                .Select(p => new { Name = p.Name, Command = p.GetCustomAttribute<CommandAttribute>(), Flag = p.GetCustomAttribute<FlagAttribute>() })
+                .Select(p => string.Format(template, $"{p.Command.Alias.ToLower()}, {p.Command.Name.ToLower()}", p.Command.HelpText))
+                .ToArray();
             var flagsHelperTexts = commandProperties
+                .Where(t => t.GetCustomAttributes<FlagAttribute>().Any())
                 .Select(p => new { Name = p.Name, Flag = p.GetCustomAttribute<FlagAttribute>() })
-                .Where(p => p.Flag is not null)
                 .Select(p => string.Format(template, $"-{p.Name.ToLower().First()}, --{p.Name.ToLower()}", p.Flag.HelpText))
                 .ToArray();
 
-            LogConsole(commandType, argumentHelperTexts, optionsHelperTexts.Concat(flagsHelperTexts), new string[0]);
+            LogConsole(commandType, argumentHelperTexts, globalFalgsHelperTexts.Concat(optionsHelperTexts.Concat(flagsHelperTexts)), new string[0]);
         }
 
         private void LogConsole(
