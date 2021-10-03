@@ -1,4 +1,4 @@
-﻿using TesTool.Core.Models;
+﻿using TesTool.Core.Models.Configuration;
 
 namespace TesTool.Core.Enumerations
 {

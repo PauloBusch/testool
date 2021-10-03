@@ -1,4 +1,4 @@
-﻿namespace TesTool.Core.Models
+﻿namespace TesTool.Core.Models.Configuration
 {
     public class Setting
     {
