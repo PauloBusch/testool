@@ -24,7 +24,7 @@ namespace TesTool.Infra.Extensions
             return false;
         }
 
-        public static IEnumerable<ITypeSymbol> GetTypes(this ITypeSymbol typeSymbol)
+        public static IEnumerable<ITypeSymbol> GetStackTypes(this ITypeSymbol typeSymbol)
         {
             var current = typeSymbol;
             while (current != null)

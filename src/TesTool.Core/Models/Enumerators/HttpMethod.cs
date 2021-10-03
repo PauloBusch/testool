@@ -1,8 +1,8 @@
 ﻿namespace TesTool.Core.Models.Enumerators
 {
-    public class Method
+    public class HttpMethod
     {
-        public Method(string name)
+        public HttpMethod(string name)
         {
             Name = name;
         }

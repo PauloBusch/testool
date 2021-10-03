@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TesTool.Core.Enumerations;
 using TesTool.Core.Interfaces.Services;
@@ -57,10 +57,19 @@ namespace TesTool.Infra.Services
                     if (!isController) continue;
 
                     var controllerName = @class.Identifier.Text.ToLower().Replace("controller", string.Empty);
+                    
                     var routeAttribute = classSymbol.GetAttribute("RouteAttribute");
                     var routeTemplate = routeAttribute?.ConstructorArguments.FirstOrDefault().Value?.ToString() ?? string.Empty;
                     var route = routeTemplate.Replace("[controller]", controllerName);
-                    var controller = new Controller(@class.Identifier.Text, route);
+                    
+                    var types = classSymbol.GetStackTypes();
+                    var authorizeAttributeName = "AuthorizeAttribute";
+                    var authAttributeNames = new [] { authorizeAttributeName, "AllowAnonymousAttribute" };
+                    var authAttribute = types.SelectMany(t => t.GetAllAttributes())
+                        .FirstOrDefault(a => authAttributeNames.Contains(a.AttributeClass.Name));
+                    var authorizeController = authAttribute?.AttributeClass.Name == authorizeAttributeName;
+
+                    var controller = new Controller(@class.Identifier.Text, route, authorizeController);
                     FillEndpoints(controller, root, model);
                     if (controller.Endpoints.Any()) controllers.Add(controller);
                 }
@@ -89,12 +98,22 @@ namespace TesTool.Infra.Services
                     .FirstOrDefault(a => a.AttributeClass.Name.StartsWith("Http"));
                 if (methodAttribute is null) continue;
                 
-                var methodType = MethodEnumerator.GetAll()
+                var methodType = HttpMethodEnumerator.GetAll()
                     .FirstOrDefault(m => methodAttribute.AttributeClass.Name.Contains(m.Name));
                 if (methodType is null) continue;
 
                 var route = methodAttribute?.ConstructorArguments.FirstOrDefault().Value?.ToString();
-                var endpoint = new Endpoint(route, methodType);
+
+                var authorizeAttributeName = "AuthorizeAttribute";
+                var allowAnonymousAttributeName = "AllowAnonymousAttribute";
+                var authAttributeNames = new[] { authorizeAttributeName, allowAnonymousAttributeName };
+                var authAttribute = methodSymbol.GetAttributes()
+                    .FirstOrDefault(a => authAttributeNames.Contains(a.AttributeClass.Name));
+                var authorizeEndpoint = controller.Authorize 
+                    ? authAttribute?.AttributeClass.Name != allowAnonymousAttributeName
+                    : authAttribute?.AttributeClass.Name == authorizeAttributeName;
+
+                var endpoint = new Endpoint(route, authorizeEndpoint, methodType);
                 FillInputs(endpoint, methodSymbol);
                 FillOutput(endpoint, methodSymbol);
                 controller.AddEndpoint(endpoint);
@@ -109,10 +128,11 @@ namespace TesTool.Infra.Services
                     .FirstOrDefault(a => a.AttributeClass.Name.StartsWith("From"));
                 var inputSource = sourceAttribute is null ? null : InputSourceEnumerator.GetAll()
                     .FirstOrDefault(m => sourceAttribute.AttributeClass.Name.Contains(m.Name));
+
                 if (inputSource is null)
                 {
                     var route = endpoint.Route ?? string.Empty;
-                    inputSource = route.Contains($"{{{parameter.Name}}}") 
+                    inputSource = Regex.IsMatch(route, @$"{{{parameter.Name}:?.*}}")
                         ? InputSourceEnumerator.ROUTE : InputSourceEnumerator.BODY;
                 }
 
@@ -162,7 +182,7 @@ namespace TesTool.Infra.Services
             if (typeSymbol.TypeKind == TypeKind.Interface) return default;
             if (systemType is not null) return new Field(definition, systemType.ToString());
 
-            var propertySymbols = typeSymbol.GetTypes().SelectMany(t => t.GetMembers())
+            var propertySymbols = typeSymbol.GetStackTypes().SelectMany(t => t.GetMembers())
                 .Where(x => x.DeclaredAccessibility == Accessibility.Public)
                 .OfType<IPropertySymbol>()
                 .ToList();
