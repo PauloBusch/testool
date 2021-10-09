@@ -14,12 +14,17 @@ namespace TesTool.Cli
                 .BuildServiceProvider();
 
             var argumentsCoreService = serviceProvider.GetService<ICommandFactoryService>();
-            
+
             var console = serviceProvider.GetService<ILoggerInfraService>();
-            /*
             var jsonOptions = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
-            var project = serviceProvider.GetService<IProjectScanInfraService>();
-            project.GetControllersAsync().Result.ToList().ForEach(c => {
+            var project = serviceProvider.GetService<IWebApiScanInfraService>();
+
+            var model = project.GetModelAsync("PersonResponse").Result;
+            console.LogInformation(JsonConvert.SerializeObject(model, Formatting.Indented, jsonOptions));
+
+            /*
+            project.GetControllersAsync().Result.ToList().ForEach(c =>
+            {
                 console.LogInformation("\n" + (c.Authorize ? "[Authorize] " : "[AllowAnonymous] ") + c.Route);
                 c.Endpoints.ToList().ForEach(e =>
                 {
@@ -32,7 +37,7 @@ namespace TesTool.Cli
                         //console.LogInformation(JsonConvert.SerializeObject(i, Formatting.Indented, jsonOptions));
                     });
                     //console.LogInformation($" [{e.Method.Name}] {e.Route} RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
-                    //console.LogInformation(JsonConvert.SerializeObject(e.Output, Formatting.Indented, jsonOptions));
+                    console.LogInformation(JsonConvert.SerializeObject(e.Output, Formatting.Indented, jsonOptions));
                 });
             });
             */

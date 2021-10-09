@@ -15,7 +15,7 @@ namespace TesTool.Cli
             services
                 .AddSingleton<ILoggerInfraService, LoggerInfraService>()
                 .AddSingleton<ISettingInfraService, SettingsInfraService>()
-                .AddSingleton<IProjectScanInfraService, ProjectScanInfraService>()
+                .AddSingleton<IWebApiScanInfraService, WebApiScanInfraService>()
                 .AddSingleton<ICommandExplorerService, CommandExplorerService>()
                 .AddSingleton<ICommandFactoryService, CommandFactoryService>();
 
