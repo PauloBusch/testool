@@ -20,24 +20,24 @@ namespace TesTool.Infra.Services
             _environmentInfraService = environmentInfraService;
         }
 
-        public async Task<Dto> GetClassAsync(string name)
+        public async Task<Class> GetClassAsync(string name)
         {
             var project = GetProject();
             if (project is null) return default;
 
-            var dtoClass = null as Dto;
+            var dtoClass = null as Class;
             await ForEachClassesAsync((@class, root, model) => {
                 if (dtoClass is not null) return; 
 
                 var type = GetModelType(model.GetDeclaredSymbol(@class) as ITypeSymbol);
-                if (type is Dto dto && dto.Name == name) dtoClass = dto;
+                if (type is Class dto && dto.Name == name) dtoClass = dto;
             });
 
             return dtoClass;
         }
 
         private string _cacheProjectPath;
-        protected override string GetProjectPath()
+        protected override string GetProjectFile()
         {
             if (!string.IsNullOrWhiteSpace(_cacheProjectPath)) return _cacheProjectPath;
             
@@ -60,6 +60,13 @@ namespace TesTool.Infra.Services
             while (directoryInfo.Parent != null);
 
             return default;
+        }
+
+        public async Task<bool> ProjectExistAsync()
+        {
+            var projectFile = GetProjectFile();
+            if (string.IsNullOrWhiteSpace(projectFile)) return false;
+            return await Task.FromResult(GetProject() is not null);
         }
     }
 }

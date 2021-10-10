@@ -6,6 +6,7 @@ namespace TesTool.Core.Interfaces.Services
     public interface IIntegrationTestScanInfraService
     {
         string GetNamespace();
-        Task<Dto> GetClassAsync(string name);
+        Task<bool> ProjectExistAsync();
+        Task<Class> GetClassAsync(string name);
     }
 }

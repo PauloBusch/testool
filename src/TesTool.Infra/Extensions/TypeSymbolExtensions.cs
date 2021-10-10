@@ -30,7 +30,7 @@ namespace TesTool.Infra.Extensions
             var current = typeSymbol;
             while (current != null)
             {
-                yield return current;
+                if (current.Name != nameof(Object)) yield return current;
                 current = current.BaseType;
             }
         }

@@ -49,21 +49,31 @@ namespace TesTool.Core.Commands.Generate
 
         public async override Task ExecuteAsync()
         {
+            if (!await _integrationTestScanInfraService.ProjectExistAsync())
+                throw new ProjectNotFoundException(ProjectTypeEnumerator.INTEGRATION_TESTS);
+
             var model = await _webApiScanInfraService.GetModelAsync(ClassName);
             if (model is null) throw new ModelNotFoundException(ClassName);
-            if (model is Dto dto)
+            if (model is Class dto)
             {
                 var fileName = $"{dto.Name}Faker.cs";
                 var filePath = Path.Combine(_environmentInfraService.GetWorkingDirectory(), fileName);
                 var sourceCode = _templateCodeInfraService.ProcessFaker(await MapTemplateModelAsync(dto));
-                if (await _fileSystemInfraService.FileExistAsync(filePath))
-                    throw new DuplicatedSourceFileException(fileName);
+                //if (await _fileSystemInfraService.FileExistAsync(filePath))
+                //    throw new DuplicatedSourceFileException(fileName);
 
                 await _fileSystemInfraService.SaveFileAsync(filePath, sourceCode);
+                
+                var factoryModel = await _integrationTestScanInfraService.GetClassAsync(FactoryName);
+                if (factoryModel is not null)
+                {
+                    if (factoryModel is Class factory) await AppendFactoryMethodAsync(factory, fileName);
+                    else throw new ValidationException("This factory is not a model.");
+                } else await CreateFactoryClassAsync(fileName);
             } else throw new ValidationException("This class is not a model.");
         }
 
-        private async Task<Bogus> MapTemplateModelAsync(Dto model)
+        private async Task<Bogus> MapTemplateModelAsync(Class model)
         {
             var conventions = await _conventionInfraService.GetConfiguredConventionsAsync();
             var templateModel = new Bogus(model.Name, GetFakerNamespace());
@@ -86,7 +96,7 @@ namespace TesTool.Core.Commands.Generate
                     var bogusProperty = new BogusProperty(property.Name, expression, false);
                     templateModel.AddProperty(bogusProperty);
                 }
-                else if (property.Type is Dto propertyType)
+                else if (property.Type is Class propertyType)
                 {
                     var fakerName = $"{propertyType.Name}Faker";
                     var existingFaker = await _integrationTestScanInfraService.GetClassAsync(fakerName);
@@ -94,7 +104,7 @@ namespace TesTool.Core.Commands.Generate
                     var bogusProperty = new BogusProperty(property.Name, expression, existingFaker is null);
                     if (existingFaker is not null) templateModel.AddNamespace(existingFaker.Namespace);
                     templateModel.AddProperty(bogusProperty);
-                } else if (property.Type is Array array && array.Type is Dto arrayType)
+                } else if (property.Type is Array array && array.Type is Class arrayType)
                 {
                     var fakerName = $"{arrayType.Name}Faker";
                     var existingFaker = await _integrationTestScanInfraService.GetClassAsync(fakerName);
@@ -124,6 +134,16 @@ namespace TesTool.Core.Commands.Generate
 
             var webApiNamespace = _webApiScanInfraService.GetNamespace();
             return $"{webApiNamespace}.IntegrationTests.Fakers.Models";
+        }
+
+        private async Task CreateFactoryClassAsync(string fakerClassName)
+        {
+
+        }
+
+        private async Task AppendFactoryMethodAsync(Class factory, string fakerClassName)
+        {
+
         }
     }
 }

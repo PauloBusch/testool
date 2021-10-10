@@ -28,7 +28,7 @@ namespace TesTool.Infra.Services
             _loggerInfraService = loggerInfraService;
         }
 
-        protected abstract string GetProjectPath();
+        protected abstract string GetProjectFile();
 
         protected async Task ForEachClassesAsync(
             Action<
@@ -56,7 +56,7 @@ namespace TesTool.Infra.Services
         }
 
         private readonly Stack<int> _stackCalls = new Stack<int>();
-        private readonly IDictionary<int, Dto> _cacheDtos = new Dictionary<int, Dto>();
+        private readonly IDictionary<int, Class> _cacheDtos = new Dictionary<int, Class>();
         protected TypeWrapper GetModelType(ITypeSymbol typeSymbol)
         {
             var hash = (typeSymbol as dynamic).GetHashCode();
@@ -100,11 +100,11 @@ namespace TesTool.Infra.Services
 
             if (_cacheDtos.ContainsKey(hash)) return _cacheDtos[hash];
 
-            var dto = new Dto(name, @namespace);
-            var propertySymbols = typeSymbol.GetStackTypes().Reverse().SelectMany(t => t.GetMembers())
-                .Where(x => x.DeclaredAccessibility == Accessibility.Public)
-                .OfType<IPropertySymbol>()
-                .ToList();
+            var @class = new Class(name, @namespace);
+            var classMembers = typeSymbol.GetStackTypes().Reverse()
+                .SelectMany(t => t.GetMembers())
+                .Where(x => x.DeclaredAccessibility == Accessibility.Public);
+            var propertySymbols = classMembers.OfType<IPropertySymbol>().ToList();
             foreach (var propertySymbol in propertySymbols)
             {
                 _stackCalls.Push(hash);
@@ -112,17 +112,27 @@ namespace TesTool.Infra.Services
                 _stackCalls.Pop();
 
                 var property = new Property(propertySymbol.Name, modelType);
-                dto.AddProperty(property);
+                @class.AddProperty(property);
             }
 
-            _cacheDtos.Add(hash, dto);
-            return dto;
+            var methodSymbols = classMembers
+                .OfType<IMethodSymbol>()
+                .Where(m => m.MethodKind != MethodKind.Constructor)
+                .ToList();
+            foreach (var methodSymbol in methodSymbols)
+            {
+                var method = new Method(methodSymbol.Name);
+                @class.AddMethod(method);
+            }
+
+            _cacheDtos.Add(hash, @class);
+            return @class;
         }
 
         private readonly IDictionary<string, Project> _cacheProjects = new Dictionary<string, Project>();
         protected Project GetProject()
         {
-            var path = GetProjectPath();
+            var path = GetProjectFile();
             if (string.IsNullOrWhiteSpace(path)) return default;
             if (_cacheProjects.ContainsKey(path)) return _cacheProjects[path];
 

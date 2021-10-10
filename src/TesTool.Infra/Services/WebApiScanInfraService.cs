@@ -83,7 +83,7 @@ namespace TesTool.Infra.Services
             if (typeBase is Core.Models.Metadata.Array array)
                 return GetModelRecursive(array.Type, name);
 
-            if (typeBase is Dto dto)
+            if (typeBase is Class dto)
             {
                 if (dto.Name == name) return typeBase;
 
@@ -162,7 +162,7 @@ namespace TesTool.Infra.Services
             endpoint.Output = GetModelType(returnType);
         }
 
-        protected override string GetProjectPath()
+        protected override string GetProjectFile()
             => _settingInfraService.GetStringAsync(SettingEnumerator.PROJECT_DIRECTORY.Key).Result;
     }
 }
