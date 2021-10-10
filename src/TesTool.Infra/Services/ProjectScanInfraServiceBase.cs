@@ -57,12 +57,23 @@ namespace TesTool.Infra.Services
 
         private readonly Stack<int> _stackCalls = new Stack<int>();
         private readonly IDictionary<int, Dto> _cacheDtos = new Dictionary<int, Dto>();
-        protected TypeBase GetModelType(ITypeSymbol typeSymbol)
+        protected TypeWrapper GetModelType(ITypeSymbol typeSymbol)
         {
             var hash = (typeSymbol as dynamic).GetHashCode();
             if (_stackCalls.Contains(hash)) return default;
 
-            var definition = typeSymbol.GetFullName();
+            if (typeSymbol.IsNullable())
+            {
+                _stackCalls.Push(hash);
+                var modelType = GetModelType(typeSymbol.NullableOf());
+                _stackCalls.Pop();
+
+                return new Core.Models.Metadata.Nullable(modelType);
+            }
+            
+            var name = typeSymbol.GetName();
+            var @namespace = typeSymbol.GetNamespace();
+
             if (typeSymbol.TypeKind == TypeKind.Enum)
             {
                 var values = typeSymbol.GetMembers()
@@ -70,7 +81,7 @@ namespace TesTool.Infra.Services
                     .Select(f => new { f.Name, Value = Convert.ToInt32(f.ConstantValue) })
                     .ToDictionary(k => k.Name, v => v.Value);
 
-                return new Core.Models.Metadata.Enum(definition, values);
+                return new Core.Models.Metadata.Enum(name, @namespace, values);
             }
 
             var systemType = Type.GetType(typeSymbol.GetFullMetadataName());
@@ -81,20 +92,19 @@ namespace TesTool.Infra.Services
                 var modelType = GetModelType(enumerableInnerType);
                 _stackCalls.Pop();
 
-                return new Core.Models.Metadata.Array(definition, modelType);
+                return new Core.Models.Metadata.Array(modelType);
             }
 
             if (typeSymbol.TypeKind == TypeKind.Interface) return default;
-            if (systemType is not null) return new Field(definition, systemType.ToString());
+            if (systemType is not null) return new Field(systemType.Name, systemType.Namespace);
 
+            if (_cacheDtos.ContainsKey(hash)) return _cacheDtos[hash];
+
+            var dto = new Dto(name, @namespace);
             var propertySymbols = typeSymbol.GetStackTypes().Reverse().SelectMany(t => t.GetMembers())
                 .Where(x => x.DeclaredAccessibility == Accessibility.Public)
                 .OfType<IPropertySymbol>()
                 .ToList();
-
-            if (_cacheDtos.ContainsKey(hash)) return _cacheDtos[hash];
-
-            var dto = new Dto(definition);
             foreach (var propertySymbol in propertySymbols)
             {
                 _stackCalls.Push(hash);

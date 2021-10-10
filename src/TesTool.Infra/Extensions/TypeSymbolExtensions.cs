@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -53,5 +54,45 @@ namespace TesTool.Infra.Extensions
         {
             return (typeSymbol as INamedTypeSymbol)?.TypeArguments;
         }
+
+        public static string GetName(this ITypeSymbol type)
+        {
+            var display = type.GetDisplayString();
+            return display.Split(".").Last();
+        }
+
+        public static string GetNamespace(this ITypeSymbol type)
+        {
+            var display = type.GetDisplayString();
+            var displayParts = display.Split(".");
+            var name = displayParts.Last();
+            return string.Join(".", displayParts.Where(p => p != name));
+        }
+
+        public static string GetDisplayString(this ITypeSymbol type)
+        {
+            if (type.IsNullable()) return type.NullableOf().GetDisplayString();
+
+            var name = type.ToDisplayString();
+            if (_fullNamesMaping.ContainsKey(name)) return _fullNamesMaping[name];
+
+            return name;
+        }
+
+        private static readonly Dictionary<string, string> _fullNamesMaping = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            {"string",     typeof(string).ToString()},
+            {"long",       typeof(long).ToString()},
+            {"int",        typeof(Int32).ToString()},
+            {"short",      typeof(short).ToString()},
+            {"ulong",      typeof(ulong).ToString()},
+            {"uint",       typeof(uint).ToString()},
+            {"ushort",     typeof(ushort).ToString()},
+            {"byte",       typeof(byte).ToString()},
+            {"double",     typeof(double).ToString()},
+            {"float",      typeof(float).ToString()},
+            {"decimal",    typeof(decimal).ToString()},
+            {"bool",       typeof(bool).ToString()},
+        };
     }
 }

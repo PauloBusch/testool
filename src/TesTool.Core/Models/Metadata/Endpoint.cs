@@ -19,7 +19,7 @@ namespace TesTool.Core.Models.Metadata
         public bool Authorize { get; private set; }
         public HttpMethod Method { get; private set; }
         public IReadOnlyCollection<Input> Inputs => _inputs.AsReadOnly();
-        public TypeBase Output { get; set; }
+        public TypeWrapper Output { get; set; }
 
         public void AddInput(Input input) => _inputs.Add(input);
     }

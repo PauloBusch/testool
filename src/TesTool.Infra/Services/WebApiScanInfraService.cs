@@ -55,7 +55,7 @@ namespace TesTool.Infra.Services
             return controllers;
         }
 
-        public async Task<TypeBase> GetModelAsync(string name)
+        public async Task<TypeWrapper> GetModelAsync(string name)
         {
             var controllers = await GetControllersAsync();
             foreach(var controller in controllers)
@@ -76,7 +76,7 @@ namespace TesTool.Infra.Services
             return default;
         }
 
-        private TypeBase GetModelRecursive(TypeBase typeBase, string name)
+        private TypeWrapper GetModelRecursive(TypeWrapper typeBase, string name)
         {
             if (typeBase is null) return default;
             

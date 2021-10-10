@@ -6,7 +6,7 @@ namespace TesTool.Core.Models.Metadata
     {
         public Input(
             string name, 
-            TypeBase type, 
+            TypeWrapper type, 
             InputSource source
         ) : base(name, type)
         {

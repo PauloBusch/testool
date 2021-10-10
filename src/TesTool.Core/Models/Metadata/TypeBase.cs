@@ -1,14 +1,18 @@
 ﻿namespace TesTool.Core.Models.Metadata
 {
-    public abstract class TypeBase
+    public abstract class TypeBase : TypeWrapper
     {
-        protected TypeBase(string fullNamespace, string wrappper)
+        protected TypeBase(
+            string wrappper,
+            string name, 
+            string @namespace 
+        ) : base(wrappper) 
         {
-            FullNamespace = fullNamespace;
-            Wrapper = wrappper;
+            Name = name;
+            Namespace = @namespace;
         }
 
-        public string Wrapper { get; protected set; }
-        public string FullNamespace { get; protected set; }
+        public string Name { get; private set; }
+        public string Namespace { get; private set; }
     }
 }

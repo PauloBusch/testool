@@ -1,8 +1,8 @@
 ﻿namespace TesTool.Core.Models.Metadata
 {
-    public class Array : TypeWrapper
+    public class Nullable : TypeWrapper
     {
-        public Array(TypeWrapper type) : base(nameof(Array)) 
+        public Nullable(TypeWrapper type) : base(nameof(Nullable)) 
         { 
             Type = type;    
         }

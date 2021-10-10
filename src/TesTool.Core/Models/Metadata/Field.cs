@@ -3,10 +3,11 @@
     public class Field : TypeBase
     {
         public Field(
-            string fullNamespace, 
-            string systemType
-        ) : base(fullNamespace, nameof(Field)) { 
-            SystemType = systemType;    
+            string name, 
+            string @namespace
+        ) : base(nameof(Field), name, @namespace) 
+        { 
+            SystemType = $"{@namespace}.{name}";    
         }
 
         public string SystemType { get; private set; }
