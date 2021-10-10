@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using TesTool.Core.Attributes;
+using TesTool.Core.Exceptions;
 using TesTool.Core.Extensions;
 using TesTool.Core.Interfaces;
 using TesTool.Core.Interfaces.Services;
@@ -50,14 +51,9 @@ namespace TesTool.Core.Commands.Help
             }
 
             var commandTypesMatched = _commandExplorerService.GetCommandTypesMatched(arguments);
-            if (commandTypesMatched.Any())
-            {
-                LogSearchCommands(commandTypesMatched);
-                return;
-            }
+            if (commandTypesMatched.Any()) LogSearchCommands(commandTypesMatched);
+            else throw new CommandNotFoundException("Execute 'testool --help' para ver os comandos válidos.");
 
-            _loggerService.LogError("Comando não encontrado.");
-            _loggerService.LogInformation("Execute 'testool --help' para ver os comandos válidos.");
             await Task.CompletedTask;
         }
 

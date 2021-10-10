@@ -3,9 +3,9 @@
     public class Field : TypeBase
     {
         public Field(
-            string @namespace, 
+            string fullNamespace, 
             string systemType
-        ) : base(@namespace, nameof(Field)) { 
+        ) : base(fullNamespace, nameof(Field)) { 
             SystemType = systemType;    
         }
 

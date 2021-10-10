@@ -3,9 +3,9 @@
     public class Array : TypeBase
     {
         public Array(
-            string @namespace,
+            string fullNamespace,
             TypeBase type
-        ) : base(@namespace, nameof(Array)) { 
+        ) : base(fullNamespace, nameof(Array)) { 
             Type = type;    
         }
 

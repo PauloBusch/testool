@@ -1,0 +1,43 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ output extension=".cs" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="TesTool.Core.Models.Templates.Faker" #>
+<# 
+  var tab = "    ";
+  var classFakerName = $"{Name}Faker";
+  var expressionInitial = Name.ToLower().ElementAt(0);
+  var useProperties = Properties.Where(p => !p.Unsafe).ToList();
+#>
+using Bogus;
+<# foreach (var @namespace in Namespaces) {
+  #>using <#=@namespace#>;
+<# } #>
+
+namespace <#=FakerNamespace#> 
+{
+    public class <#=classFakerName#> : Faker<<#=Name#>> 
+    {
+        public <#=classFakerName#>()
+        {
+            <# foreach (var property in Properties) { 
+              var isFirst = useProperties.First() == property;
+              var isLast = useProperties.Last() == property;
+              var rowStringBuilder = new StringBuilder();
+              if (!isFirst) rowStringBuilder.Append(tab + tab + tab + tab);
+              if (property.Unsafe) rowStringBuilder.Append("// ");
+              if (!isFirst) rowStringBuilder.Append(".");
+              rowStringBuilder.Append($"RuleFor({expressionInitial} => {expressionInitial}.{property.Name}, {property.Expression})");
+              if (isLast) rowStringBuilder.Append(";");
+              rowStringBuilder.Append("\n");
+              #><#=rowStringBuilder.ToString()#><#
+            } #>
+        } 
+    }
+}
+<#+
+    public string Name { get; set; }
+    public string FakerNamespace { get; set; }
+    public string[] Namespaces { get; set; }
+    public BogusProperty[] Properties { get; set; }
+#>

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using TesTool.Core.Attributes;
+using TesTool.Core.Exceptions;
 using TesTool.Core.Extensions;
 using TesTool.Core.Interfaces;
 using TesTool.Core.Interfaces.Services;
@@ -33,25 +35,14 @@ namespace TesTool.Core.Services
                 var defaultCommandType = _commandExplorerService.GetAllCommandTypes()
                     .SingleOrDefault(type => type.GetCustomAttributes<DefaultAttribute>().Any());
                 if (defaultCommandType is not null) return _serviceProvider.GetService(defaultCommandType) as ICommand;
-                _loggerService.LogError("Nenhum parâmetro foi informado.");
-                return default;
+                throw new ValidationException("Nenhum parâmetro foi informado.");
             }
 
             var commandTypesMatched = _commandExplorerService.GetCommandTypesMatched(arguments);
-            if (!commandTypesMatched.Any())
-            {
-                _loggerService.LogError("Comando não encontrado.");
-                _loggerService.LogInformation("Execute 'testool --help' para ver os comandos válidos.");
-                return default;
-            }
+            if (!commandTypesMatched.Any()) throw new CommandNotFoundException("Execute 'testool --help' para ver os comandos válidos.");
 
             var commandType = _commandExplorerService.GetCommandTypeExact(arguments);
-            if (commandType == null)
-            {
-                _loggerService.LogError("Comando incompleto.");
-                _loggerService.LogInformation("Execute 'testool --help [command]' para ver mais informações sobre o comando.");
-                return default;
-            }
+            if (commandType == null) throw new CommandIncompleteException("Execute 'testool --help [command]' para ver mais informações sobre o comando.");
 
             var command = _serviceProvider.GetService(commandType) as ICommand;
             var properties = commandType.GetProperties();
@@ -86,11 +77,7 @@ namespace TesTool.Core.Services
                             var value = argumentsStack.ElementAt(1);
                             property.SetValue(command, value, null);
                             argumentsStack.RemoveAll(a => a == value);
-                        } else
-                        {
-                            _loggerService.LogError($"Valor inválid para a opção --{property.Name.ToLower()}.");
-                            return default;
-                        }
+                        } else throw new ValidationException($"Valor inválido para a opção --{property.Name.ToLower()}.");
                     }
 
                     argumentsStack.RemoveAll(a => matchArguments.Contains(a));
@@ -118,19 +105,12 @@ namespace TesTool.Core.Services
                         }
                     }
                     else if (propertyAttribute.IsRequired)
-                    {
-                        _loggerService.LogError($"Parâmetro obrigatório <{property.Name.ToSnakeCase().ToUpper()}> não fornecido.");
-                        return default;
-                    }
+                        throw new ValidationException($"Parâmetro obrigatório <{property.Name.ToSnakeCase().ToUpper()}> não fornecido.");
                 }
             }
 
-            if (argumentsStack.Any())
-            {
-                _loggerService.LogError($"Argumento(s) não reconhecido(s) {string.Join(", ", argumentsStack)}.");
-                return default;
-            }
-
+            if (argumentsStack.Any()) throw new ValidationException($"Argumento(s) não reconhecido(s) {string.Join(", ", argumentsStack)}.");
+            
             return command;
         }
     }

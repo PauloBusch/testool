@@ -2,16 +2,37 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <AssemblyVersion>1.0.0.2</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Buildalyzer" Version="3.2.3" />
     <PackageReference Include="Buildalyzer.Workspaces" Version="3.2.3" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
+    <PackageReference Include="System.CodeDom" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TesTool.Core\TesTool.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Templates\FakerTemplate.tt">
+      <LastGenOutput>FakerTemplate.cs</LastGenOutput>
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Templates\FakerTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FakerTemplate.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
 
 </Project>

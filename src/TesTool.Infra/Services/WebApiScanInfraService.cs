@@ -1,6 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +19,7 @@ namespace TesTool.Infra.Services
         public WebApiScanInfraService(
             ILoggerInfraService loggerInfraService,
             ISettingInfraService settingInfraService
-        ) : base(loggerInfraService)
+        ) : base(ProjectTypeEnumerator.WEB_API, loggerInfraService)
         {
             _settingInfraService = settingInfraService;
         }
@@ -49,7 +48,7 @@ namespace TesTool.Infra.Services
                 var authorizeController = authAttribute?.AttributeClass.Name == authorizeAttributeName;
 
                 var controller = new Controller(@class.Identifier.Text, route, authorizeController);
-                FillEndpoints(controller, root, model);
+                FillEndpoints(controller, classSymbol);
                 if (controller.Endpoints.Any()) controllers.Add(controller);
             });
 
@@ -80,14 +79,15 @@ namespace TesTool.Infra.Services
         private TypeBase GetModelRecursive(TypeBase typeBase, string name)
         {
             if (typeBase is null) return default;
-
-            if (typeBase.Namespace.EndsWith(name)) return typeBase;
             
             if (typeBase is Core.Models.Metadata.Array array)
                 return GetModelRecursive(array.Type, name);
 
-            if (typeBase is Dto dto) { 
-                foreach(var property in dto.Properties)
+            if (typeBase is Dto dto)
+            {
+                if (dto.Name == name) return typeBase;
+
+                foreach (var property in dto.Properties)
                 {
                     var model = GetModelRecursive(property.Type, name);
                     if (model is not null) return model;
@@ -97,12 +97,15 @@ namespace TesTool.Infra.Services
             return default;
         }
 
-        private void FillEndpoints(Controller controller, SyntaxNode root, SemanticModel model)
+        private void FillEndpoints(Controller controller, ITypeSymbol classSymbol)
         {
-            var methods = root.DescendantNodes().OfType<MethodDeclarationSyntax>();
-            foreach (var method in methods)
+            var methodSymbols = classSymbol.GetStackTypes()
+                .Reverse()
+                .OfType<INamedTypeSymbol>()
+                .SelectMany(t => t.GetMethods())
+                .ToList();
+            foreach (var methodSymbol in methodSymbols)
             {
-                var methodSymbol = model.GetDeclaredSymbol(method);
                 var methodAttribute = methodSymbol.GetAttributes()
                     .FirstOrDefault(a => a.AttributeClass.Name.StartsWith("Http"));
                 if (methodAttribute is null) continue;

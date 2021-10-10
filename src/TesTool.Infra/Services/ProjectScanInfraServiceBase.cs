@@ -6,7 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TesTool.Core.Exceptions;
 using TesTool.Core.Interfaces.Services;
+using TesTool.Core.Models.Enumerators;
 using TesTool.Core.Models.Metadata;
 using TesTool.Infra.Extensions;
 
@@ -14,10 +16,15 @@ namespace TesTool.Infra.Services
 {
     public abstract class ProjectScanInfraServiceBase
     {
+        private readonly ProjectType _projectType;
         private readonly ILoggerInfraService _loggerInfraService;
 
-        protected ProjectScanInfraServiceBase(ILoggerInfraService loggerInfraService)
+        protected ProjectScanInfraServiceBase(
+            ProjectType projectType,
+            ILoggerInfraService loggerInfraService
+        )
         {
+            _projectType = projectType;
             _loggerInfraService = loggerInfraService;
         }
 
@@ -32,16 +39,14 @@ namespace TesTool.Infra.Services
         ) 
         {
             var project = GetProject();
-            if (project is null)
-            {
-                _loggerInfraService.LogError("No projects found.");
-                return;
-            }
+            if (project is null) throw new ProjectNotFoundException(_projectType);
 
             var compilation = await GetCompilationAsync(project);
             foreach (var documentId in project.DocumentIds)
             {
                 var document = project.GetDocument(documentId);
+                if (document.Name.StartsWith("EntityAddressRequestFaker")) { }
+
                 var root = await document.GetSyntaxRootAsync();
                 var tree = await document.GetSyntaxTreeAsync();
                 var model = compilation.GetSemanticModel(tree);
@@ -82,7 +87,7 @@ namespace TesTool.Infra.Services
             if (typeSymbol.TypeKind == TypeKind.Interface) return default;
             if (systemType is not null) return new Field(definition, systemType.ToString());
 
-            var propertySymbols = typeSymbol.GetStackTypes().SelectMany(t => t.GetMembers())
+            var propertySymbols = typeSymbol.GetStackTypes().Reverse().SelectMany(t => t.GetMembers())
                 .Where(x => x.DeclaredAccessibility == Accessibility.Public)
                 .OfType<IPropertySymbol>()
                 .ToList();
@@ -105,9 +110,10 @@ namespace TesTool.Infra.Services
         }
 
         private readonly IDictionary<string, Project> _cacheProjects = new Dictionary<string, Project>();
-        private Project GetProject()
+        protected Project GetProject()
         {
             var path = GetProjectPath();
+            if (string.IsNullOrWhiteSpace(path)) return default;
             if (_cacheProjects.ContainsKey(path)) return _cacheProjects[path];
 
             var manager = new AnalyzerManager();
@@ -126,5 +132,7 @@ namespace TesTool.Infra.Services
             _cacheCompilation.Add(project.Name, compilation);
             return compilation;
         }
+
+        public string GetNamespace() => GetProject()?.AssemblyName;
     }
 }

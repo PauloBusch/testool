@@ -1,7 +1,8 @@
 {
   "profiles": {
     "TesTool.Cli": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "g f Form1919Section2AssociateRequest Factory"
     }
   }
 }

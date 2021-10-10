@@ -2,13 +2,13 @@
 {
     public abstract class TypeBase
     {
-        protected TypeBase(string @namespace, string wrappper)
+        protected TypeBase(string fullNamespace, string wrappper)
         {
+            FullNamespace = fullNamespace;
             Wrapper = wrappper;
-            Namespace = @namespace;
         }
 
         public string Wrapper { get; protected set; }
-        public string Namespace { get; protected set; }
+        public string FullNamespace { get; protected set; }
     }
 }
