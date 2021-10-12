@@ -30,6 +30,22 @@ namespace TesTool.Infra.Services
 
         protected abstract string GetProjectFile();
 
+        protected async Task<ITypeSymbol> GetTypeSymbolAsync(string name)
+        {
+            var project = GetProject();
+            if (project is null) return default;
+
+            var typeSymbol = null as ITypeSymbol;
+            await ForEachClassesAsync((@class, root, model) => {
+                if (typeSymbol is not null) return;
+
+                var declaredSymbol = model.GetDeclaredSymbol(@class) as ITypeSymbol;
+                if (declaredSymbol.GetName() == name) typeSymbol = declaredSymbol;
+            });
+
+            return typeSymbol;
+        }
+
         protected async Task ForEachClassesAsync(
             Action<
                 ClassDeclarationSyntax, 
@@ -45,8 +61,6 @@ namespace TesTool.Infra.Services
             foreach (var documentId in project.DocumentIds)
             {
                 var document = project.GetDocument(documentId);
-                if (document.Name.StartsWith("EntityAddressRequestFaker")) { }
-
                 var root = await document.GetSyntaxRootAsync();
                 var tree = await document.GetSyntaxTreeAsync();
                 var model = compilation.GetSemanticModel(tree);
@@ -104,6 +118,10 @@ namespace TesTool.Infra.Services
             var classMembers = typeSymbol.GetStackTypes().Reverse()
                 .SelectMany(t => t.GetMembers())
                 .Where(x => x.DeclaredAccessibility == Accessibility.Public);
+
+            var usings = typeSymbol.ContainingNamespace.GetNamespaceTypes();
+            foreach (var @using in usings) @class.AddNamespace(@using.ToString());
+
             var propertySymbols = classMembers.OfType<IPropertySymbol>().ToList();
             foreach (var propertySymbol in propertySymbols)
             {
@@ -117,7 +135,7 @@ namespace TesTool.Infra.Services
 
             var methodSymbols = classMembers
                 .OfType<IMethodSymbol>()
-                .Where(m => m.MethodKind != MethodKind.Constructor)
+                .Where(m => m.MethodKind == MethodKind.Ordinary)
                 .ToList();
             foreach (var methodSymbol in methodSymbols)
             {
@@ -145,7 +163,7 @@ namespace TesTool.Infra.Services
         }
 
         private readonly IDictionary<string, Compilation> _cacheCompilation = new Dictionary<string, Compilation>();
-        private async Task<Compilation> GetCompilationAsync(Project project)
+        protected async Task<Compilation> GetCompilationAsync(Project project)
         {
             if (_cacheCompilation.ContainsKey(project.Name)) return _cacheCompilation[project.Name];
             var compilation = await project.GetCompilationAsync();

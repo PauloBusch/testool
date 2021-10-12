@@ -4,6 +4,7 @@ using System;
 using System.Threading.Tasks;
 using TesTool.Core.Exceptions;
 using TesTool.Core.Interfaces.Services;
+using TesTool.Core.Models.Templates.Factory;
 
 namespace TesTool.Cli
 {
@@ -49,7 +50,16 @@ namespace TesTool.Cli
                 });
                 */
 
-                //var templateService = serviceProvider.GetService<ITemplateCodeInfraService>();
+                /*
+                var model = new ModelFactory("Fcb.Api.IntegrationTests.Fakers");
+                model.AddNamespace("Fcb.Api.IntegrationTests._Common.Base");
+                model.AddNamespace("Fcb.Api.IntegrationTests.Fakers.Models");
+                model.AddMethod(new ModelFactoryMethod("CountryModel", "CountryModelFaker"));
+                model.AddMethod(new ModelFactoryMethod("UserRequest", "UserRequestFaker"));
+
+                var templateService = serviceProvider.GetService<ITemplateCodeInfraService>();
+                console.LogInformation(templateService.ProcessFakerFactory(model));
+                */                
             }
             catch (TesToolExceptionBase exception)
             {

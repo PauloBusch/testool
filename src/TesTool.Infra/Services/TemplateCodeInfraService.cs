@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using TesTool.Core.Interfaces.Services;
+using TesTool.Core.Models.Templates.Factory;
 using TesTool.Core.Models.Templates.Faker;
 using TesTool.Infra.Templates;
 
@@ -9,20 +11,42 @@ namespace TesTool.Infra.Services
     {
         public string ProcessFaker(Bogus model)
         {
-            var namespaces = model.Namespaces
-                .Distinct()
-                .Where(n => n != model.FakerNamespace)
-                .OrderBy(n => n)
-                .ToArray();
-
             var template = new FakerTemplate
             {
                 Name = model.Name,
-                Namespaces = namespaces,
                 FakerNamespace = model.FakerNamespace,
+                Namespaces = PrepareNamespaces(model.Namespaces, model.FakerNamespace),
                 Properties = model.Properties.ToArray()
             };
             return template.TransformText();
+        }
+
+        public string ProcessFakerFactory(ModelFactory model)
+        {
+            var template = new ModelFakerFactoryTemplate 
+            { 
+                TemplataService = this,
+                Name = model.Name,
+                Methods = model.Methods.ToArray(),
+                Namespaces = PrepareNamespaces(model.Namespaces, model.FactoryNamespace),
+                FactoryNamespace = model.FactoryNamespace,
+            };
+            return template.TransformText();
+        }
+
+        public string ProcessFakerFactoryMethod(ModelFactoryMethod model)
+        {
+            var template = new ModelFakerFactoryMethodTemplate { Method = model };
+            return template.TransformText();
+        }
+
+        private string[] PrepareNamespaces(IEnumerable<string> namespaces, string currentNamespace)
+        {
+            return namespaces
+                .Distinct()
+                .Where(n => n != currentNamespace)
+                .OrderBy(n => n)
+                .ToArray();
         }
     }
 }

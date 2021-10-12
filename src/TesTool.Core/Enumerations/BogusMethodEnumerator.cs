@@ -16,6 +16,7 @@ namespace TesTool.Core.Enumerations
         public static readonly BogusMethod RANDOM_GUID = new ("f => f.Random.Guid()");
         public static readonly BogusMethod RANDOM_BOOL = new ("f => f.Random.Bool()");
         public static readonly BogusMethod RANDOM_INT = new ("f => f.Random.Int()");
+        public static readonly BogusMethod RANDOM_DECIMAL = new ("f => f.Random.Decimal(0, 100)");
         public static readonly BogusMethod RANDOM_ENUM = new ("f => f.Random.Enum<{ENUM_NAME}>()");
 
         public static readonly BogusMethod INTERNET_PASSWORD = new ("f => f.Internet.Password()");

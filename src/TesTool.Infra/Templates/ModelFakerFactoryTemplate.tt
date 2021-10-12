@@ -1,0 +1,24 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="TesTool.Core.Models.Templates.Factory" #>
+<#@ import namespace="TesTool.Core.Interfaces.Services" #>
+<# foreach (var @namespace in Namespaces) {
+  #>using <#=@namespace#>;
+<# } #>
+
+namespace <#=FactoryNamespace#>
+{
+    public class <#=Name#>
+    {
+<#  #><# foreach (var method in Methods) { #>
+        <#=TemplataService.ProcessFakerFactoryMethod(method)#><#
+    #><# } #>
+    }
+}
+<#+
+    public string Name { get; set; }
+    public string FactoryNamespace { get; set; }
+    public string[] Namespaces { get; set; }
+    public ModelFactoryMethod[] Methods { get; set; }
+    public ITemplateCodeInfraService TemplataService { get; set; }
+#>

@@ -45,6 +45,10 @@ namespace TesTool.Infra.Services
                     typeMatch: "System.Int32$"
                 ),
                 new Convention(
+                    BogusMethodEnumerator.RANDOM_DECIMAL.Expression,
+                    typeMatch: $"^System.Decimal$"
+                ),
+                new Convention(
                     BogusMethodEnumerator.LOREM_WORD.Expression,
                     typeMatch: $"^System.String$"
                 ),

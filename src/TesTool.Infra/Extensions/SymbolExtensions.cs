@@ -99,11 +99,6 @@ namespace TesTool.Infra.Extensions
                 && symbol.DeclaredAccessibility == Accessibility.Internal
             );
 
-        public static IEnumerable<IMethodSymbol> GetMethods(this INamedTypeSymbol resolvedType)
-        {
-            return resolvedType.GetMembers().OfType<IMethodSymbol>();
-        }
-
         public static IEnumerable<IFieldSymbol> GetFields(this INamedTypeSymbol resolvedType)
         {
             return resolvedType.GetMembers().OfType<IFieldSymbol>();
@@ -207,6 +202,8 @@ namespace TesTool.Infra.Extensions
 
         public static IEnumerable<INamedTypeSymbol> GetNamespaceTypes(this INamespaceSymbol sym)
         {
+            if (sym is null) yield break;
+
             foreach (var child in sym.GetTypeMembers())
             {
                 yield return child;

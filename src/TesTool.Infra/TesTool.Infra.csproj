@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <AssemblyVersion>1.0.0.2</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,6 +20,14 @@
       <LastGenOutput>FakerTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
+    <None Update="Templates\ModelFakerFactoryMethodTemplate.tt">
+      <LastGenOutput>ModelFakerFactoryMethodTemplate.cs</LastGenOutput>
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+    </None>
+    <None Update="Templates\ModelFakerFactoryTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>ModelFakerFactoryTemplate.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -32,6 +39,16 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>FakerTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Templates\ModelFakerFactoryMethodTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ModelFakerFactoryMethodTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Templates\ModelFakerFactoryTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ModelFakerFactoryTemplate.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 

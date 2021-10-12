@@ -7,6 +7,9 @@ namespace TesTool.Core.Interfaces.Services
     {
         string GetNamespace();
         Task<bool> ProjectExistAsync();
-        Task<Class> GetClassAsync(string name);
+        Task<bool> ClassExistAsync(string className);
+        Task<Class> GetClassAsync(string className);
+        Task<string> GetPathClassAsync(string className);
+        Task<string> MergeClassCodeAsync(string className, string sourceCode);
     }
 }

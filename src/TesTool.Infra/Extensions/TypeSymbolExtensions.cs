@@ -25,6 +25,16 @@ namespace TesTool.Infra.Extensions
             return false;
         }
 
+        public static IEnumerable<IMethodSymbol> GetMethods(this ITypeSymbol typeSymbol)
+        {
+            return typeSymbol.GetStackTypes().Reverse()
+                    .SelectMany(t => t.GetMembers())
+                    .OfType<IMethodSymbol>()
+                    .Where(x => x.DeclaredAccessibility == Accessibility.Public)
+                    .Where(m => m.MethodKind == MethodKind.Ordinary)
+                    .ToList();
+        }
+
         public static IEnumerable<ITypeSymbol> GetStackTypes(this ITypeSymbol typeSymbol)
         {
             var current = typeSymbol;

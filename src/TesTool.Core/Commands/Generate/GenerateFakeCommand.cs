@@ -10,6 +10,7 @@ using TesTool.Core.Exceptions;
 using TesTool.Core.Interfaces.Services;
 using TesTool.Core.Models.Configuration;
 using TesTool.Core.Models.Metadata;
+using TesTool.Core.Models.Templates.Factory;
 using TesTool.Core.Models.Templates.Faker;
 
 namespace TesTool.Core.Commands.Generate
@@ -56,6 +57,10 @@ namespace TesTool.Core.Commands.Generate
             if (model is null) throw new ModelNotFoundException(ClassName);
             if (model is Class dto)
             {
+                var fakerName = $"{ClassName}Faker";
+                //if (await _integrationTestScanInfraService.ClassExistAsync(fakerName))
+                //    throw new DuplicatedClassException(fakerName);
+
                 var fileName = $"{dto.Name}Faker.cs";
                 var filePath = Path.Combine(_environmentInfraService.GetWorkingDirectory(), fileName);
                 var sourceCode = _templateCodeInfraService.ProcessFaker(await MapTemplateModelAsync(dto));
@@ -64,12 +69,9 @@ namespace TesTool.Core.Commands.Generate
 
                 await _fileSystemInfraService.SaveFileAsync(filePath, sourceCode);
                 
-                var factoryModel = await _integrationTestScanInfraService.GetClassAsync(FactoryName);
-                if (factoryModel is not null)
-                {
-                    if (factoryModel is Class factory) await AppendFactoryMethodAsync(factory, fileName);
-                    else throw new ValidationException("This factory is not a model.");
-                } else await CreateFactoryClassAsync(fileName);
+                var exist = await _integrationTestScanInfraService.ClassExistAsync(FactoryName);
+                if (exist) await AppendFactoryMethodAsync();
+                else await CreateFactoryClassAsync();
             } else throw new ValidationException("This class is not a model.");
         }
 
@@ -127,6 +129,35 @@ namespace TesTool.Core.Commands.Generate
             return convention?.BogusExpression;
         }
 
+        private async Task CreateFactoryClassAsync()
+        {
+            var templateModel = GetModelFactory();
+            var fileName = $"{FactoryName}.cs";
+            var filePath = Path.Combine(_environmentInfraService.GetWorkingDirectory(), fileName);
+            var factorySourceCode = _templateCodeInfraService.ProcessFakerFactory(templateModel);
+            if (await _fileSystemInfraService.FileExistAsync(filePath))
+                throw new DuplicatedSourceFileException(fileName);
+
+            await _fileSystemInfraService.SaveFileAsync(filePath, factorySourceCode);
+        }
+
+        private async Task AppendFactoryMethodAsync()
+        {
+            var templateModel = GetModelFactory();
+            var factoryPathFile = await _integrationTestScanInfraService.GetPathClassAsync(FactoryName);
+            var factorySourceCode = _templateCodeInfraService.ProcessFakerFactory(templateModel);
+            var mergedSourceCode = await _integrationTestScanInfraService.MergeClassCodeAsync(FactoryName, factorySourceCode);
+            await _fileSystemInfraService.SaveFileAsync(factoryPathFile, mergedSourceCode);
+        }
+
+        private ModelFactory GetModelFactory()
+        {
+            var templateModel = new ModelFactory(FactoryName, GetFakerFactoryNamespace());
+            templateModel.AddNamespace(GetFakerNamespace());
+            templateModel.AddMethod(new ModelFactoryMethod(ClassName, $"{ClassName}Faker"));
+            return templateModel;
+        }
+
         private string GetFakerNamespace()
         {
             var integrationTestNamespace = _integrationTestScanInfraService.GetNamespace();
@@ -136,14 +167,13 @@ namespace TesTool.Core.Commands.Generate
             return $"{webApiNamespace}.IntegrationTests.Fakers.Models";
         }
 
-        private async Task CreateFactoryClassAsync(string fakerClassName)
+        private string GetFakerFactoryNamespace()
         {
+            var integrationTestNamespace = _integrationTestScanInfraService.GetNamespace();
+            if (!string.IsNullOrWhiteSpace(integrationTestNamespace)) return $"{integrationTestNamespace}.Fakers";
 
-        }
-
-        private async Task AppendFactoryMethodAsync(Class factory, string fakerClassName)
-        {
-
+            var webApiNamespace = _webApiScanInfraService.GetNamespace();
+            return $"{webApiNamespace}.IntegrationTests.Fakers";
         }
     }
 }

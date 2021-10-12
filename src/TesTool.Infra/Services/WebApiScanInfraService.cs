@@ -99,11 +99,7 @@ namespace TesTool.Infra.Services
 
         private void FillEndpoints(Controller controller, ITypeSymbol classSymbol)
         {
-            var methodSymbols = classSymbol.GetStackTypes()
-                .Reverse()
-                .OfType<INamedTypeSymbol>()
-                .SelectMany(t => t.GetMethods())
-                .ToList();
+            var methodSymbols = classSymbol.GetMethods();
             foreach (var methodSymbol in methodSymbols)
             {
                 var methodAttribute = methodSymbol.GetAttributes()
