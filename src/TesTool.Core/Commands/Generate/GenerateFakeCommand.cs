@@ -30,6 +30,7 @@ namespace TesTool.Core.Commands.Generate
         private readonly IFileSystemInfraService _fileSystemInfraService;
         private readonly IEnvironmentInfraService _environmentInfraService;
         private readonly IConventionInfraService _conventionInfraService;
+        private readonly IExpressionInfraService _expressionInfraService;
 
         public GenerateFakeCommand(
             IWebApiScanInfraService webApiScanInfraService,
@@ -37,7 +38,8 @@ namespace TesTool.Core.Commands.Generate
             IEnvironmentInfraService environmentInfraService,
             ITemplateCodeInfraService templateCodeInfraService,
             IFileSystemInfraService fileSystemInfraService,
-            IConventionInfraService conventionInfraService
+            IConventionInfraService conventionInfraService,
+            IExpressionInfraService expressionInfraService
         )
         {
             _webApiScanInfraService = webApiScanInfraService;
@@ -46,10 +48,14 @@ namespace TesTool.Core.Commands.Generate
             _integrationTestScanInfraService = integrationTestScanInfraService;
             _templateCodeInfraService = templateCodeInfraService;
             _conventionInfraService = conventionInfraService;
+            _expressionInfraService = expressionInfraService;
         }
 
         public async override Task ExecuteAsync()
         {
+            if (!string.IsNullOrWhiteSpace(Output) && !Directory.Exists(Output)) 
+                throw new DirectoryNotFoundException("Diretório de saída inválido.");
+
             if (!await _integrationTestScanInfraService.ProjectExistAsync())
                 throw new ProjectNotFoundException(ProjectTypeEnumerator.INTEGRATION_TESTS);
 
@@ -62,7 +68,7 @@ namespace TesTool.Core.Commands.Generate
                 //    throw new DuplicatedClassException(fakerName);
 
                 var fileName = $"{dto.Name}Faker.cs";
-                var filePath = Path.Combine(_environmentInfraService.GetWorkingDirectory(), fileName);
+                var filePath = Path.Combine(GetOutputDirectory(), fileName);
                 var sourceCode = _templateCodeInfraService.ProcessFaker(await MapTemplateModelAsync(dto));
                 //if (await _fileSystemInfraService.FileExistAsync(filePath))
                 //    throw new DuplicatedSourceFileException(fileName);
@@ -85,7 +91,7 @@ namespace TesTool.Core.Commands.Generate
             {
                 if (property.Type is Field field)
                 {
-                    var bogusExpression = GetBogusExpression(property, field, conventions);
+                    var bogusExpression = await GetBogusExpressionAsync(property, field, conventions);
                     if (string.IsNullOrWhiteSpace(bogusExpression)) continue;
 
                     var bogusProperty = new BogusProperty(property.Name, bogusExpression, false);
@@ -94,9 +100,16 @@ namespace TesTool.Core.Commands.Generate
                 else if (property.Type is Enum enumType)
                 {
                     templateModel.AddNamespace(enumType.Namespace);
-                    var expression = BogusMethodEnumerator.RANDOM_ENUM.Expression.Replace("{ENUM_NAME}", enumType.Name);
-                    var bogusProperty = new BogusProperty(property.Name, expression, false);
-                    templateModel.AddProperty(bogusProperty);
+                    if (Static)
+                    {
+                        var bogusProperty = new BogusProperty(property.Name, $"{enumType.Name}.{enumType.Values.Last().Key}", false);
+                        templateModel.AddProperty(bogusProperty);
+                    } else
+                    {
+                        var expression = BogusMethodEnumerator.RANDOM_ENUM.Expression.Replace("{ENUM_NAME}", enumType.Name);
+                        var bogusProperty = new BogusProperty(property.Name, expression, false);
+                        templateModel.AddProperty(bogusProperty);
+                    }
                 }
                 else if (property.Type is Class propertyType)
                 {
@@ -120,23 +133,25 @@ namespace TesTool.Core.Commands.Generate
             return templateModel;
         }
 
-        private static string GetBogusExpression(Property property, Field field, IEnumerable<Convention> conventions)
+        private async Task<string> GetBogusExpressionAsync(Property property, Field field, IEnumerable<Convention> conventions)
         {
             var convention = conventions.LastOrDefault(c => 
                 (string.IsNullOrWhiteSpace(c.TypeMatch) || Regex.IsMatch(field.SystemType, c.TypeMatch, RegexOptions.IgnoreCase)) &&
                 (string.IsNullOrWhiteSpace(c.PropertyMatch) || Regex.IsMatch(property.Name, c.PropertyMatch, RegexOptions.IgnoreCase))
             );
-            return convention?.BogusExpression;
+            if (convention is null) return default; 
+            if (Static) return await _expressionInfraService.BuildBogusExpressionAsync(convention.BogusExpression);
+            return convention.BogusExpression;
         }
 
         private async Task CreateFactoryClassAsync()
         {
             var templateModel = GetModelFactory();
             var fileName = $"{FactoryName}.cs";
-            var filePath = Path.Combine(_environmentInfraService.GetWorkingDirectory(), fileName);
+            var filePath = Path.Combine(GetOutputDirectory(), fileName);
             var factorySourceCode = _templateCodeInfraService.ProcessFakerFactory(templateModel);
-            if (await _fileSystemInfraService.FileExistAsync(filePath))
-                throw new DuplicatedSourceFileException(fileName);
+            //if (await _fileSystemInfraService.FileExistAsync(filePath))
+            //    throw new DuplicatedSourceFileException(fileName);
 
             await _fileSystemInfraService.SaveFileAsync(filePath, factorySourceCode);
         }
@@ -175,5 +190,9 @@ namespace TesTool.Core.Commands.Generate
             var webApiNamespace = _webApiScanInfraService.GetNamespace();
             return $"{webApiNamespace}.IntegrationTests.Fakers";
         }
+
+        private string GetOutputDirectory() => string.IsNullOrWhiteSpace(Output) 
+            ? _environmentInfraService.GetWorkingDirectory() 
+            : Output;
     }
 }

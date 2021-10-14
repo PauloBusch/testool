@@ -2,6 +2,6 @@
 {
     public class DuplicatedSourceFileException : TesToolExceptionBase
     {
-        public DuplicatedSourceFileException(string fileName) : base($"Arquivo de código {fileName} já existe.") { }
+        public DuplicatedSourceFileException(string fileName) : base($"Arquivo {fileName} já existe.") { }
     }
 }

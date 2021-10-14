@@ -19,6 +19,8 @@ namespace TesTool.Cli
                 .AddSingleton<IFileSystemInfraService, FileSystemInfraService>()
                 .AddSingleton<ITemplateCodeInfraService, TemplateCodeInfraService>()
                 .AddSingleton<IConventionInfraService, ConventionInfraService>()
+                .AddSingleton<IExpressionInfraService, ExpressionInfraService>()
+                .AddSingleton<ISerializerInfraService, SerializerInfraService>()
 
                 .AddSingleton<IWebApiScanInfraService, WebApiScanInfraService>()
                 .AddSingleton<IIntegrationTestScanInfraService, IntegrationTestScanInfraService>()

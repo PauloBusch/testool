@@ -70,14 +70,16 @@ namespace TesTool.Core.Services
                     if (flagAttribute is not null) property.SetValue(command, true, null);
                     if (optionAttribute is not null)
                     {
-                        var existIndex = argumentsStack.Count >= 2;
-                        var validArgument = existIndex && !argumentsStack.ElementAt(1).StartsWith("-");
+                        var optionIndex = argumentsStack.FindIndex(a => matchArguments.Contains(a));
+                        var valueIndex = optionIndex + 1;
+                        var existIndex = argumentsStack.Count > valueIndex;
+                        var validArgument = existIndex && !argumentsStack.ElementAt(valueIndex).StartsWith("-");
                         if (validArgument)
                         {
-                            var value = argumentsStack.ElementAt(1);
+                            var value = argumentsStack.ElementAt(valueIndex);
                             property.SetValue(command, value, null);
                             argumentsStack.RemoveAll(a => a == value);
-                        } else throw new ValidationException($"Valor inválido para a opção --{property.Name.ToLower()}.");
+                        } else throw new ValidationException($"Valor inválido para a opção {argumentsStack[optionIndex]}.");
                     }
 
                     argumentsStack.RemoveAll(a => matchArguments.Contains(a));

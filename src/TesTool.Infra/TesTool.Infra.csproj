@@ -5,8 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Bogus" Version="33.1.1" />
     <PackageReference Include="Buildalyzer" Version="3.2.3" />
     <PackageReference Include="Buildalyzer.Workspaces" Version="3.2.3" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.11.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
     <PackageReference Include="System.CodeDom" Version="5.0.0" />
   </ItemGroup>

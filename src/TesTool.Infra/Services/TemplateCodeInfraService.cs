@@ -2,14 +2,13 @@
 using System.Linq;
 using TesTool.Core.Interfaces.Services;
 using TesTool.Core.Models.Templates.Factory;
-using TesTool.Core.Models.Templates.Faker;
 using TesTool.Infra.Templates;
 
 namespace TesTool.Infra.Services
 {
     public class TemplateCodeInfraService : ITemplateCodeInfraService
     {
-        public string ProcessFaker(Bogus model)
+        public string ProcessFaker(Core.Models.Templates.Faker.Bogus model)
         {
             var template = new FakerTemplate
             {
