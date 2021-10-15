@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using TesTool.Core.Interfaces.Services;
+using TesTool.Core.Models.Templates.Comparator;
 using TesTool.Core.Models.Templates.Factory;
 using TesTool.Infra.Templates;
 
@@ -36,6 +37,21 @@ namespace TesTool.Infra.Services
         public string ProcessFakerFactoryMethod(ModelFactoryMethod model)
         {
             var template = new ModelFakerFactoryMethodTemplate { Method = model };
+            return template.TransformText();
+        }
+
+        public string ProcessComparer(ModelCompare model)
+        {
+            var template = new ModelComparerTemplate
+            {
+                Comparers = model.Comparers.ToArray(),
+                Properties = model.Properties.ToArray(),
+                ComparatorNamespace = model.ComparatorNamespace,
+                ComparatorClassName = model.ComparatorClassName,
+                SourceClassName = model.SourceClassName,
+                TargetClassName = model.TargetClassName,
+                Namespaces = PrepareNamespaces(model.Namespaces, model.ComparatorNamespace)
+            };
             return template.TransformText();
         }
 

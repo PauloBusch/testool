@@ -4,6 +4,7 @@ using System;
 using System.Threading.Tasks;
 using TesTool.Core.Exceptions;
 using TesTool.Core.Interfaces.Services;
+using TesTool.Core.Models.Templates.Comparator;
 using TesTool.Core.Models.Templates.Factory;
 
 namespace TesTool.Cli
@@ -24,6 +25,7 @@ namespace TesTool.Cli
                     .BuildServiceProvider();
 
                 var argumentsCoreService = serviceProvider.GetService<ICommandFactoryService>();
+
                 await argumentsCoreService.CreateCommand(args)?.ExecuteAsync();
 
                 var console = serviceProvider.GetService<ILoggerInfraService>();
@@ -48,18 +50,24 @@ namespace TesTool.Cli
                         //console.LogInformation(JsonConvert.SerializeObject(e.Output, Formatting.Indented, jsonOptions));
                     });
                 });
-                */
-
-                /*
-                var model = new ModelFactory("Fcb.Api.IntegrationTests.Fakers");
-                model.AddNamespace("Fcb.Api.IntegrationTests._Common.Base");
-                model.AddNamespace("Fcb.Api.IntegrationTests.Fakers.Models");
-                model.AddMethod(new ModelFactoryMethod("CountryModel", "CountryModelFaker"));
-                model.AddMethod(new ModelFactoryMethod("UserRequest", "UserRequestFaker"));
+                
+                
+                var model = new ModelCompare(
+                    "Api.IntegrationTests.Comparators", 
+                    "DeveloperCreateDtoEqualDeveloper",
+                    "DeveloperCreateDto",
+                    "Developer"
+                );
+                model.AddNamespace("Tasks.Domain.Developers.Dtos");
+                model.AddNamespace("Tasks.Domain.Developers.Entities");
+                model.AddProperty(new ModelCompareProperty("Name"));
+                model.AddProperty(new ModelCompareProperty("Login"));
+                model.AddProperty(new ModelCompareProperty("CPF"));
 
                 var templateService = serviceProvider.GetService<ITemplateCodeInfraService>();
-                console.LogInformation(templateService.ProcessFakerFactory(model));
-                */                
+                console.LogInformation(templateService.ProcessComparer(model));
+                */
+                        
             }
             catch (TesToolExceptionBase exception)
             {

@@ -1,4 +1,5 @@
-﻿using TesTool.Core.Models.Templates.Factory;
+﻿using TesTool.Core.Models.Templates.Comparator;
+using TesTool.Core.Models.Templates.Factory;
 using TesTool.Core.Models.Templates.Faker;
 
 namespace TesTool.Core.Interfaces.Services
@@ -8,5 +9,6 @@ namespace TesTool.Core.Interfaces.Services
         string ProcessFaker(Bogus model);
         string ProcessFakerFactory(ModelFactory model);
         string ProcessFakerFactoryMethod(ModelFactoryMethod model);
+        string ProcessComparer(ModelCompare model);
     }
 }

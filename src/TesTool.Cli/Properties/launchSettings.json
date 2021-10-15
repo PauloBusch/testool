@@ -2,7 +2,7 @@
   "profiles": {
     "TesTool.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "g f Form1919Section2AssociateRequest ModelFakerFactory1 -s"
+      "commandLineArgs": "g e GuarantorForm2Request GuarantorForm2Response ModelComparer"
     }
   }
 }

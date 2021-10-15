@@ -30,6 +30,13 @@ namespace TesTool.Infra.Services
 
         protected abstract string GetProjectFile();
 
+        public async Task<bool> ProjectExistAsync()
+        {
+            var projectFile = GetProjectFile();
+            if (string.IsNullOrWhiteSpace(projectFile)) return false;
+            return await Task.FromResult(GetProject() is not null);
+        }
+
         protected async Task<ITypeSymbol> GetTypeSymbolAsync(string name)
         {
             var project = GetProject();

@@ -28,23 +28,21 @@ namespace TesTool.Core.Commands.Generate
         private readonly IIntegrationTestScanInfraService _integrationTestScanInfraService;
         private readonly ITemplateCodeInfraService _templateCodeInfraService;
         private readonly IFileSystemInfraService _fileSystemInfraService;
-        private readonly IEnvironmentInfraService _environmentInfraService;
         private readonly IConventionInfraService _conventionInfraService;
         private readonly IExpressionInfraService _expressionInfraService;
 
         public GenerateFakeCommand(
             IWebApiScanInfraService webApiScanInfraService,
             IIntegrationTestScanInfraService integrationTestScanInfraService,
-            IEnvironmentInfraService environmentInfraService,
             ITemplateCodeInfraService templateCodeInfraService,
             IFileSystemInfraService fileSystemInfraService,
             IConventionInfraService conventionInfraService,
-            IExpressionInfraService expressionInfraService
-        )
+            IExpressionInfraService expressionInfraService,
+            IEnvironmentInfraService environmentInfraService
+        ) : base(environmentInfraService)
         {
             _webApiScanInfraService = webApiScanInfraService;
             _fileSystemInfraService = fileSystemInfraService;
-            _environmentInfraService = environmentInfraService;
             _integrationTestScanInfraService = integrationTestScanInfraService;
             _templateCodeInfraService = templateCodeInfraService;
             _conventionInfraService = conventionInfraService;
@@ -64,14 +62,14 @@ namespace TesTool.Core.Commands.Generate
             if (model is Class dto)
             {
                 var fakerName = $"{ClassName}Faker";
-                //if (await _integrationTestScanInfraService.ClassExistAsync(fakerName))
-                //    throw new DuplicatedClassException(fakerName);
+                if (await _integrationTestScanInfraService.ClassExistAsync(fakerName))
+                    throw new DuplicatedClassException(fakerName);
 
                 var fileName = $"{dto.Name}Faker.cs";
                 var filePath = Path.Combine(GetOutputDirectory(), fileName);
                 var sourceCode = _templateCodeInfraService.ProcessFaker(await MapTemplateModelAsync(dto));
-                //if (await _fileSystemInfraService.FileExistAsync(filePath))
-                //    throw new DuplicatedSourceFileException(fileName);
+                if (await _fileSystemInfraService.FileExistAsync(filePath))
+                    throw new DuplicatedSourceFileException(fileName);
 
                 await _fileSystemInfraService.SaveFileAsync(filePath, sourceCode);
                 
@@ -150,8 +148,8 @@ namespace TesTool.Core.Commands.Generate
             var fileName = $"{FactoryName}.cs";
             var filePath = Path.Combine(GetOutputDirectory(), fileName);
             var factorySourceCode = _templateCodeInfraService.ProcessFakerFactory(templateModel);
-            //if (await _fileSystemInfraService.FileExistAsync(filePath))
-            //    throw new DuplicatedSourceFileException(fileName);
+            if (await _fileSystemInfraService.FileExistAsync(filePath))
+                throw new DuplicatedSourceFileException(fileName);
 
             await _fileSystemInfraService.SaveFileAsync(filePath, factorySourceCode);
         }
@@ -190,9 +188,5 @@ namespace TesTool.Core.Commands.Generate
             var webApiNamespace = _webApiScanInfraService.GetNamespace();
             return $"{webApiNamespace}.IntegrationTests.Fakers";
         }
-
-        private string GetOutputDirectory() => string.IsNullOrWhiteSpace(Output) 
-            ? _environmentInfraService.GetWorkingDirectory() 
-            : Output;
     }
 }

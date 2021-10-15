@@ -18,12 +18,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Templates\ModelComparerTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>ModelComparerTemplate.cs</LastGenOutput>
+    </None>
     <None Update="Templates\FakerTemplate.tt">
       <LastGenOutput>FakerTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
     <None Update="Templates\ModelFakerFactoryMethodTemplate.tt">
-      <LastGenOutput>ModelFakerFactoryMethodTemplate.cs</LastGenOutput>
+      <LastGenOutput>ModelComparerAssertTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
     <None Update="Templates\ModelFakerFactoryTemplate.tt">
@@ -42,10 +46,15 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>FakerTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Update="Templates\ModelFakerFactoryMethodTemplate.cs">
+    <Compile Update="Templates\ModelComparerTemplate.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+      <DependentUpon>ModelComparerTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Templates\ModelFakerFactoryMethodTemplate - Copy.cs">
       <DependentUpon>ModelFakerFactoryMethodTemplate.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Update="Templates\ModelFakerFactoryTemplate.cs">
       <DesignTime>True</DesignTime>

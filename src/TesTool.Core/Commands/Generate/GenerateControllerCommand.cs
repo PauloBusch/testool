@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using TesTool.Core.Attributes;
+using TesTool.Core.Interfaces.Services;
 
 namespace TesTool.Core.Commands.Generate
 {
@@ -8,6 +9,8 @@ namespace TesTool.Core.Commands.Generate
     {
         [Parameter(HelpText = "Nome da classe controlador.")]
         public string Controller { get; set; }
+        
+        public GenerateControllerCommand(IEnvironmentInfraService environmentInfraService) : base(environmentInfraService) { }
 
         public override Task ExecuteAsync()
         {

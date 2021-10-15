@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using TesTool.Core.Attributes;
+using TesTool.Core.Interfaces.Services;
 
 namespace TesTool.Core.Commands.Generate
 {
@@ -8,6 +9,8 @@ namespace TesTool.Core.Commands.Generate
     {
         [Parameter(HelpText = "Diretório do projeto.")]
         public string Directory { get; set; }
+        
+        public GenerateProjectCommand(IEnvironmentInfraService environmentInfraService) : base(environmentInfraService) { }
 
         public override Task ExecuteAsync()
         {

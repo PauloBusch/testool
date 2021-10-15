@@ -22,23 +22,16 @@ namespace TesTool.Infra.Services
             _environmentInfraService = environmentInfraService;
         }
 
+        public async Task<bool> ClassExistAsync(string className)
+        {
+            return await GetTypeSymbolAsync(className) is not null;
+        }
+
         public async Task<Class> GetClassAsync(string name)
         {
             var typeSymbol = await GetTypeSymbolAsync(name);
             if (typeSymbol is null) return default;
             return GetModelType(typeSymbol) as Class;
-        }
-
-        public async Task<bool> ProjectExistAsync()
-        {
-            var projectFile = GetProjectFile();
-            if (string.IsNullOrWhiteSpace(projectFile)) return false;
-            return await Task.FromResult(GetProject() is not null);
-        }
-
-        public async Task<bool> ClassExistAsync(string className)
-        {
-            return await GetTypeSymbolAsync(className) is not null;
         }
 
         public async Task<string> GetPathClassAsync(string className)

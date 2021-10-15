@@ -55,6 +55,11 @@ namespace TesTool.Infra.Services
             return controllers;
         }
 
+        public async Task<bool> ClassExistAsync(string className)
+        {
+            return await GetModelAsync(className) is Class;
+        }
+
         public async Task<TypeWrapper> GetModelAsync(string name)
         {
             var controllers = await GetControllersAsync();
