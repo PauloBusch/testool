@@ -9,7 +9,7 @@ using TesTool.Core.Interfaces.Services;
 
 namespace TesTool.Core.Commands.Configure
 {
-    [Command("project", "p", HelpText = "Definir globalmente um projeto de trabalho.")]
+    [Command("project", HelpText = "Definir globalmente um projeto de trabalho.")]
     public class ConfigureProjectCommand : ConfigureCommandBase
     {
         [Parameter(HelpText = "Diretório do projeto.")]

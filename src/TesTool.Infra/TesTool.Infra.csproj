@@ -22,7 +22,7 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>AssertExtensionsTemplate.cs</LastGenOutput>
     </None>
-    <None Update="Templates\Comparators\ComparatorFactoryTemplate.tt">
+    <None Update="Templates\Factories\ComparatorFactoryTemplate.tt">
       <LastGenOutput>ComparatorFactoryTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
@@ -38,7 +38,7 @@
       <LastGenOutput>FakerTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
-    <None Update="Templates\Comparators\ComparatorFactoryMethodTemplate.tt">
+    <None Update="Templates\Factories\ComparatorFactoryMethodTemplate.tt">
       <LastGenOutput>ComparatorFactoryMethodTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
@@ -46,13 +46,13 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>HttpRequestTemplate.cs</LastGenOutput>
     </None>
-    <None Update="Templates\Fakers\ModelFakerFactoryMethodTemplate.tt">
-      <LastGenOutput>ModelFakerFactoryMethodTemplate.cs</LastGenOutput>
+    <None Update="Templates\Factories\ModelFactoryMethodTemplate.tt">
+      <LastGenOutput>ModelFactoryMethodTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
-    <None Update="Templates\Fakers\ModelFakerFactoryTemplate.tt">
+    <None Update="Templates\Factories\ModelFactoryTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>ModelFakerFactoryTemplate.cs</LastGenOutput>
+      <LastGenOutput>ModelFactoryTemplate.cs</LastGenOutput>
     </None>
   </ItemGroup>
 
@@ -61,11 +61,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Templates\Extensions\AssertExtensionsTemplate.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>AssertExtensionsTemplate.tt</DependentUpon>
-    </Compile>
     <Compile Update="Templates\Comparators\ComparatorDynamicTemplate.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -76,15 +71,35 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ComparatorStaticTemplate.tt</DependentUpon>
     </Compile>
+    <Compile Update="Templates\Extensions\AssertExtensionsTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AssertExtensionsTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Templates\Factories\ComparatorFactoryMethodTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ComparatorFactoryMethodTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Templates\Factories\ComparatorFactoryTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ComparatorFactoryTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Templates\Factories\ModelFactoryMethodTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ModelFactoryMethodTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Templates\Factories\ModelFactoryTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ModelFactoryTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Update="Templates\Fakers\FakerTemplate.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>FakerTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Update="Templates\Comparators\ComparatorFactoryTemplate.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ComparatorFactoryTemplate.tt</DependentUpon>
     </Compile>
     <Compile Update="Templates\Helpers\HttpRequestTemplate.cs">
       <DesignTime>True</DesignTime>
@@ -95,21 +110,6 @@
       <DependentUpon>ModelFakerFactoryMethodTemplate.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Templates\Comparators\ComparatorFactoryMethodTemplate.cs">
-      <DependentUpon>ComparatorFactoryMethodTemplate.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Templates\Fakers\ModelFakerFactoryMethodTemplate.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ModelFakerFactoryMethodTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Update="Templates\Fakers\ModelFakerFactoryTemplate.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ModelFakerFactoryTemplate.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 

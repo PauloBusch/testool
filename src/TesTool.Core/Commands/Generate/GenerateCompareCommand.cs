@@ -76,12 +76,12 @@ namespace TesTool.Core.Commands.Generate
             if (Static)
             {
                 var templateModel = await MapModelCompareStaticAsync(sourceModel, targetModel);
-                sourceCode = _templateCodeInfraService.ProcessComparerStatic(templateModel);
+                sourceCode = _templateCodeInfraService.BuildCompareStatic(templateModel);
             } else
             {
                 var templateModel = await MapModelCompareDynamicAsync(sourceModel, targetModel);
                 await CreateAssertExtensionAsync(templateModel);
-                sourceCode = _templateCodeInfraService.ProcessComparerDynamic(templateModel);
+                sourceCode = _templateCodeInfraService.BuildCompareDynamic(templateModel);
             }
             await _fileSystemInfraService.SaveFileAsync(filePath, sourceCode);
 
@@ -140,7 +140,7 @@ namespace TesTool.Core.Commands.Generate
             var templateModel = GetModelFactory();
             var fileName = $"{ComparatorName}.cs";
             var filePath = Path.Combine(GetOutputDirectory(), fileName);
-            var factorySourceCode = _templateCodeInfraService.ProcessComparerFactory(templateModel);
+            var factorySourceCode = _templateCodeInfraService.BuildComparatorFactory(templateModel);
             if (await _fileSystemInfraService.FileExistAsync(filePath))
                 throw new DuplicatedSourceFileException(fileName);
 
@@ -150,7 +150,7 @@ namespace TesTool.Core.Commands.Generate
         public async Task AppendComparatorFactoryMethodAsync() {
             var templateModel = GetModelFactory();
             var factoryPathFile = await _testScanInfraService.GetPathClassAsync(ComparatorName);
-            var factorySourceCode = _templateCodeInfraService.ProcessComparerFactory(templateModel);
+            var factorySourceCode = _templateCodeInfraService.BuildComparatorFactory(templateModel);
             var mergedSourceCode = await _testCodeInfraService.MergeClassCodeAsync(ComparatorName, factorySourceCode);
             await _fileSystemInfraService.SaveFileAsync(factoryPathFile, mergedSourceCode);
         }
@@ -164,7 +164,7 @@ namespace TesTool.Core.Commands.Generate
                 var extensionFileName = $"{extensionClassName}.cs";
                 var extensionNamespace = GetExtensionNamespace();
                 var extensionFilePath = Path.Combine(GetOutputDirectory(), extensionFileName);
-                var extensionSourceCode = _templateCodeInfraService.ProcessAssertExtensions(extensionNamespace);
+                var extensionSourceCode = _templateCodeInfraService.BuildAssertExtensions(extensionNamespace);
                 if (await _fileSystemInfraService.FileExistAsync(extensionFilePath))
                     throw new DuplicatedSourceFileException(extensionFileName);
 

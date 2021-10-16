@@ -42,13 +42,16 @@ namespace TesTool.Core.Commands.Generate
             if (controllerClass is null) throw new ClassNotFoundException(GetControllerName());
             if (!controllerClass.Endpoints.Any()) throw new ValidationException("The controller has no endpoints.");
 
-            var helpClassesRegex = HelpClassEnumerator.GetAll().Select(h => h.Regex).ToArray();
+            // TODO: Review code
+            /*
+            var helpClassesRegex = TestClassEnumerator.GetAll().Select(h => h.Regex).ToArray();
             var regexClassesNotFounded = await _testScanInfraService.GetNotFoundClassesAsync(helpClassesRegex);
             if (regexClassesNotFounded.Any())
             {
-                var classNames = HelpClassEnumerator.GetAll().Where(h => regexClassesNotFounded.Any(r => r == h.Regex));
+                var classNames = TestClassEnumerator.GetAll().Where(h => regexClassesNotFounded.Any(r => r == h.Regex));
                 throw new UnsupportedCommandException($"O projeto não possui as classes necessárias: {string.Join(", ", classNames)}.");
             }
+            */
         }
 
         private string GetControllerName() => Controller.Contains("Controller") ? Controller : $"{Controller}Controller";

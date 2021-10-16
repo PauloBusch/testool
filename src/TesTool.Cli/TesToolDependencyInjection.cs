@@ -3,7 +3,9 @@ using System;
 using System.Linq;
 using TesTool.Core.Interfaces;
 using TesTool.Core.Interfaces.Services;
+using TesTool.Core.Interfaces.Services.Factories;
 using TesTool.Core.Services;
+using TesTool.Core.Services.Factories;
 using TesTool.Infra.Services;
 
 namespace TesTool.Cli
@@ -26,6 +28,7 @@ namespace TesTool.Cli
                 .AddSingleton<ITestScanInfraService, TestScanInfraService>()
                 .AddSingleton<ITestCodeInfraService, TestCodeInfraService>()
 
+                .AddSingleton<IFactoryModelService, FactoryModelService>()
                 .AddSingleton<ICommandExplorerService, CommandExplorerService>()
                 .AddSingleton<ICommandFactoryService, CommandFactoryService>();
 

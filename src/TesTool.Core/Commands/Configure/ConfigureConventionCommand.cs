@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.IO;
-using System.Text.Json;
 using System.Threading.Tasks;
 using TesTool.Core.Attributes;
 using TesTool.Core.Enumerations;
@@ -9,7 +8,7 @@ using TesTool.Core.Interfaces.Services;
 
 namespace TesTool.Core.Commands.Configure
 {
-    [Command("convention", "c", HelpText = "Definir arquivo de configuração de conveção.")]
+    [Command("convention", HelpText = "Definir arquivo de configuração de conveção.")]
     public class ConfigureConventionCommand : ConfigureCommandBase
     {
         [Parameter(HelpText = "Diretório do arquivo de configuração.")]
