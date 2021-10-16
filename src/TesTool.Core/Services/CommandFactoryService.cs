@@ -78,7 +78,7 @@ namespace TesTool.Core.Services
                         {
                             var value = argumentsStack.ElementAt(valueIndex);
                             property.SetValue(command, value, null);
-                            argumentsStack.RemoveAll(a => a == value);
+                            argumentsStack.RemoveAt(valueIndex);
                         } else throw new ValidationException($"Valor inválido para a opção {argumentsStack[optionIndex]}.");
                     }
 
@@ -101,9 +101,10 @@ namespace TesTool.Core.Services
                             argumentsStack.RemoveAll(a => values.Contains(a));
                         } else
                         {
-                            var value = argumentsStack.ElementAt(0);
+                            var valueIndex = 0;
+                            var value = argumentsStack.ElementAt(valueIndex);
                             property.SetValue(command, value, null);
-                            argumentsStack.RemoveAll(a => a == value);
+                            argumentsStack.RemoveAt(valueIndex);
                         }
                     }
                     else if (propertyAttribute.IsRequired)

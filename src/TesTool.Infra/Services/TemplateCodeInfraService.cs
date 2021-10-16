@@ -40,9 +40,9 @@ namespace TesTool.Infra.Services
             return template.TransformText();
         }
 
-        public string ProcessComparer(ModelCompare model)
+        public string ProcessComparerStatic(CompareStatic model)
         {
-            var template = new ModelComparerTemplate
+            var template = new ComparatorStaticTemplate
             {
                 Comparers = model.Comparers.ToArray(),
                 Properties = model.Properties.ToArray(),
@@ -52,6 +52,44 @@ namespace TesTool.Infra.Services
                 TargetClassName = model.TargetClassName,
                 Namespaces = PrepareNamespaces(model.Namespaces, model.ComparatorNamespace)
             };
+            return template.TransformText();
+        }
+
+        public string ProcessComparerDynamic(CompareDynamic model)
+        {
+            var template = new ComparatorDynamicTemplate
+            {
+                ComparatorNamespace = model.ComparatorNamespace,
+                ComparatorClassName = model.ComparatorClassName,
+                SourceClassName = model.SourceClassName,
+                TargetClassName = model.TargetClassName,
+                Namespaces = PrepareNamespaces(model.Namespaces, model.ComparatorNamespace)
+            };
+            return template.TransformText();
+        }
+
+        public string ProcessComparerFactory(ComparatorFactory model)
+        {
+            var template = new ComparatorFactoryTemplate
+            {
+                TemplataService = this,
+                Name = model.Name,
+                Methods = model.Methods.ToArray(),
+                Namespaces = PrepareNamespaces(model.Namespaces, model.FactoryNamespace),
+                FactoryNamespace = model.FactoryNamespace,
+            };
+            return template.TransformText();
+        }
+
+        public string ProcessComparerFactoryMethod(ComparatorFactoryMethod model)
+        {
+            var template = new ComparatorFactoryMethodTemplate { Method = model };
+            return template.TransformText();
+        }
+
+        public string ProcessAssertExtensions(string @namespace)
+        {
+            var template = new AssertExtensionsTemplate { ExtensionNamespace = @namespace };
             return template.TransformText();
         }
 

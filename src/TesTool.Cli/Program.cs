@@ -50,22 +50,22 @@ namespace TesTool.Cli
                         //console.LogInformation(JsonConvert.SerializeObject(e.Output, Formatting.Indented, jsonOptions));
                     });
                 });
+                */
                 
-                
-                var model = new ModelCompare(
-                    "Api.IntegrationTests.Comparators", 
-                    "DeveloperCreateDtoEqualDeveloper",
-                    "DeveloperCreateDto",
-                    "Developer"
+                /*
+                var model = new ComparatorFactory(
+                    "ComparerFactory",
+                    "Tasks.IntegrationTests"
                 );
-                model.AddNamespace("Tasks.Domain.Developers.Dtos");
-                model.AddNamespace("Tasks.Domain.Developers.Entities");
-                model.AddProperty(new ModelCompareProperty("Name"));
-                model.AddProperty(new ModelCompareProperty("Login"));
-                model.AddProperty(new ModelCompareProperty("CPF"));
+                model.AddNamespace("Tasks.IntegrationTests.Comparators");
+                model.AddNamespace("Tasks.IntegrationTests.Comparators1");
+                model.AddNamespace("Tasks.IntegrationTests.Comparators2");
+                model.AddMethod(new ComparatorFactoryMethod("DeveloperCreateDtoEqualDeveloper"));
+                model.AddMethod(new ComparatorFactoryMethod("DeveloperCreateDtoEqualDeveloper1"));
+                model.AddMethod(new ComparatorFactoryMethod("DeveloperCreateDtoEqualDeveloper2"));
 
                 var templateService = serviceProvider.GetService<ITemplateCodeInfraService>();
-                console.LogInformation(templateService.ProcessComparer(model));
+                console.LogInformation(templateService.ProcessComparerFactory(model));
                 */
                         
             }

@@ -1,7 +1,7 @@
 ﻿<#@ template language="C#" #>
 <#@ assembly name="System.Core" #>
 <#@ import namespace="TesTool.Core.Models.Templates.Factory" #>
-public <#=Method.Faker#> <#=Method.Name#>() => new();
+public <#=Method.Name#> <#=Method.Name#>() => new();
 <#+ 
-    public ModelFactoryMethod Method { get; set; } 
+    public ComparatorFactoryMethod Method { get; set; } 
 #>

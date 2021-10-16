@@ -1,8 +1,8 @@
 ﻿namespace TesTool.Core.Models.Templates.Comparator
 {
-    public class ModelCompareObject
+    public class CompareObject
     {
-        public ModelCompareObject(
+        public CompareObject(
             string propertyName, 
             string comparerName,
             bool @unsafe

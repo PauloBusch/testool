@@ -12,6 +12,9 @@ namespace <#=ComparatorNamespace#>
 {
     public class <#=ComparatorClassName#>
     {
+<#      #><# if (SourceClassName!=TargetClassName) { #>
+        public void Equals(<#=TargetClassName#> source, <#=SourceClassName#> target) => Equals(source, target);
+<#      #><# } #>
         public void Equals(<#=SourceClassName#> source, <#=TargetClassName#> target)
         {
 <#      #><# foreach (var property in Properties) { #>
@@ -33,6 +36,6 @@ namespace <#=ComparatorNamespace#>
     public string SourceClassName { get; set; }
     public string TargetClassName { get; set; }
     public string[] Namespaces { get; set; }
-    public ModelCompareProperty[] Properties { get; set; }
-    public ModelCompareObject[] Comparers { get; set; }
+    public CompareProperty[] Properties { get; set; }
+    public CompareObject[] Comparers { get; set; }
 #>

@@ -1,8 +1,8 @@
 ﻿namespace TesTool.Core.Models.Templates.Comparator
 {
-    public class ModelCompareProperty
+    public class CompareProperty
     {
-        public ModelCompareProperty(string propertyName)
+        public CompareProperty(string propertyName)
         {
             PropertyName = propertyName;
         }

@@ -2,7 +2,7 @@
   "profiles": {
     "TesTool.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "g e GuarantorForm2Request GuarantorForm2Response ModelComparer"
+      "commandLineArgs": "g e AddressResponse AddressRequest  ModelComparer -s"
     }
   }
 }

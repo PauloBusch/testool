@@ -10,15 +10,16 @@
 namespace TesTool.Infra.Templates
 {
     using TesTool.Core.Models.Templates.Factory;
+    using TesTool.Core.Interfaces.Services;
     using System;
     
     /// <summary>
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\ModelFakerFactoryMethodTemplate.tt"
+    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\ComparatorFactoryTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public partial class ModelFakerFactoryMethodTemplate : ModelFakerFactoryMethodTemplateBase
+    public partial class ComparatorFactoryTemplate : ComparatorFactoryTemplateBase
     {
 #line hidden
         /// <summary>
@@ -26,34 +27,85 @@ namespace TesTool.Infra.Templates
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("public ");
             
-            #line 4 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\ModelFakerFactoryMethodTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Method.Faker));
-            
-            #line default
-            #line hidden
-            this.Write(" ");
-            
-            #line 4 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\ModelFakerFactoryMethodTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Method.Name));
+            #line 5 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\ComparatorFactoryTemplate.tt"
+ foreach (var @namespace in Namespaces) {
+  
             
             #line default
             #line hidden
-            this.Write("() => new ");
+            this.Write("using ");
             
-            #line 4 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\ModelFakerFactoryMethodTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Method.Faker));
+            #line 6 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\ComparatorFactoryTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(@namespace));
             
             #line default
             #line hidden
-            this.Write("();\r\n");
+            this.Write(";\r\n");
+            
+            #line 7 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\ComparatorFactoryTemplate.tt"
+ } 
+            
+            #line default
+            #line hidden
+            this.Write("\r\nnamespace ");
+            
+            #line 9 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\ComparatorFactoryTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(FactoryNamespace));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n{\r\n    public class ");
+            
+            #line 11 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\ComparatorFactoryTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n    {\r\n");
+            
+            #line 13 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\ComparatorFactoryTemplate.tt"
+  
+            
+            #line default
+            #line hidden
+            
+            #line 13 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\ComparatorFactoryTemplate.tt"
+ foreach (var method in Methods) { 
+            
+            #line default
+            #line hidden
+            this.Write("        ");
+            
+            #line 14 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\ComparatorFactoryTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(TemplataService.ProcessComparerFactoryMethod(method)));
+            
+            #line default
+            #line hidden
+            
+            #line 14 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\ComparatorFactoryTemplate.tt"
+
+    
+            
+            #line default
+            #line hidden
+            
+            #line 15 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\ComparatorFactoryTemplate.tt"
+ } 
+            
+            #line default
+            #line hidden
+            this.Write("    }\r\n}\r\n");
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 5 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\ModelFakerFactoryMethodTemplate.tt"
- 
-    public ModelFactoryMethod Method { get; set; } 
+        #line 18 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\ComparatorFactoryTemplate.tt"
+
+    public string Name { get; set; }
+    public string FactoryNamespace { get; set; }
+    public string[] Namespaces { get; set; }
+    public ComparatorFactoryMethod[] Methods { get; set; }
+    public ITemplateCodeInfraService TemplataService { get; set; }
 
         
         #line default
@@ -67,7 +119,7 @@ namespace TesTool.Infra.Templates
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public class ModelFakerFactoryMethodTemplateBase
+    public class ComparatorFactoryTemplateBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

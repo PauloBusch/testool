@@ -2,13 +2,13 @@
 
 namespace TesTool.Core.Models.Templates.Comparator
 {
-    public class ModelCompare
+    public class CompareStatic
     {
         private List<string> _namespaces;
-        private List<ModelCompareProperty> _properties;
-        private List<ModelCompareObject> _comparers;
+        private List<CompareProperty> _properties;
+        private List<CompareObject> _comparers;
 
-        public ModelCompare(
+        public CompareStatic(
             string comparatorNamespace, 
             string comparatorClassName, 
             string sourceClassName, 
@@ -20,8 +20,8 @@ namespace TesTool.Core.Models.Templates.Comparator
             SourceClassName = sourceClassName;
             TargetClassName = targetClassName;
             _namespaces = new List<string>();
-            _properties = new List<ModelCompareProperty>();
-            _comparers = new List<ModelCompareObject>();
+            _properties = new List<CompareProperty>();
+            _comparers = new List<CompareObject>();
         }
 
         public string ComparatorNamespace { get; private set; }
@@ -29,11 +29,11 @@ namespace TesTool.Core.Models.Templates.Comparator
         public string SourceClassName { get; private set; }
         public string TargetClassName { get; private set; }
         public IReadOnlyCollection<string> Namespaces => _namespaces.AsReadOnly();
-        public IReadOnlyCollection<ModelCompareProperty> Properties => _properties.AsReadOnly();
-        public IReadOnlyCollection<ModelCompareObject> Comparers => _comparers.AsReadOnly();
+        public IReadOnlyCollection<CompareProperty> Properties => _properties.AsReadOnly();
+        public IReadOnlyCollection<CompareObject> Comparers => _comparers.AsReadOnly();
 
         public void AddNamespace(string @namespace) => _namespaces.Add(@namespace);
-        public void AddProperty(ModelCompareProperty property) => _properties.Add(property);
-        public void AddComparer(ModelCompareObject comparer) => _comparers.Add(comparer);
+        public void AddProperty(CompareProperty property) => _properties.Add(property);
+        public void AddComparer(CompareObject comparer) => _comparers.Add(comparer);
     }
 }

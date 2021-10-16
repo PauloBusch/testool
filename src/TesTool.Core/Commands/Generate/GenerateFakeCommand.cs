@@ -171,22 +171,16 @@ namespace TesTool.Core.Commands.Generate
             return templateModel;
         }
 
-        private string GetFakerNamespace()
+        private string GetFakerNamespace() => GetNamespace("Fakers.Models");
+        private string GetFakerFactoryNamespace() => GetNamespace("Fakers");
+
+        private string GetNamespace(string sufix)
         {
             var integrationTestNamespace = _integrationTestScanInfraService.GetNamespace();
-            if (!string.IsNullOrWhiteSpace(integrationTestNamespace)) return $"{integrationTestNamespace}.Fakers.Models";
+            if (!string.IsNullOrWhiteSpace(integrationTestNamespace)) return $"{integrationTestNamespace}.{sufix}";
 
             var webApiNamespace = _webApiScanInfraService.GetNamespace();
-            return $"{webApiNamespace}.IntegrationTests.Fakers.Models";
-        }
-
-        private string GetFakerFactoryNamespace()
-        {
-            var integrationTestNamespace = _integrationTestScanInfraService.GetNamespace();
-            if (!string.IsNullOrWhiteSpace(integrationTestNamespace)) return $"{integrationTestNamespace}.Fakers";
-
-            var webApiNamespace = _webApiScanInfraService.GetNamespace();
-            return $"{webApiNamespace}.IntegrationTests.Fakers";
+            return $"{webApiNamespace}.IntegrationTests.{sufix}";
         }
     }
 }

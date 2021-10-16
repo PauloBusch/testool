@@ -9,6 +9,10 @@ namespace TesTool.Core.Interfaces.Services
         string ProcessFaker(Bogus model);
         string ProcessFakerFactory(ModelFactory model);
         string ProcessFakerFactoryMethod(ModelFactoryMethod model);
-        string ProcessComparer(ModelCompare model);
+        string ProcessComparerStatic(CompareStatic model);
+        string ProcessComparerDynamic(CompareDynamic model);
+        string ProcessComparerFactory(ComparatorFactory model);
+        string ProcessComparerFactoryMethod(ComparatorFactoryMethod model);
+        string ProcessAssertExtensions(string @namespace);
     }
 }

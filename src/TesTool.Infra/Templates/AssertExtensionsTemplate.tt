@@ -1,0 +1,96 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+
+namespace <#=ExtensionNamespace#>
+{
+    public static class AssertExtensions
+    {
+        public static void AreEqualObjects(
+            object source, object target,
+            IEnumerable<string> ignore = null
+        )
+        {
+            if (source is null) throw new ArgumentNullException(nameof(source));
+            if (target is null) throw new ArgumentNullException(nameof(target));
+            var sourceType = source.GetType();
+            var targetType = target.GetType();
+            var sourcePropertyNames = sourceType.GetProperties().Select(p => p.Name).ToList();
+            var targetPropertyNames = targetType.GetProperties().Select(p => p.Name).ToList();
+            var mergedProperties = sourcePropertyNames.Concat(targetPropertyNames);
+            var comparedPropertiesCount = 0;
+            foreach (var propertyName in sourcePropertyNames)
+            {
+                if (ignore != null && ignore.Contains(propertyName)) continue;
+
+                var sourceProperty = sourceType.GetProperty(propertyName);
+                var targetProperty = targetType.GetProperty(propertyName);
+                if (sourceProperty == null || targetProperty == null) continue;
+
+                var type = Nullable.GetUnderlyingType(sourceProperty.PropertyType) ?? sourceProperty.PropertyType;
+                if (!IsSimpleType(type)) continue;
+
+                if (sourceProperty.PropertyType != targetProperty.PropertyType) continue;
+                var expectedValue = sourceProperty.GetValue(source, null);
+                var actualValue = targetProperty.GetValue(target, null);
+                if (!AreEqualProperty(type, expectedValue, actualValue))
+                    throw new Exception(
+                        $"The property {propertyName} value are not equal for object type {targetType.Name}\n" +
+                        $"Expected value: {(expectedValue is null ? "null" : $"\"{expectedValue}\"")}\n" +
+                        $"Actual value: \"{(actualValue is null ? "null" : $"\"{actualValue}\"")}\""
+                    );
+                comparedPropertiesCount++;
+            }
+
+            if (comparedPropertiesCount == decimal.Zero)
+                throw new Exception($"No properties were compared for object type {targetType.Name}");
+        }
+
+        private static bool AreEqualProperty(Type type, object source, object target)
+        {
+            if (source == null && target == null) return true;
+            if (source == null || target == null) return false;
+
+            const int precision = 2;
+            var sourceValue = source;
+            var targetValue = target;
+            if (new [] { typeof(decimal), typeof(Decimal) }.Contains(type))
+            {
+                sourceValue = decimal.Round((decimal)sourceValue, precision, MidpointRounding.ToZero);
+                targetValue = decimal.Round((decimal)targetValue, precision, MidpointRounding.ToZero);
+            }
+
+            if (new [] { typeof(string), typeof(String) }.Contains(type))
+            {
+                sourceValue = Regex.Unescape(sourceValue.ToString());
+                targetValue = Regex.Unescape(targetValue.ToString());
+            }
+
+            if (!sourceValue.Equals(targetValue)) return false;
+            if (!targetValue.Equals(sourceValue)) return false;
+            return true;
+        }
+
+        public static bool IsSimpleType(Type type)
+        {
+            var realType = Nullable.GetUnderlyingType(type) ?? type;
+            if (realType.IsPrimitive || realType.IsEnum) return true;
+
+            var sampleTypes = new[] {
+                typeof(string),
+                typeof(decimal),
+                typeof(DateTime),
+                typeof(DateTimeOffset),
+                typeof(TimeSpan),
+                typeof(Guid)
+            };
+            return sampleTypes.Contains(realType);
+        }
+    }
+}
+<#+
+    public string ExtensionNamespace { get; set; }
+#>

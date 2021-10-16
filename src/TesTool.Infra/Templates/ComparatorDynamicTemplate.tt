@@ -1,0 +1,29 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="TesTool.Core.Models.Templates.Comparator" #>
+<# var tab = "    "; #>
+<# foreach (var @namespace in Namespaces) {
+  #>using <#=@namespace#>;
+<# } #>
+
+namespace <#=ComparatorNamespace#>
+{
+    public class <#=ComparatorClassName#>
+    {
+<#      #><# if (SourceClassName!=TargetClassName) { #>
+        public void Equals(<#=TargetClassName#> source, <#=SourceClassName#> target) => Equals(source, target);
+<#      #><# } #>
+        public void Equals(<#=SourceClassName#> source, <#=TargetClassName#> target)
+        {
+            AssertExtensions.AreEqualObjects(source, target);
+        }
+    }
+}
+<#+
+    public string ComparatorNamespace { get; set; }
+    public string ComparatorClassName { get; set; }
+    public string SourceClassName { get; set; }
+    public string TargetClassName { get; set; }
+    public string[] Namespaces { get; set; }
+#>
