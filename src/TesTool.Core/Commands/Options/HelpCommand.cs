@@ -51,7 +51,7 @@ namespace TesTool.Core.Commands.Help
             }
 
             var commandTypesMatched = _commandExplorerService.GetCommandTypesMatched(arguments);
-            if (commandTypesMatched.Any()) LogSearchCommands(commandTypesMatched);
+            if (commandTypesMatched.Any()) LogSearchCommands(commandTypesMatched, arguments.Length);
             else throw new CommandNotFoundException("Execute 'testool --help' para ver os comandos válidos.");
 
             await Task.CompletedTask;
@@ -59,17 +59,18 @@ namespace TesTool.Core.Commands.Help
 
         private void LogDefaultCommands()
         {
-            var template = "  {0,-20} {1}";
             var commandTypes = _commandExplorerService.GetAllCommandTypes();
             var optionHelperTexts = commandTypes
                 .Where(type => type.GetCustomAttributes<FlagAttribute>().Any())
                 .Select(type => type.GetCustomAttributes<CommandAttribute>().Reverse())
                 .Select(commands => commands.First())
                 .Distinct()
+                .OrderBy(c => c.Order)
+                .ThenBy(c => c.Name)
                 .Select(command =>
                 {
                     var commandOptions = !string.IsNullOrWhiteSpace(command.Alias) ? $"{command.Alias}, {command.Name}" : command.Name;
-                    return string.Format(template, commandOptions, command.HelpText);
+                    return new [] { commandOptions, command.HelpText };
                 })
                 .ToArray();
             var commandHelperTexts = commandTypes
@@ -77,70 +78,74 @@ namespace TesTool.Core.Commands.Help
                 .Select(type => type.GetCustomAttributes<CommandAttribute>().Reverse())
                 .Select(commands => commands.First())
                 .Distinct()
+                .OrderBy(c => c.Order)
+                .ThenBy(c => c.Name)
                 .Select(command =>
                 {
                     var commandOptions = !string.IsNullOrWhiteSpace(command.Alias) ? $"{command.Alias}|{command.Name}" : command.Name;
-                    return string.Format(template, commandOptions, command.HelpText);
+                    return new[] { commandOptions, command.HelpText };
                 })
                 .ToArray();
 
-            LogConsole(default, new string[0], options: optionHelperTexts, commands: commandHelperTexts);
+            LogConsole(default, Array.Empty<string[]>(), optionsColumns: optionHelperTexts, commandsColumns: commandHelperTexts);
         }
 
-        private void LogSearchCommands(IEnumerable<Type> commandTypes)
+        private void LogSearchCommands(IEnumerable<Type> commandTypes, int commandLevel)
         {
-            var template = "  {0,-30} {1}";
             var commandBaseType = commandTypes.FirstOrDefault()?.BaseType;
             var commandHelperTexts = commandTypes
                 .Where(type => !type.GetCustomAttributes<OptionAttribute>().Any())
-                .Select(type => type.GetCustomAttributes<CommandAttribute>().Reverse())
-                .Select(command => command.Last())
+                .Select(type => type.GetCustomAttributes<CommandAttribute>().Reverse().ElementAt(commandLevel))
                 .Distinct()
+                .OrderBy(c => c.Order)
+                .ThenBy(c => c.Name)
                 .Select(command =>
                 {
                     var commandOptions = !string.IsNullOrWhiteSpace(command.Alias) ? $"{command.Alias}|{command.Name}" : command.Name;
-                    return string.Format(template, commandOptions, command.HelpText);
+                    return new[] { commandOptions, command.HelpText };
                 })
                 .ToArray();
 
-            LogConsole(commandBaseType, new string[0], new string[0], commands: commandHelperTexts);
+            LogConsole(commandBaseType, Array.Empty<string[]>(), Array.Empty<string[]>(), commandsColumns: commandHelperTexts);
         }
 
         private void LogExactCommand(Type commandType)
         {
-            var template = "  {0,-30} {1}";
             var commandProperties = commandType.GetProperties();
             var commandTypes = _commandExplorerService.GetAllCommandTypes();
             var argumentHelperTexts = commandProperties
                 .Select(p => new { Name = p.Name, Parameter = p.GetCustomAttribute<ParameterAttribute>() })
                 .Where(p => p.Parameter is not null)
-                .Select(p => string.Format(template, $"<{p.Name.ToSnakeCase().ToUpper()}>", p.Parameter.HelpText))
+                .Select(p => new []{ $"<{p.Name.ToSnakeCase().ToUpper()}>", p.Parameter.HelpText })
                 .ToArray();
             var optionsHelperTexts = commandProperties
                 .Where(t => t.GetCustomAttributes<OptionAttribute>().Any())
                 .Select(p => new { Name = p.Name, Option = p.GetCustomAttribute<OptionAttribute>() })
-                .Select(p => string.Format(template, $"-{p.Name.ToLower().First()}, --{p.Name.ToLower()} <{p.Name.ToSnakeCase().ToUpper()}>", p.Option.HelpText))
+                .OrderBy(p => p.Name)
+                .Select(p => new [] { $"-{p.Name.ToLower().First()}, --{p.Name.ToLower()} <{p.Name.ToSnakeCase().ToUpper()}>", p.Option.HelpText })
                 .ToArray();
             var globalFalgsHelperTexts = commandTypes
                 .Where(t => t.GetCustomAttributes<DefaultAttribute>().Any())
                 .Where(t => t.GetCustomAttributes<FlagAttribute>().Any())
-                .Select(p => new { Name = p.Name, Command = p.GetCustomAttribute<CommandAttribute>(), Flag = p.GetCustomAttribute<FlagAttribute>() })
-                .Select(p => string.Format(template, $"{p.Command.Alias.ToLower()}, {p.Command.Name.ToLower()}", p.Command.HelpText))
+                .Select(p => p.GetCustomAttribute<CommandAttribute>())
+                .OrderBy(p => p.Alias ?? p.Name)
+                .Select(p => new [] { $"{p.Alias.ToLower()}, {p.Name.ToLower()}", p.HelpText })
                 .ToArray();
             var flagsHelperTexts = commandProperties
                 .Where(t => t.GetCustomAttributes<FlagAttribute>().Any())
                 .Select(p => new { Name = p.Name, Flag = p.GetCustomAttribute<FlagAttribute>() })
-                .Select(p => string.Format(template, $"-{p.Name.ToLower().First()}, --{p.Name.ToLower()}", p.Flag.HelpText))
+                .OrderBy(p => p.Name)
+                .Select(p => new [] { $"-{p.Name.ToLower().First()}, --{p.Name.ToLower()}", p.Flag.HelpText })
                 .ToArray();
 
-            LogConsole(commandType, argumentHelperTexts, globalFalgsHelperTexts.Concat(optionsHelperTexts.Concat(flagsHelperTexts)), new string[0]);
+            LogConsole(commandType, argumentHelperTexts, globalFalgsHelperTexts.Concat(optionsHelperTexts.Concat(flagsHelperTexts)), new string[0][]);
         }
 
         private void LogConsole(
             Type commandType,
-            IEnumerable<string> arguments,
-            IEnumerable<string> options,
-            IEnumerable<string> commands
+            IEnumerable<IEnumerable<string>> argumentsColumns,
+            IEnumerable<IEnumerable<string>> optionsColumns,
+            IEnumerable<IEnumerable<string>> commandsColumns
         )
         {
             var cliCommands = new List<string>();
@@ -153,29 +158,39 @@ namespace TesTool.Core.Commands.Help
                 cliCommands.AddRange(calls);
             }
             var cliLabels = new List<string>();
-            if (commands.Count() > 1) cliLabels.Add("command");
-            if (arguments.Any()) cliLabels.Add("arguments");
-            if (options.Any()) cliLabels.Add("options");
+            if (commandsColumns.Count() > 1) cliLabels.Add("command");
+            if (argumentsColumns.Any()) cliLabels.Add("arguments");
+            if (optionsColumns.Any()) cliLabels.Add("options");
             _loggerService.LogInformation($"\nUso: testool {string.Join(" ", cliCommands.Concat(cliLabels.Select(c => $"[{c}]")))}");
 
-            if (arguments.Any())
+            if (argumentsColumns.Any())
             {
                 _loggerService.LogInformation("\nArgumentos:");
-                _loggerService.LogInformation(string.Join("\n", arguments));
+                _loggerService.LogInformation(FormatRow(argumentsColumns));
             }
 
-            if (options.Any())
+            if (optionsColumns.Any())
             {
                 _loggerService.LogInformation("\nOpções:");
-                _loggerService.LogInformation(string.Join("\n", options.OrderBy(o => o)));
+                _loggerService.LogInformation(FormatRow(optionsColumns));
             }
 
-            if (commands.Any())
+            if (commandsColumns.Any())
             {
                 _loggerService.LogInformation("\nComandos:");
-                _loggerService.LogInformation(string.Join("\n", commands.OrderBy(c => c)));
+                _loggerService.LogInformation(FormatRow(commandsColumns));
                 _loggerService.LogInformation($"\nExecute 'testool --help {string.Join(" ", cliCommands.Concat(new[] { "[command]" }))}' para obter mais informações sobre um comando.");
             }
+        }
+
+        private static string FormatRow(IEnumerable<IEnumerable<string>> rows)
+        {
+            var steps = 5;
+            var columns = rows.Select(r => r.First());
+            var characters = columns.Max(c => c.Length);
+            var columnSize = Math.Floor((decimal)characters / steps) * steps + 5;
+            var template = $"  {{0,-{columnSize}}} {{1}}";
+            return string.Join("\n", rows.Select(c => string.Format(template, c.ToArray())));
         }
     }
 }

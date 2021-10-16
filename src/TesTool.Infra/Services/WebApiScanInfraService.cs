@@ -24,15 +24,47 @@ namespace TesTool.Infra.Services
             _settingInfraService = settingInfraService;
         }
 
+        public async Task<Controller> GetControllerAsync(string className)
+        {
+            Controller controller = null;
+            await ForEachClassesAsync((@class, root, model) => {
+                if (@class.IsAbstract()) return true;
+
+                var classSymbol = model.GetDeclaredSymbol(@class) as ITypeSymbol;
+                var isController = classSymbol.ImplementsClass("ControllerBase", "Microsoft.AspNetCore.Mvc");
+                if (!isController) return true;
+                if (@class.Identifier.Text != className) return true;
+
+                var controllerName = @class.Identifier.Text.ToLower().Replace("controller", string.Empty);
+
+                var routeAttribute = classSymbol.GetAttribute("RouteAttribute");
+                var routeTemplate = routeAttribute?.ConstructorArguments.FirstOrDefault().Value?.ToString() ?? string.Empty;
+                var route = routeTemplate.Replace("[controller]", controllerName);
+
+                var types = classSymbol.GetStackTypes();
+                var authorizeAttributeName = "AuthorizeAttribute";
+                var authAttributeNames = new[] { authorizeAttributeName, "AllowAnonymousAttribute" };
+                var authAttribute = types.SelectMany(t => t.GetAllAttributes())
+                    .FirstOrDefault(a => authAttributeNames.Contains(a.AttributeClass.Name));
+                var authorizeController = authAttribute?.AttributeClass.Name == authorizeAttributeName;
+
+                controller = new Controller(@class.Identifier.Text, route, authorizeController);
+                FillEndpoints(controller, classSymbol);
+                return false;
+            });
+
+            return controller;
+        }
+
         public async Task<IEnumerable<Controller>> GetControllersAsync()
         {
             var controllers = new List<Controller>();
             await ForEachClassesAsync((@class, root, model) => {
-                if (@class.IsAbstract()) return;
+                if (@class.IsAbstract()) return true;
 
                 var classSymbol = model.GetDeclaredSymbol(@class) as ITypeSymbol;
                 var isController = classSymbol.ImplementsClass("ControllerBase", "Microsoft.AspNetCore.Mvc");
-                if (!isController) return;
+                if (!isController) return true;
 
                 var controllerName = @class.Identifier.Text.ToLower().Replace("controller", string.Empty);
 
@@ -50,14 +82,10 @@ namespace TesTool.Infra.Services
                 var controller = new Controller(@class.Identifier.Text, route, authorizeController);
                 FillEndpoints(controller, classSymbol);
                 if (controller.Endpoints.Any()) controllers.Add(controller);
+                return true;
             });
 
             return controllers;
-        }
-
-        public async Task<bool> ClassExistAsync(string className)
-        {
-            return await GetModelAsync(className) is Class;
         }
 
         public async Task<TypeWrapper> GetModelAsync(string name)

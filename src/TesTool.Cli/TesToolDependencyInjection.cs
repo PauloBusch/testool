@@ -23,8 +23,9 @@ namespace TesTool.Cli
                 .AddSingleton<ISerializerInfraService, SerializerInfraService>()
 
                 .AddSingleton<IWebApiScanInfraService, WebApiScanInfraService>()
-                .AddSingleton<IIntegrationTestScanInfraService, IntegrationTestScanInfraService>()
-                
+                .AddSingleton<ITestScanInfraService, TestScanInfraService>()
+                .AddSingleton<ITestCodeInfraService, TestCodeInfraService>()
+
                 .AddSingleton<ICommandExplorerService, CommandExplorerService>()
                 .AddSingleton<ICommandFactoryService, CommandFactoryService>();
 

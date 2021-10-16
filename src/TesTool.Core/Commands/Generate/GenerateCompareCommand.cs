@@ -12,8 +12,9 @@ using TesTool.Core.Models.Templates.Factory;
 
 namespace TesTool.Core.Commands.Generate
 {
-    [Command("Equals", "e", HelpText = "Gerar código de comparação entre objetos.")]
-    public class GenerateEqualsCommand : GenerateCommandBase
+    // TODO: move to GenerateFactoryCompareCommand
+    [Command("compare", Order = 4, HelpText = "Gerar código de comparação entre objetos.")]
+    public class GenerateCompareCommand : GenerateCommandBase
     {
         [Parameter(HelpText = "Nome da classe de origem.")]
         public string SourceClassName { get; set; }
@@ -21,23 +22,30 @@ namespace TesTool.Core.Commands.Generate
         [Parameter(HelpText = "Nome da classe de destino.")]
         public string TargetClassName { get; set; }
 
-        [Parameter(HelpText = "Nome da classe que terá o método de comparação.")]
+        // TODO: remove and get default
+        [Parameter(IsRequired = false, HelpText = "Nome da classe que terá o método de comparação.")]
         public string ComparatorName { get; set; }
 
-        private readonly IIntegrationTestScanInfraService _integrationTestScanInfraService;
+        [Flag(HelpText = "Habilita modo estático de geração de código.")]
+        public bool Static { get; set; }
+
+        private readonly ITestScanInfraService _testScanInfraService;
+        private readonly ITestCodeInfraService _testCodeInfraService;
         private readonly ITemplateCodeInfraService _templateCodeInfraService;
         private readonly IWebApiScanInfraService _webApiScanInfraService;
         private readonly IFileSystemInfraService _fileSystemInfraService;
 
-        public GenerateEqualsCommand(
-            IIntegrationTestScanInfraService integrationTestScanInfraService,
+        public GenerateCompareCommand(
+            ITestScanInfraService testScanInfraService,
+            ITestCodeInfraService testCodeInfraService,
             ITemplateCodeInfraService templateCodeInfraService,
             IWebApiScanInfraService webApiScanInfraService,
             IEnvironmentInfraService environmentInfraService,
             IFileSystemInfraService fileSystemInfraService
         ) : base(environmentInfraService)
         {
-            _integrationTestScanInfraService = integrationTestScanInfraService;
+            _testScanInfraService = testScanInfraService;
+            _testCodeInfraService = testCodeInfraService;
             _templateCodeInfraService = templateCodeInfraService;
             _webApiScanInfraService = webApiScanInfraService;
             _fileSystemInfraService = fileSystemInfraService;
@@ -48,7 +56,7 @@ namespace TesTool.Core.Commands.Generate
             if (!string.IsNullOrWhiteSpace(Output) && !Directory.Exists(Output))
                 throw new DirectoryNotFoundException("Diretório de saída inválido.");
 
-            if (!await _integrationTestScanInfraService.ProjectExistAsync())
+            if (!await _testScanInfraService.ProjectExistAsync())
                 throw new ProjectNotFoundException(ProjectTypeEnumerator.INTEGRATION_TESTS);
 
             var comparatorClass = await TryGetComparatorClassAsync(SourceClassName, TargetClassName);
@@ -77,7 +85,7 @@ namespace TesTool.Core.Commands.Generate
             }
             await _fileSystemInfraService.SaveFileAsync(filePath, sourceCode);
 
-            var exist = await _integrationTestScanInfraService.ClassExistAsync(ComparatorName);
+            var exist = await _testScanInfraService.ClassExistAsync(ComparatorName);
             if (exist) await AppendComparatorFactoryMethodAsync();
             else await CreateComparatorFactoryClassAsync();
         }
@@ -141,16 +149,16 @@ namespace TesTool.Core.Commands.Generate
 
         public async Task AppendComparatorFactoryMethodAsync() {
             var templateModel = GetModelFactory();
-            var factoryPathFile = await _integrationTestScanInfraService.GetPathClassAsync(ComparatorName);
+            var factoryPathFile = await _testScanInfraService.GetPathClassAsync(ComparatorName);
             var factorySourceCode = _templateCodeInfraService.ProcessComparerFactory(templateModel);
-            var mergedSourceCode = await _integrationTestScanInfraService.MergeClassCodeAsync(ComparatorName, factorySourceCode);
+            var mergedSourceCode = await _testCodeInfraService.MergeClassCodeAsync(ComparatorName, factorySourceCode);
             await _fileSystemInfraService.SaveFileAsync(factoryPathFile, mergedSourceCode);
         }
 
         private async Task CreateAssertExtensionAsync(CompareDynamic templateModel)
         {
             var extensionClassName = "AssertExtensions";
-            var extensionClass = await _integrationTestScanInfraService.GetClassAsync(extensionClassName);
+            var extensionClass = await _testScanInfraService.GetClassAsync(extensionClassName);
             if (extensionClass is null)
             {
                 var extensionFileName = $"{extensionClassName}.cs";
@@ -179,11 +187,11 @@ namespace TesTool.Core.Commands.Generate
         private async Task<Class> TryGetComparatorClassAsync(string sourceClassName, string targetClassName)
         {
             var comparatorClassName1 = $"{sourceClassName}Equals{targetClassName}";
-            var comparatorClass1 = await _integrationTestScanInfraService.GetClassAsync(comparatorClassName1);
+            var comparatorClass1 = await _testScanInfraService.GetClassAsync(comparatorClassName1);
             if (comparatorClass1 is not null) return comparatorClass1; 
 
             var comparatorClassName2 = $"{targetClassName}Equals{sourceClassName}";
-            var comparatorClass2 = await _integrationTestScanInfraService.GetClassAsync(comparatorClassName2);
+            var comparatorClass2 = await _testScanInfraService.GetClassAsync(comparatorClassName2);
             if (comparatorClass2 is not null) return comparatorClass2;
 
             return default;
@@ -195,7 +203,7 @@ namespace TesTool.Core.Commands.Generate
 
         private string GetNamespace(string sufix)
         {
-            var integrationTestNamespace = _integrationTestScanInfraService.GetNamespace();
+            var integrationTestNamespace = _testScanInfraService.GetNamespace();
             if (!string.IsNullOrWhiteSpace(integrationTestNamespace)) return $"{integrationTestNamespace}.{sufix}";
 
             var webApiNamespace = _webApiScanInfraService.GetNamespace();

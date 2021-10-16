@@ -44,20 +44,21 @@ namespace TesTool.Infra.Services
 
             var typeSymbol = null as ITypeSymbol;
             await ForEachClassesAsync((@class, root, model) => {
-                if (typeSymbol is not null) return;
-
                 var declaredSymbol = model.GetDeclaredSymbol(@class) as ITypeSymbol;
-                if (declaredSymbol.GetName() == name) typeSymbol = declaredSymbol;
+                var equalType = declaredSymbol.GetName() == name;
+                if (equalType) typeSymbol = declaredSymbol;
+                return !equalType;
             });
 
             return typeSymbol;
         }
 
         protected async Task ForEachClassesAsync(
-            Action<
+            Func<
                 ClassDeclarationSyntax, 
                 SyntaxNode, 
-                SemanticModel
+                SemanticModel,
+                bool
             > iterator
         ) 
         {
@@ -72,7 +73,11 @@ namespace TesTool.Infra.Services
                 var tree = await document.GetSyntaxTreeAsync();
                 var model = compilation.GetSemanticModel(tree);
                 var classes = root.DescendantNodes().OfType<ClassDeclarationSyntax>();
-                foreach (var @class in classes) iterator(@class, root, model);
+                foreach (var @class in classes)
+                {
+                    var @continue = iterator(@class, root, model);
+                    if (!@continue) return;
+                }
             }
         }
 

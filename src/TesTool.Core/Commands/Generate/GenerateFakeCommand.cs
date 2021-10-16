@@ -15,7 +15,13 @@ using TesTool.Core.Models.Templates.Faker;
 
 namespace TesTool.Core.Commands.Generate
 {
-    [Command("fake", "f", HelpText = "Gerar código de fabricação de objeto.")]
+    // TODO: move to 
+    // GenerateFakeEntityCommand
+    // GenerateFakeModelCommand
+    // GenerateFactoryModelCommand
+    // GenerateFactoryEntityCommand
+    //[Command("fake", "f", HelpText = "Gerar código de fabricação de objeto.")]
+    /*
     public class GenerateFakeCommand : GenerateCommandBase
     {
         [Parameter(HelpText = "Nome da classe a ser fábricada.")]
@@ -24,8 +30,12 @@ namespace TesTool.Core.Commands.Generate
         [Parameter(HelpText = "Nome da classe que terá o método de fabricação.")]
         public string FactoryName { get; set; }
 
+        [Flag(HelpText = "Habilita modo estático de geração de código.")]
+        public bool Static { get; set; }
+
         private readonly IWebApiScanInfraService _webApiScanInfraService;
-        private readonly IIntegrationTestScanInfraService _integrationTestScanInfraService;
+        private readonly ITestScanInfraService _testScanInfraService;
+        private readonly ITestCodeInfraService _testCodeInfraService;
         private readonly ITemplateCodeInfraService _templateCodeInfraService;
         private readonly IFileSystemInfraService _fileSystemInfraService;
         private readonly IConventionInfraService _conventionInfraService;
@@ -33,7 +43,8 @@ namespace TesTool.Core.Commands.Generate
 
         public GenerateFakeCommand(
             IWebApiScanInfraService webApiScanInfraService,
-            IIntegrationTestScanInfraService integrationTestScanInfraService,
+            ITestScanInfraService testScanInfraService,
+            ITestCodeInfraService testCodeInfraService,
             ITemplateCodeInfraService templateCodeInfraService,
             IFileSystemInfraService fileSystemInfraService,
             IConventionInfraService conventionInfraService,
@@ -43,7 +54,8 @@ namespace TesTool.Core.Commands.Generate
         {
             _webApiScanInfraService = webApiScanInfraService;
             _fileSystemInfraService = fileSystemInfraService;
-            _integrationTestScanInfraService = integrationTestScanInfraService;
+            _testScanInfraService = testScanInfraService;
+            _testCodeInfraService = testCodeInfraService;
             _templateCodeInfraService = templateCodeInfraService;
             _conventionInfraService = conventionInfraService;
             _expressionInfraService = expressionInfraService;
@@ -54,7 +66,7 @@ namespace TesTool.Core.Commands.Generate
             if (!string.IsNullOrWhiteSpace(Output) && !Directory.Exists(Output)) 
                 throw new DirectoryNotFoundException("Diretório de saída inválido.");
 
-            if (!await _integrationTestScanInfraService.ProjectExistAsync())
+            if (!await _testScanInfraService.ProjectExistAsync())
                 throw new ProjectNotFoundException(ProjectTypeEnumerator.INTEGRATION_TESTS);
 
             var model = await _webApiScanInfraService.GetModelAsync(ClassName);
@@ -62,7 +74,7 @@ namespace TesTool.Core.Commands.Generate
             if (model is Class dto)
             {
                 var fakerName = $"{ClassName}Faker";
-                if (await _integrationTestScanInfraService.ClassExistAsync(fakerName))
+                if (await _testScanInfraService.ClassExistAsync(fakerName))
                     throw new DuplicatedClassException(fakerName);
 
                 var fileName = $"{dto.Name}Faker.cs";
@@ -73,7 +85,7 @@ namespace TesTool.Core.Commands.Generate
 
                 await _fileSystemInfraService.SaveFileAsync(filePath, sourceCode);
                 
-                var exist = await _integrationTestScanInfraService.ClassExistAsync(FactoryName);
+                var exist = await _testScanInfraService.ClassExistAsync(FactoryName);
                 if (exist) await AppendFactoryMethodAsync();
                 else await CreateFactoryClassAsync();
             } else throw new ValidationException("This class is not a model.");
@@ -112,7 +124,7 @@ namespace TesTool.Core.Commands.Generate
                 else if (property.Type is Class propertyType)
                 {
                     var fakerName = $"{propertyType.Name}Faker";
-                    var existingFaker = await _integrationTestScanInfraService.GetClassAsync(fakerName);
+                    var existingFaker = await _testScanInfraService.GetClassAsync(fakerName);
                     var expression = BogusMethodEnumerator.COMPLEX_OBJECT.Expression.Replace("{FAKER_NAME}", fakerName);
                     var bogusProperty = new BogusProperty(property.Name, expression, existingFaker is null);
                     if (existingFaker is not null) templateModel.AddNamespace(existingFaker.Namespace);
@@ -120,7 +132,7 @@ namespace TesTool.Core.Commands.Generate
                 } else if (property.Type is Array array && array.Type is Class arrayType)
                 {
                     var fakerName = $"{arrayType.Name}Faker";
-                    var existingFaker = await _integrationTestScanInfraService.GetClassAsync(fakerName);
+                    var existingFaker = await _testScanInfraService.GetClassAsync(fakerName);
                     var expression = BogusMethodEnumerator.COLLECTION.Expression.Replace("{FAKER_NAME}", fakerName);
                     var bogusProperty = new BogusProperty(property.Name, expression, existingFaker is null);
                     if (existingFaker is not null) templateModel.AddNamespace(existingFaker.Namespace);
@@ -157,9 +169,9 @@ namespace TesTool.Core.Commands.Generate
         private async Task AppendFactoryMethodAsync()
         {
             var templateModel = GetModelFactory();
-            var factoryPathFile = await _integrationTestScanInfraService.GetPathClassAsync(FactoryName);
+            var factoryPathFile = await _testScanInfraService.GetPathClassAsync(FactoryName);
             var factorySourceCode = _templateCodeInfraService.ProcessFakerFactory(templateModel);
-            var mergedSourceCode = await _integrationTestScanInfraService.MergeClassCodeAsync(FactoryName, factorySourceCode);
+            var mergedSourceCode = await _testCodeInfraService.MergeClassCodeAsync(FactoryName, factorySourceCode);
             await _fileSystemInfraService.SaveFileAsync(factoryPathFile, mergedSourceCode);
         }
 
@@ -176,11 +188,12 @@ namespace TesTool.Core.Commands.Generate
 
         private string GetNamespace(string sufix)
         {
-            var integrationTestNamespace = _integrationTestScanInfraService.GetNamespace();
+            var integrationTestNamespace = _testScanInfraService.GetNamespace();
             if (!string.IsNullOrWhiteSpace(integrationTestNamespace)) return $"{integrationTestNamespace}.{sufix}";
 
             var webApiNamespace = _webApiScanInfraService.GetNamespace();
             return $"{webApiNamespace}.IntegrationTests.{sufix}";
         }
     }
+    */
 }

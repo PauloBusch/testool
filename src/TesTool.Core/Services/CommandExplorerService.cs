@@ -32,7 +32,7 @@ namespace TesTool.Core.Services
             foreach (var type in GetAllCommandTypes())
             {
                 var isDefault = type.GetCustomAttributes<DefaultAttribute>().Any();
-                var commands = type.GetCustomAttributes<CommandAttribute>().Reverse();
+                var commands = type.GetCustomAttributes<CommandAttribute>().Reverse().ToList();
                 if (isDefault && commands.Any(c => arguments.Any(a => c.Equals(a)))) return type;
                 if (arguments.Length < commands.Count()) continue;
                 

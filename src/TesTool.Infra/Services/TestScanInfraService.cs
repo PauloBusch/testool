@@ -1,20 +1,23 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TesTool.Core.Enumerations;
 using TesTool.Core.Interfaces.Services;
 using TesTool.Core.Models.Metadata;
+using TesTool.Infra.Extensions;
 
 namespace TesTool.Infra.Services
 {
-    public class IntegrationTestScanInfraService : ProjectScanInfraServiceBase, IIntegrationTestScanInfraService
+    public class TestScanInfraService : ProjectScanInfraServiceBase, ITestScanInfraService
     {
         private readonly IEnvironmentInfraService _environmentInfraService;
 
-        public IntegrationTestScanInfraService(
+        public TestScanInfraService(
             ILoggerInfraService loggerInfraService,
             IEnvironmentInfraService environmentInfraService
         ) : base(ProjectTypeEnumerator.INTEGRATION_TESTS, loggerInfraService) 
@@ -25,6 +28,23 @@ namespace TesTool.Infra.Services
         public async Task<bool> ClassExistAsync(string className)
         {
             return await GetTypeSymbolAsync(className) is not null;
+        }
+
+        public async Task<IEnumerable<string>> GetNotFoundClassesAsync(IEnumerable<string> regexNames)
+        {
+            var project = GetProject();
+            if (project is null) return default;
+
+            var notFounded = regexNames.ToList();
+            await ForEachClassesAsync((@class, root, model) => {
+                if (!notFounded.Any()) return true;
+
+                var declaredSymbol = model.GetDeclaredSymbol(@class) as ITypeSymbol;
+                notFounded.RemoveAll(regex => Regex.IsMatch(declaredSymbol.GetName(), regex));
+                return notFounded.Any();
+            });
+
+            return notFounded;
         }
 
         public async Task<Class> GetClassAsync(string name)
@@ -51,41 +71,6 @@ namespace TesTool.Infra.Services
             }
 
             return default;
-        }
-
-        public async Task<string> MergeClassCodeAsync(string className, string sourceCode)
-        {
-            var project = GetProject();
-            if (project is null) return default;
-
-            var compilationUnitGenerated = SyntaxFactory.ParseCompilationUnit(sourceCode);
-            var sourceClass = compilationUnitGenerated.DescendantNodes()
-                .OfType<ClassDeclarationSyntax>()
-                .Single(c => c.Identifier.Text == className);
-            var sourceUsings = compilationUnitGenerated.Usings;
-            var sourceMethods = sourceClass.Members.OfType<MethodDeclarationSyntax>().ToList();
-
-            var mergedClassCode = null as string;
-            await ForEachClassesAsync((storedClass, root, model) => {
-                if (mergedClassCode is not null) return;
-                if (storedClass.Identifier.Text != className) return;
-
-                var updatedClass = null as ClassDeclarationSyntax;
-                var compilationUnitStored = root as CompilationUnitSyntax;
-                var storedUsings = compilationUnitStored.Usings;
-                var storedMethods = storedClass.Members.OfType<MethodDeclarationSyntax>().ToList();
-
-                var usingsToAppend = sourceUsings.Where(u => !storedUsings.Any(s => s.Name.ToString() == u.Name.ToString())).ToList();
-                var methodsToAppend = sourceMethods.Where(s => !storedMethods.Any(m => m.Identifier.Text == s.Identifier.Text)).ToList();
-                
-                foreach (var @using in usingsToAppend) compilationUnitStored = compilationUnitStored.AddUsings(@using);
-                foreach (var method in methodsToAppend) updatedClass = (updatedClass ?? storedClass).AddMembers(method);
-
-                if (updatedClass is not null) compilationUnitStored = compilationUnitStored.ReplaceNode(storedClass, updatedClass);
-                mergedClassCode = compilationUnitStored.ToFullString();
-            });
-
-            return mergedClassCode;
         }
 
         private string _cacheProjectPath;

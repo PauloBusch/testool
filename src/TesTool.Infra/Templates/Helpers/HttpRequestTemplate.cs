@@ -7,18 +7,17 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace TesTool.Infra.Templates
+namespace TesTool.Infra.Templates.Helpers
 {
-    using TesTool.Core.Models.Templates.Factory;
     using System;
     
     /// <summary>
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\ModelFakerFactoryMethodTemplate.tt"
+    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Helpers\HttpRequestTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public partial class ModelFakerFactoryMethodTemplate : ModelFakerFactoryMethodTemplateBase
+    public partial class HttpRequestTemplate : HttpRequestTemplateBase
     {
 #line hidden
         /// <summary>
@@ -26,27 +25,85 @@ namespace TesTool.Infra.Templates
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("public ");
+            this.Write("using System;\r\nusing System.Collections.Generic;\r\nusing System.IO;\r\nusing System." +
+                    "Net;\r\nusing System.Net.Http;\r\nusing System.Text;\r\nusing System.Text.Json;\r\nusing" +
+                    " System.Threading.Tasks;\r\nusing System.Web;\r\n\r\nnamespace ");
             
-            #line 4 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\ModelFakerFactoryMethodTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Method.Faker));
-            
-            #line default
-            #line hidden
-            this.Write(" ");
-            
-            #line 4 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\ModelFakerFactoryMethodTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Method.Name));
+            #line 13 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Helpers\HttpRequestTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
             #line hidden
-            this.Write("() => new();\r\n");
+            this.Write("\r\n{\r\n    public class Request\r\n    {\r\n        public readonly HttpClient Client;\r" +
+                    "\n\r\n        public Request(HttpClient client) => Client = client;\r\n\r\n        publ" +
+                    "ic async Task<(HttpResponseMessage response, TResult result)> GetAsync<TResult>(" +
+                    "Uri uri, dynamic query = null) where TResult : class\r\n        {\r\n            var" +
+                    " request = new HttpRequestMessage\r\n            {\r\n                RequestUri = n" +
+                    "ew Uri($\"{uri}?{GetUrlString(query)}\"),\r\n                Method = HttpMethod.Get" +
+                    "\r\n            };\r\n\r\n            var response = await Client.SendAsync(request);\r" +
+                    "\n            return await GetResultAsync<TResult>(response);\r\n        }\r\n\r\n     " +
+                    "   public async Task<(HttpResponseMessage response, TResult result)> PostAsync<T" +
+                    "Result>(Uri uri, dynamic data, dynamic query = null) where TResult : class\r\n    " +
+                    "    {\r\n            var content = new StringContent(JsonSerializer.Serialize(data" +
+                    "), Encoding.Default, \"application/json\");\r\n\r\n            var response = await Cl" +
+                    "ient.PostAsync(new Uri($\"{uri}?{GetUrlString(query)}\"), content);\r\n            r" +
+                    "eturn await GetResultAsync<TResult>(response);\r\n        }\r\n\r\n        public asyn" +
+                    "c Task<(HttpResponseMessage response, TResult result)> PutAsync<TResult>(Uri uri" +
+                    ", dynamic data, dynamic query = null) where TResult : class\r\n        {\r\n        " +
+                    "    var content = new StringContent(JsonSerializer.Serialize(data), Encoding.Def" +
+                    "ault, \"application/json\");\r\n\r\n            var response = await Client.PutAsync(n" +
+                    "ew Uri($\"{uri}?{GetUrlString(query)}\"), content);\r\n            return await GetR" +
+                    "esultAsync<TResult>(response);\r\n        }\r\n\r\n        public async Task<(HttpResp" +
+                    "onseMessage response, TResult result)> PatchAsync<TResult>(Uri uri, dynamic data" +
+                    " = null, dynamic query = null) where TResult : class\r\n        {\r\n            var" +
+                    " content = new StringContent(JsonSerializer.Serialize(data), Encoding.Default, \"" +
+                    "application/json\");\r\n\r\n            var response = await Client.PatchAsync(new Ur" +
+                    "i($\"{uri}?{GetUrlString(query)}\"), content);\r\n            return await GetResult" +
+                    "Async<TResult>(response);\r\n        }\r\n\r\n        public async Task<(HttpResponseM" +
+                    "essage response, TResult result)> DeleteAsync<TResult>(Uri uri, dynamic query = " +
+                    "null) where TResult : class\r\n        {\r\n            var response = await Client." +
+                    "DeleteAsync(new Uri($\"{uri}?{GetUrlString(query)}\"));\r\n            return await " +
+                    "GetResultAsync<TResult>(response);\r\n        }\r\n\r\n        public async Task<(Http" +
+                    "ResponseMessage response, FileInfo file)> DownloadFile(Uri uri, dynamic query = " +
+                    "null)\r\n        {\r\n            var request = new HttpRequestMessage\r\n            " +
+                    "{\r\n                RequestUri = new Uri($\"{uri}?{GetUrlString(query)}\"),\r\n      " +
+                    "          Method = HttpMethod.Get\r\n            };\r\n\r\n            var response = " +
+                    "await Client.SendAsync(request);\r\n            try\r\n            {\r\n              " +
+                    "  if (response.StatusCode != HttpStatusCode.OK) return (response, null);\r\n      " +
+                    "          var fileName = $\"{Guid.NewGuid()}{Path.GetExtension(response.Content.H" +
+                    "eaders.ContentDisposition?.FileNameStar)}\";\r\n                var filePath = Path" +
+                    ".Combine(Path.GetTempPath(), fileName);\r\n                using var contentStream" +
+                    " = await response.Content.ReadAsStreamAsync();\r\n                using var fileSt" +
+                    "ream = new FileStream(filePath, FileMode.Create);\r\n                await content" +
+                    "Stream.CopyToAsync(fileStream);\r\n\r\n                return (response, new FileInf" +
+                    "o(filePath));\r\n            }\r\n            catch (Exception e)\r\n            {\r\n  " +
+                    "              throw new Exception($\"Could not download file\", e);\r\n            }" +
+                    "\r\n        }\r\n\r\n        #region Private Methods\r\n\r\n        private async Task<(Ht" +
+                    "tpResponseMessage response, TResult result)> GetResultAsync<TResult>(HttpRespons" +
+                    "eMessage response) where TResult : class\r\n        {\r\n            var json = awai" +
+                    "t response.Content.ReadAsStringAsync();\r\n            try\r\n            {\r\n       " +
+                    "         var result = JsonSerializer.Deserialize<TResult>(json);\r\n              " +
+                    "  return (response, result);\r\n            }\r\n            catch (Exception e)\r\n  " +
+                    "          {\r\n                throw new Exception($\"Could not deserialize object." +
+                    " Current JSON: {json}\", e);\r\n            }\r\n        }\r\n\r\n        private string " +
+                    "GetUrlString(object data = null)\r\n        {\r\n            if (data == null) retur" +
+                    "n string.Empty;\r\n\r\n            var parameters = new List<string>();\r\n           " +
+                    " var properties = data.GetType().GetProperties();\r\n            foreach (var prop" +
+                    "erty in properties)\r\n            {\r\n                var value = property.GetValu" +
+                    "e(data);\r\n                if (value == null) continue;\r\n\r\n                var ty" +
+                    "pe = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;" +
+                    "\r\n                var valueJson = JsonSerializer.Serialize(value);\r\n            " +
+                    "    parameters.Add($\"{HttpUtility.UrlEncode(property.Name)}={HttpUtility.UrlEnco" +
+                    "de(valueJson)}\");\r\n\r\n                throw new InvalidOperationException($\"Not c" +
+                    "onfigured conversion from type {property.PropertyType.Name}\");\r\n            }\r\n\r" +
+                    "\n            return string.Join(\"&\", parameters);\r\n        }\r\n\r\n        #endregi" +
+                    "on\r\n    }\r\n}\r\n");
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 5 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\ModelFakerFactoryMethodTemplate.tt"
- 
-    public ModelFactoryMethod Method { get; set; } 
+        #line 129 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Helpers\HttpRequestTemplate.tt"
+
+    public string Namespace { get; set; }
 
         
         #line default
@@ -60,7 +117,7 @@ namespace TesTool.Infra.Templates
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public class ModelFakerFactoryMethodTemplateBase
+    public class HttpRequestTemplateBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

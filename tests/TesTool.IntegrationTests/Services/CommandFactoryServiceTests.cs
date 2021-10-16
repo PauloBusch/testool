@@ -112,7 +112,7 @@ namespace TesTool.IntegrationTests.Services
             };
 
             var command = _factory.CreateCommand(arguments.ToArray());
-            var configureProjectCommand = command as GenerateEqualsCommand;
+            var configureProjectCommand = command as GenerateCompareCommand;
 
             Assert.NotNull(configureProjectCommand);
             Assert.Equal(sourceClassName, configureProjectCommand.SourceClassName);

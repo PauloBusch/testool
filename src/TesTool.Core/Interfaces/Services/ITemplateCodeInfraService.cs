@@ -14,5 +14,6 @@ namespace TesTool.Core.Interfaces.Services
         string ProcessComparerFactory(ComparatorFactory model);
         string ProcessComparerFactoryMethod(ComparatorFactoryMethod model);
         string ProcessAssertExtensions(string @namespace);
+        string ProcessHttpRequest(string @namespace);
     }
 }

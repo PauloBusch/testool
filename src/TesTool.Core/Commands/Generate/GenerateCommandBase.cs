@@ -11,9 +11,6 @@ namespace TesTool.Core.Commands.Generate
         [Option(HelpText = "Diretório de saída.")]
         public string Output { get; set; }
 
-        [Flag(HelpText = "Habilita modo estático de geração de código.")]
-        public bool Static { get; set; }
-
         private readonly IEnvironmentInfraService _environmentInfraService;
 
         protected GenerateCommandBase(IEnvironmentInfraService environmentInfraService)

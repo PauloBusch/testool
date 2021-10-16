@@ -4,6 +4,10 @@ using TesTool.Core.Interfaces.Services;
 using TesTool.Core.Models.Templates.Comparator;
 using TesTool.Core.Models.Templates.Factory;
 using TesTool.Infra.Templates;
+using TesTool.Infra.Templates.Comparators;
+using TesTool.Infra.Templates.Extensions;
+using TesTool.Infra.Templates.Fakers;
+using TesTool.Infra.Templates.Helpers;
 
 namespace TesTool.Infra.Services
 {
@@ -23,7 +27,7 @@ namespace TesTool.Infra.Services
 
         public string ProcessFakerFactory(ModelFactory model)
         {
-            var template = new ModelFakerFactoryTemplate 
+            var template = new ModelFakerFactoryTemplate
             { 
                 TemplataService = this,
                 Name = model.Name,
@@ -90,6 +94,12 @@ namespace TesTool.Infra.Services
         public string ProcessAssertExtensions(string @namespace)
         {
             var template = new AssertExtensionsTemplate { ExtensionNamespace = @namespace };
+            return template.TransformText();
+        }
+
+        public string ProcessHttpRequest(string @namespace)
+        {
+            var template = new HttpRequestTemplate { Namespace = @namespace };
             return template.TransformText();
         }
 

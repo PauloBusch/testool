@@ -11,6 +11,7 @@ namespace TesTool.Core.Attributes
             Alias = alias;
         }
 
+        public int Order { get; set; }
         public string Name { get; private set; }
         public string Alias { get; private set; }
 
