@@ -11,7 +11,7 @@ namespace <#=FactoryNamespace#>
     public class <#=Name#>
     {
 <#  #><# foreach (var method in Methods) { #>
-        <#=TemplataService.ProcessFakerFactoryMethod(method)#><#
+        <#=TemplataService.BuildModelFactoryMethod(method)#><#
     #><# } #>
     }
 }

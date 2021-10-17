@@ -7,6 +7,7 @@ namespace TesTool.Core.Interfaces.Services
     public interface IWebApiScanInfraService
     {
         string GetNamespace();
+        Task<bool> ProjectExistAsync();
         Task<TypeWrapper> GetModelAsync(string name);
         Task<Controller> GetControllerAsync(string className);
         Task<IEnumerable<Controller>> GetControllersAsync();

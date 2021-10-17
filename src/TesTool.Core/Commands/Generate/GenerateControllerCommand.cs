@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using TesTool.Core.Attributes;
-using TesTool.Core.Enumerations;
 using TesTool.Core.Exceptions;
 using TesTool.Core.Interfaces.Services;
 
@@ -20,7 +19,6 @@ namespace TesTool.Core.Commands.Generate
         private readonly ITestScanInfraService _testScanInfraService;
         private readonly ITemplateCodeInfraService _templateCodeInfraService;
         private readonly IWebApiScanInfraService _webApiScanInfraService;
-        private readonly IFileSystemInfraService _fileSystemInfraService;
 
         public GenerateControllerCommand(
             ITestScanInfraService testScanInfraService,
@@ -28,15 +26,14 @@ namespace TesTool.Core.Commands.Generate
             IWebApiScanInfraService webApiScanInfraService,
             IEnvironmentInfraService environmentInfraService,
             IFileSystemInfraService fileSystemInfraService
-        ) : base(environmentInfraService) 
+        ) : base(environmentInfraService, fileSystemInfraService) 
         {
             _testScanInfraService = testScanInfraService;
             _templateCodeInfraService = templateCodeInfraService;
             _webApiScanInfraService = webApiScanInfraService;
-            _fileSystemInfraService = fileSystemInfraService;
         }
 
-        public override async Task ExecuteAsync()
+        protected override async Task GenerateAsync()
         {
             var controllerClass = await _webApiScanInfraService.GetControllerAsync(GetControllerName());
             if (controllerClass is null) throw new ClassNotFoundException(GetControllerName());

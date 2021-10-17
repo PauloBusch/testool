@@ -1,8 +1,8 @@
 ﻿namespace TesTool.Core.Models.Templates.Faker
 {
-    public class BogusProperty
+    public class ModelProperty
     {
-        public BogusProperty(string name, string expression, bool @unsafe)
+        public ModelProperty(string name, string expression, bool @unsafe)
         {
             Name = name;
             Unsafe = @unsafe;

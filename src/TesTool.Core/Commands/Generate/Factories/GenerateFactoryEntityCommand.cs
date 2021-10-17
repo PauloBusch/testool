@@ -7,6 +7,9 @@ namespace TesTool.Core.Commands.Generate.Factory
     [Command("entity", HelpText = "Gerar fábrica de entidades de banco de dados.")]
     public class GenerateFactoryEntityCommand : GenerateFactoryBase
     {
+        [Parameter(HelpText = "Nome do contexto de banco de dados.")]
+        public string DbContext { get; set; }
+
         public GenerateFactoryEntityCommand(
             ISettingInfraService settingInfraService, 
             IEnvironmentInfraService environmentInfraService, 

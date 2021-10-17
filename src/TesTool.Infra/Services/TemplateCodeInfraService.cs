@@ -3,7 +3,6 @@ using System.Linq;
 using TesTool.Core.Interfaces.Services;
 using TesTool.Core.Models.Templates.Comparator;
 using TesTool.Core.Models.Templates.Factory;
-using TesTool.Infra.Templates;
 using TesTool.Infra.Templates.Comparators;
 using TesTool.Infra.Templates.Extensions;
 using TesTool.Infra.Templates.Factories;
@@ -14,7 +13,7 @@ namespace TesTool.Infra.Services
 {
     public class TemplateCodeInfraService : ITemplateCodeInfraService
     {
-        public string BuildModel(Core.Models.Templates.Faker.Bogus model)
+        public string BuildModel(Core.Models.Templates.Faker.Model model)
         {
             var template = new FakerTemplate
             {

@@ -6,13 +6,16 @@ namespace TesTool.Core.Interfaces.Services
 {
     public interface ITemplateCodeInfraService
     {
-        string BuildModel(Bogus model);
+        string BuildModel(Model model);
         string BuildModelFactory(ModelFactory model);
         string BuildModelFactoryMethod(ModelFactoryMethod model);
+
         string BuildCompareStatic(CompareStatic model);
         string BuildCompareDynamic(CompareDynamic model);
+
         string BuildComparatorFactory(ComparatorFactory model);
         string BuildComparatorFactoryMethod(ComparatorFactoryMethod model);
+
         string BuildAssertExtensions(string @namespace);
         string BuildHttpRequest(string @namespace);
     }

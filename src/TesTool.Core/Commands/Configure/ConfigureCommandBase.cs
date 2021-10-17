@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using TesTool.Core.Attributes;
 using TesTool.Core.Interfaces;
 

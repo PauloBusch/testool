@@ -1,28 +1,42 @@
-﻿using TesTool.Core.Interfaces.Services;
+﻿using System.Threading.Tasks;
+using TesTool.Core.Interfaces.Services;
+using TesTool.Core.Models.Configuration;
+using TesTool.Core.Models.Enumerators;
 
 namespace TesTool.Core.Services.Factories
 {
     public abstract class FactoryServiceBase
     {
-        private readonly ITestScanInfraService _testScanInfraService;
-        private readonly IWebApiScanInfraService _webApiScanInfraService;
+        private readonly Setting _setting;
+        private readonly TestClass _testClass;
+
+        private readonly ISettingInfraService _settingInfraService;
+        
+        protected readonly ISolutionService _solutionService;
+        protected readonly ITestScanInfraService _testScanInfraService;
+        protected readonly IWebApiScanInfraService _webApiScanInfraService;
 
         protected FactoryServiceBase(
+            Setting setting,
+            TestClass testClass,
+            ISettingInfraService settingInfraService,
+            ISolutionService solutionService,
             ITestScanInfraService testScanInfraService, 
             IWebApiScanInfraService webApiScanInfraService
         )
         {
+            _setting = setting;
+            _testClass = testClass;
+            _solutionService = solutionService;
+            _settingInfraService = settingInfraService;
             _testScanInfraService = testScanInfraService;
             _webApiScanInfraService = webApiScanInfraService;
         }
 
-        protected string GetNamespace(string sufix)
+        public async Task<string> GetFactoryNameAsync()
         {
-            var integrationTestNamespace = _testScanInfraService.GetNamespace();
-            if (!string.IsNullOrWhiteSpace(integrationTestNamespace)) return $"{integrationTestNamespace}.{sufix}";
-
-            var webApiNamespace = _webApiScanInfraService.GetNamespace();
-            return $"{webApiNamespace}.IntegrationTests.{sufix}";
+            var factoryName = await _settingInfraService.GetStringAsync(_setting.Key);
+            return !string.IsNullOrWhiteSpace(factoryName) ? factoryName : _testClass.Name;
         }
     }
 }

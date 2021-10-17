@@ -129,7 +129,7 @@ namespace TesTool.Infra.Templates.Fakers
     public string Name { get; set; }
     public string FakerNamespace { get; set; }
     public string[] Namespaces { get; set; }
-    public BogusProperty[] Properties { get; set; }
+    public ModelProperty[] Properties { get; set; }
 
         
         #line default

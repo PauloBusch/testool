@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
 using TesTool.Core.Attributes;
 using TesTool.Core.Interfaces;
 using TesTool.Core.Interfaces.Services;
@@ -12,13 +13,27 @@ namespace TesTool.Core.Commands.Generate
         public string Output { get; set; }
 
         private readonly IEnvironmentInfraService _environmentInfraService;
+        
+        protected readonly IFileSystemInfraService _fileSystemInfraService;
 
-        protected GenerateCommandBase(IEnvironmentInfraService environmentInfraService)
+        protected GenerateCommandBase(
+            IEnvironmentInfraService environmentInfraService,
+            IFileSystemInfraService  fileSystemInfraService
+        )
         {
             _environmentInfraService = environmentInfraService;
+            _fileSystemInfraService = fileSystemInfraService;
         }
 
-        public abstract Task ExecuteAsync();
+        protected abstract Task GenerateAsync();
+
+        public async Task ExecuteAsync()
+        {
+            if (!string.IsNullOrWhiteSpace(Output) && !await _fileSystemInfraService.FileExistAsync(Output))
+                throw new DirectoryNotFoundException("Diretório de saída inválido.");
+
+            await GenerateAsync();
+        }
 
         protected string GetOutputDirectory() => string.IsNullOrWhiteSpace(Output)
             ? _environmentInfraService.GetWorkingDirectory() : Output;

@@ -33,7 +33,6 @@ namespace TesTool.Core.Commands.Generate
         private readonly ITestCodeInfraService _testCodeInfraService;
         private readonly ITemplateCodeInfraService _templateCodeInfraService;
         private readonly IWebApiScanInfraService _webApiScanInfraService;
-        private readonly IFileSystemInfraService _fileSystemInfraService;
 
         public GenerateCompareCommand(
             ITestScanInfraService testScanInfraService,
@@ -42,20 +41,16 @@ namespace TesTool.Core.Commands.Generate
             IWebApiScanInfraService webApiScanInfraService,
             IEnvironmentInfraService environmentInfraService,
             IFileSystemInfraService fileSystemInfraService
-        ) : base(environmentInfraService)
+        ) : base(environmentInfraService, fileSystemInfraService)
         {
             _testScanInfraService = testScanInfraService;
             _testCodeInfraService = testCodeInfraService;
             _templateCodeInfraService = templateCodeInfraService;
             _webApiScanInfraService = webApiScanInfraService;
-            _fileSystemInfraService = fileSystemInfraService;
         }
 
-        public override async Task ExecuteAsync()
+        protected override async Task GenerateAsync()
         {
-            if (!string.IsNullOrWhiteSpace(Output) && !Directory.Exists(Output))
-                throw new DirectoryNotFoundException("Diretório de saída inválido.");
-
             if (!await _testScanInfraService.ProjectExistAsync())
                 throw new ProjectNotFoundException(ProjectTypeEnumerator.INTEGRATION_TESTS);
 

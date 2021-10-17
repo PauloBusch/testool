@@ -30,7 +30,6 @@ namespace TesTool.Infra.Services
             await ForEachClassesAsync((storedClass, root, model) => {
                 if (storedClass.Identifier.Text != className) return true;
 
-                var updatedClass = null as ClassDeclarationSyntax;
                 var compilationUnitStored = root as CompilationUnitSyntax;
                 var storedUsings = compilationUnitStored.Usings;
                 var storedMethods = storedClass.Members.OfType<MethodDeclarationSyntax>().ToList();
@@ -38,10 +37,12 @@ namespace TesTool.Infra.Services
                 var usingsToAppend = sourceUsings.Where(u => !storedUsings.Any(s => s.Name.ToString() == u.Name.ToString())).ToList();
                 var methodsToAppend = sourceMethods.Where(s => !storedMethods.Any(m => m.Identifier.Text == s.Identifier.Text)).ToList();
 
-                foreach (var @using in usingsToAppend) compilationUnitStored = compilationUnitStored.AddUsings(@using);
+                var updatedClass = null as ClassDeclarationSyntax;
                 foreach (var method in methodsToAppend) updatedClass = (updatedClass ?? storedClass).AddMembers(method);
-
                 if (updatedClass is not null) compilationUnitStored = compilationUnitStored.ReplaceNode(storedClass, updatedClass);
+                
+                foreach (var @using in usingsToAppend) compilationUnitStored = compilationUnitStored.AddUsings(@using);
+
                 mergedClassCode = compilationUnitStored.ToFullString();
                 return false;
             });

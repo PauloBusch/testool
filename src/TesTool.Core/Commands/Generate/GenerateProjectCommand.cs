@@ -13,9 +13,12 @@ namespace TesTool.Core.Commands.Generate
         [Flag(HelpText = "Habilita modo estático de geração de código.")]
         public bool Static { get; set; }
 
-        public GenerateProjectCommand(IEnvironmentInfraService environmentInfraService) : base(environmentInfraService) { }
+        public GenerateProjectCommand(
+            IEnvironmentInfraService environmentInfraService,
+            IFileSystemInfraService fileSystemInfraService
+        ) : base(environmentInfraService, fileSystemInfraService) { }
 
-        public override Task ExecuteAsync()
+        protected override Task GenerateAsync()
         {
             throw new System.NotImplementedException();
         }

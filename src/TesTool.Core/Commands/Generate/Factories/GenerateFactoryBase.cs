@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 using TesTool.Core.Attributes;
+using TesTool.Core.Enumerations;
 using TesTool.Core.Exceptions;
 using TesTool.Core.Interfaces.Services;
 using TesTool.Core.Models.Configuration;
@@ -18,7 +19,6 @@ namespace TesTool.Core.Commands.Generate.Factory
         private readonly TestClass _testClass;
         private readonly ISettingInfraService _settingInfraService;
 
-        protected readonly IFileSystemInfraService _fileSystemInfraService;
         protected readonly ITemplateCodeInfraService _templateCodeInfraService;
         protected readonly ITestScanInfraService _testScanInfraService;
 
@@ -30,25 +30,27 @@ namespace TesTool.Core.Commands.Generate.Factory
             ITestScanInfraService testScanInfraService,
             IFileSystemInfraService fileSystemInfraService,
             ITemplateCodeInfraService templateCodeInfraService
-        ) : base(environmentInfraService) 
+        ) : base(environmentInfraService, fileSystemInfraService) 
         {
             _setting = setting;
             _testClass = testClass;
             _settingInfraService = settingInfraService;
-            _fileSystemInfraService = fileSystemInfraService;
             _templateCodeInfraService = templateCodeInfraService;
             _testScanInfraService = testScanInfraService;
         }
 
         protected abstract string BuildSourceCode(string factoryName);
 
-        public override async Task ExecuteAsync()
+        protected override async Task GenerateAsync()
         {
-            var factoryName = await GetFactoryNameAsync();
+            if (!await _testScanInfraService.ProjectExistAsync())
+                throw new ProjectNotFoundException(ProjectTypeEnumerator.INTEGRATION_TESTS);
+
+            var factoryName = GetFactoryName();
             if (await _testScanInfraService.ClassExistAsync(factoryName))
                 throw new DuplicatedClassException(factoryName);
 
-            var filePath = await GetFactoryFilePathAsync();
+            var filePath = GetFactoryFilePath();
             var factorySourceCode = BuildSourceCode(factoryName);
             if (await _fileSystemInfraService.FileExistAsync(filePath))
                 throw new DuplicatedSourceFileException(factoryName);
@@ -57,16 +59,14 @@ namespace TesTool.Core.Commands.Generate.Factory
             await _settingInfraService.SetStringAsync(_setting.Key, factoryName);
         }
 
-        private async Task<string> GetFactoryNameAsync()
+        private string GetFactoryName()
         {
-            if (!string.IsNullOrWhiteSpace(FactoryName)) return FactoryName;
-
-            return await _settingInfraService.GetStringAsync(_setting.Key) ?? _testClass.Name;
+            return !string.IsNullOrWhiteSpace(FactoryName) ? FactoryName : _testClass.Name;
         }
 
-        private async Task<string> GetFactoryFilePathAsync()
+        private string GetFactoryFilePath()
         {
-            var fileName = $"{await GetFactoryNameAsync()}.cs";
+            var fileName = $"{GetFactoryName()}.cs";
             return Path.Combine(GetOutputDirectory(), fileName);
         }
     }

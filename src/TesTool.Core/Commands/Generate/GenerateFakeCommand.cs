@@ -37,7 +37,6 @@ namespace TesTool.Core.Commands.Generate
         private readonly ITestScanInfraService _testScanInfraService;
         private readonly ITestCodeInfraService _testCodeInfraService;
         private readonly ITemplateCodeInfraService _templateCodeInfraService;
-        private readonly IFileSystemInfraService _fileSystemInfraService;
         private readonly IConventionInfraService _conventionInfraService;
         private readonly IExpressionInfraService _expressionInfraService;
 
@@ -50,10 +49,9 @@ namespace TesTool.Core.Commands.Generate
             IConventionInfraService conventionInfraService,
             IExpressionInfraService expressionInfraService,
             IEnvironmentInfraService environmentInfraService
-        ) : base(environmentInfraService)
+        ) : base(environmentInfraService, fileSystemInfraService)
         {
             _webApiScanInfraService = webApiScanInfraService;
-            _fileSystemInfraService = fileSystemInfraService;
             _testScanInfraService = testScanInfraService;
             _testCodeInfraService = testCodeInfraService;
             _templateCodeInfraService = templateCodeInfraService;
@@ -61,11 +59,8 @@ namespace TesTool.Core.Commands.Generate
             _expressionInfraService = expressionInfraService;
         }
 
-        public async override Task ExecuteAsync()
+        protected async override Task GenerateAsync()
         {
-            if (!string.IsNullOrWhiteSpace(Output) && !Directory.Exists(Output)) 
-                throw new DirectoryNotFoundException("Diretório de saída inválido.");
-
             if (!await _testScanInfraService.ProjectExistAsync())
                 throw new ProjectNotFoundException(ProjectTypeEnumerator.INTEGRATION_TESTS);
 
@@ -91,10 +86,10 @@ namespace TesTool.Core.Commands.Generate
             } else throw new ValidationException("This class is not a model.");
         }
 
-        private async Task<Bogus> MapTemplateModelAsync(Class model)
+        private async Task<Model> MapTemplateModelAsync(Class model)
         {
             var conventions = await _conventionInfraService.GetConfiguredConventionsAsync();
-            var templateModel = new Bogus(model.Name, GetFakerNamespace());
+            var templateModel = new Model(model.Name, GetFakerNamespace());
             templateModel.AddNamespace(model.Namespace);
 
             foreach (var property in model.Properties)
@@ -104,7 +99,7 @@ namespace TesTool.Core.Commands.Generate
                     var bogusExpression = await GetBogusExpressionAsync(property, field, conventions);
                     if (string.IsNullOrWhiteSpace(bogusExpression)) continue;
 
-                    var bogusProperty = new BogusProperty(property.Name, bogusExpression, false);
+                    var bogusProperty = new ModelProperty(property.Name, bogusExpression, false);
                     templateModel.AddProperty(bogusProperty);
                 }
                 else if (property.Type is Enum enumType)
@@ -112,12 +107,12 @@ namespace TesTool.Core.Commands.Generate
                     templateModel.AddNamespace(enumType.Namespace);
                     if (Static)
                     {
-                        var bogusProperty = new BogusProperty(property.Name, $"{enumType.Name}.{enumType.Values.Last().Key}", false);
+                        var bogusProperty = new ModelProperty(property.Name, $"{enumType.Name}.{enumType.Values.Last().Key}", false);
                         templateModel.AddProperty(bogusProperty);
                     } else
                     {
                         var expression = BogusMethodEnumerator.RANDOM_ENUM.Expression.Replace("{ENUM_NAME}", enumType.Name);
-                        var bogusProperty = new BogusProperty(property.Name, expression, false);
+                        var bogusProperty = new ModelProperty(property.Name, expression, false);
                         templateModel.AddProperty(bogusProperty);
                     }
                 }
@@ -126,7 +121,7 @@ namespace TesTool.Core.Commands.Generate
                     var fakerName = $"{propertyType.Name}Faker";
                     var existingFaker = await _testScanInfraService.GetClassAsync(fakerName);
                     var expression = BogusMethodEnumerator.COMPLEX_OBJECT.Expression.Replace("{FAKER_NAME}", fakerName);
-                    var bogusProperty = new BogusProperty(property.Name, expression, existingFaker is null);
+                    var bogusProperty = new ModelProperty(property.Name, expression, existingFaker is null);
                     if (existingFaker is not null) templateModel.AddNamespace(existingFaker.Namespace);
                     templateModel.AddProperty(bogusProperty);
                 } else if (property.Type is Array array && array.Type is Class arrayType)
@@ -134,7 +129,7 @@ namespace TesTool.Core.Commands.Generate
                     var fakerName = $"{arrayType.Name}Faker";
                     var existingFaker = await _testScanInfraService.GetClassAsync(fakerName);
                     var expression = BogusMethodEnumerator.COLLECTION.Expression.Replace("{FAKER_NAME}", fakerName);
-                    var bogusProperty = new BogusProperty(property.Name, expression, existingFaker is null);
+                    var bogusProperty = new ModelProperty(property.Name, expression, existingFaker is null);
                     if (existingFaker is not null) templateModel.AddNamespace(existingFaker.Namespace);
                     templateModel.AddProperty(bogusProperty);
                 }
