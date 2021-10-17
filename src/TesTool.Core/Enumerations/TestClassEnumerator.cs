@@ -10,6 +10,6 @@ namespace TesTool.Core.Enumerations
 
         public static readonly TestClass MODEL_FACTORY = new("ModelFactory");
         public static readonly TestClass ENTITY_FACTORY = new("EntityFactory");
-        public static readonly TestClass COMPARATOR_FACTORY = new("ComparatorFactory");
+        public static readonly TestClass COMPARE_FACTORY = new("CompareFactory");
     }
 }

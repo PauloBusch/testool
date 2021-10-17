@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using TesTool.Core.Enumerations;
+﻿using TesTool.Core.Enumerations;
 using TesTool.Core.Interfaces.Services;
 using TesTool.Core.Interfaces.Services.Factories;
 using TesTool.Core.Models.Templates.Factory;

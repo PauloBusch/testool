@@ -117,7 +117,6 @@ namespace TesTool.IntegrationTests.Services
             Assert.NotNull(configureProjectCommand);
             Assert.Equal(sourceClassName, configureProjectCommand.SourceClassName);
             Assert.Equal(targetClassName, configureProjectCommand.TargetClassName);
-            Assert.Equal(comparatorName, configureProjectCommand.ComparatorName);
             _loggerServiceMock.Verify(logger => logger.LogError(It.IsAny<string>()), Times.Never);
         }
     }

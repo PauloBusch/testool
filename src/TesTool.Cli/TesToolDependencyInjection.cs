@@ -31,8 +31,10 @@ namespace TesTool.Cli
                 .AddSingleton<ITestCodeInfraService, TestCodeInfraService>()
 
                 .AddSingleton<IFakeEntityService, FakeEntityService>()
-                
+                .AddSingleton<ICompareService, CompareService>()
+
                 .AddSingleton<IFactoryModelService, FactoryModelService>()
+                .AddSingleton<IFactoryCompareService, FactoryCompareService>()
 
                 .AddSingleton<ISolutionService, SolutionService>()
                 .AddSingleton<ICommandExplorerService, CommandExplorerService>()
