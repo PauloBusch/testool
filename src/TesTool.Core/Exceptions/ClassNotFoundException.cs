@@ -2,6 +2,6 @@
 {
     public class ClassNotFoundException : TesToolExceptionBase
     {
-        public ClassNotFoundException(string className) : base($"Classe não encontrada {className}.") { }
+        public ClassNotFoundException(string className) : base($"Classe {className} não encontrada.") { }
     }
 }

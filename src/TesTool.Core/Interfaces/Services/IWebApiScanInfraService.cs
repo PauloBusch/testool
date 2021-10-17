@@ -8,7 +8,9 @@ namespace TesTool.Core.Interfaces.Services
     {
         string GetNamespace();
         Task<bool> ProjectExistAsync();
-        Task<TypeWrapper> GetModelAsync(string name);
+        Task<bool> ExistModelAsync(string className);
+        Task<bool> IsContextEntityFramework(string className);
+        Task<TypeWrapper> GetModelAsync(string className);
         Task<Controller> GetControllerAsync(string className);
         Task<IEnumerable<Controller>> GetControllersAsync();
     }

@@ -16,8 +16,10 @@ namespace TesTool.Infra.Services
         
         public async Task<string> MergeClassCodeAsync(string className, string sourceCode)
         {
-            var project = GetProject();
-            if (project is null) return default;
+            var classes = await GetClassesAsync();
+            var storedContext = classes.FirstOrDefault(c => c.Declaration.Identifier.Text == className);
+            if (storedContext is null) return default;
+            var storedClass = storedContext.Declaration;
 
             var compilationUnitGenerated = SyntaxFactory.ParseCompilationUnit(sourceCode);
             var sourceClass = compilationUnitGenerated.DescendantNodes()
@@ -26,28 +28,20 @@ namespace TesTool.Infra.Services
             var sourceUsings = compilationUnitGenerated.Usings;
             var sourceMethods = sourceClass.Members.OfType<MethodDeclarationSyntax>().ToList();
 
-            var mergedClassCode = null as string;
-            await ForEachClassesAsync((storedClass, root, model) => {
-                if (storedClass.Identifier.Text != className) return true;
+            var compilationUnitStored = storedContext.Root as CompilationUnitSyntax;
+            var storedUsings = compilationUnitStored.Usings;
+            var storedMethods = storedClass.Members.OfType<MethodDeclarationSyntax>().ToList();
 
-                var compilationUnitStored = root as CompilationUnitSyntax;
-                var storedUsings = compilationUnitStored.Usings;
-                var storedMethods = storedClass.Members.OfType<MethodDeclarationSyntax>().ToList();
+            var usingsToAppend = sourceUsings.Where(u => !storedUsings.Any(s => s.Name.ToString() == u.Name.ToString())).ToList();
+            var methodsToAppend = sourceMethods.Where(s => !storedMethods.Any(m => m.Identifier.Text == s.Identifier.Text)).ToList();
 
-                var usingsToAppend = sourceUsings.Where(u => !storedUsings.Any(s => s.Name.ToString() == u.Name.ToString())).ToList();
-                var methodsToAppend = sourceMethods.Where(s => !storedMethods.Any(m => m.Identifier.Text == s.Identifier.Text)).ToList();
+            var updatedClass = null as ClassDeclarationSyntax;
+            foreach (var method in methodsToAppend) updatedClass = (updatedClass ?? storedClass).AddMembers(method);
+            if (updatedClass is not null) compilationUnitStored = compilationUnitStored.ReplaceNode(storedClass, updatedClass);
 
-                var updatedClass = null as ClassDeclarationSyntax;
-                foreach (var method in methodsToAppend) updatedClass = (updatedClass ?? storedClass).AddMembers(method);
-                if (updatedClass is not null) compilationUnitStored = compilationUnitStored.ReplaceNode(storedClass, updatedClass);
-                
-                foreach (var @using in usingsToAppend) compilationUnitStored = compilationUnitStored.AddUsings(@using);
+            foreach (var @using in usingsToAppend) compilationUnitStored = compilationUnitStored.AddUsings(@using);
 
-                mergedClassCode = compilationUnitStored.ToFullString();
-                return false;
-            });
-
-            return mergedClassCode;
+            return compilationUnitStored.ToFullString();
         }
     }
 }

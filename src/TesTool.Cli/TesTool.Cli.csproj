@@ -10,6 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\TesTool.Core\TesTool.Core.csproj" />
     <ProjectReference Include="..\TesTool.Infra\TesTool.Infra.csproj" />
   </ItemGroup>

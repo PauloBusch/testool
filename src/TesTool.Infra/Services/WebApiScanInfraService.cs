@@ -1,5 +1,4 @@
 ﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,31 +26,29 @@ namespace TesTool.Infra.Services
         public async Task<Controller> GetControllerAsync(string className)
         {
             Controller controller = null;
-            await ForEachClassesAsync((@class, root, model) => {
-                if (@class.IsAbstract()) return true;
+            var classes = await GetClassesAsync();
+            var controllerClass = classes.FirstOrDefault(c => c.Declaration.Identifier.Text == className);
+            if (controllerClass is null) return controller;
+            if (controllerClass.Declaration.IsAbstract()) return controller;
 
-                var classSymbol = model.GetDeclaredSymbol(@class) as ITypeSymbol;
-                var isController = classSymbol.ImplementsClass("ControllerBase", "Microsoft.AspNetCore.Mvc");
-                if (!isController) return true;
-                if (@class.Identifier.Text != className) return true;
+            var isController = controllerClass.TypeSymbol.ImplementsClass("ControllerBase", "Microsoft.AspNetCore.Mvc");
+            if (!isController) return controller;
 
-                var controllerName = @class.Identifier.Text.ToLower().Replace("controller", string.Empty);
+            var controllerName = controllerClass.Declaration.Identifier.Text.ToLower().Replace("controller", string.Empty);
 
-                var routeAttribute = classSymbol.GetAttribute("RouteAttribute");
-                var routeTemplate = routeAttribute?.ConstructorArguments.FirstOrDefault().Value?.ToString() ?? string.Empty;
-                var route = routeTemplate.Replace("[controller]", controllerName);
+            var routeAttribute = controllerClass.TypeSymbol.GetAttribute("RouteAttribute");
+            var routeTemplate = routeAttribute?.ConstructorArguments.FirstOrDefault().Value?.ToString() ?? string.Empty;
+            var route = routeTemplate.Replace("[controller]", controllerName);
 
-                var types = classSymbol.GetStackTypes();
-                var authorizeAttributeName = "AuthorizeAttribute";
-                var authAttributeNames = new[] { authorizeAttributeName, "AllowAnonymousAttribute" };
-                var authAttribute = types.SelectMany(t => t.GetAllAttributes())
-                    .FirstOrDefault(a => authAttributeNames.Contains(a.AttributeClass.Name));
-                var authorizeController = authAttribute?.AttributeClass.Name == authorizeAttributeName;
+            var types = controllerClass.TypeSymbol.GetStackTypes();
+            var authorizeAttributeName = "AuthorizeAttribute";
+            var authAttributeNames = new[] { authorizeAttributeName, "AllowAnonymousAttribute" };
+            var authAttribute = types.SelectMany(t => t.GetAllAttributes())
+                .FirstOrDefault(a => authAttributeNames.Contains(a.AttributeClass.Name));
+            var authorizeController = authAttribute?.AttributeClass.Name == authorizeAttributeName;
 
-                controller = new Controller(@class.Identifier.Text, route, authorizeController);
-                FillEndpoints(controller, classSymbol);
-                return false;
-            });
+            controller = new Controller(controllerClass.Declaration.Identifier.Text, route, authorizeController);
+            FillEndpoints(controller, controllerClass.TypeSymbol);
 
             return controller;
         }
@@ -59,75 +56,64 @@ namespace TesTool.Infra.Services
         public async Task<IEnumerable<Controller>> GetControllersAsync()
         {
             var controllers = new List<Controller>();
-            await ForEachClassesAsync((@class, root, model) => {
-                if (@class.IsAbstract()) return true;
+            var classes = await GetClassesAsync();
+            foreach (var @class in classes)
+            {
+                if (@class.Declaration.IsAbstract()) continue;
 
-                var classSymbol = model.GetDeclaredSymbol(@class) as ITypeSymbol;
-                var isController = classSymbol.ImplementsClass("ControllerBase", "Microsoft.AspNetCore.Mvc");
-                if (!isController) return true;
+                var isController = @class.TypeSymbol.ImplementsClass("ControllerBase", "Microsoft.AspNetCore.Mvc");
+                if (!isController) continue;
 
-                var controllerName = @class.Identifier.Text.ToLower().Replace("controller", string.Empty);
+                var controllerName = @class.Declaration.Identifier.Text.ToLower().Replace("controller", string.Empty);
 
-                var routeAttribute = classSymbol.GetAttribute("RouteAttribute");
+                var routeAttribute = @class.TypeSymbol.GetAttribute("RouteAttribute");
                 var routeTemplate = routeAttribute?.ConstructorArguments.FirstOrDefault().Value?.ToString() ?? string.Empty;
                 var route = routeTemplate.Replace("[controller]", controllerName);
 
-                var types = classSymbol.GetStackTypes();
+                var types = @class.TypeSymbol.GetStackTypes();
                 var authorizeAttributeName = "AuthorizeAttribute";
                 var authAttributeNames = new[] { authorizeAttributeName, "AllowAnonymousAttribute" };
                 var authAttribute = types.SelectMany(t => t.GetAllAttributes())
                     .FirstOrDefault(a => authAttributeNames.Contains(a.AttributeClass.Name));
                 var authorizeController = authAttribute?.AttributeClass.Name == authorizeAttributeName;
 
-                var controller = new Controller(@class.Identifier.Text, route, authorizeController);
-                FillEndpoints(controller, classSymbol);
+                var controller = new Controller(@class.Declaration.Identifier.Text, route, authorizeController);
+                FillEndpoints(controller, @class.TypeSymbol);
                 if (controller.Endpoints.Any()) controllers.Add(controller);
-                return true;
-            });
+            }
 
             return controllers;
         }
 
-        public async Task<TypeWrapper> GetModelAsync(string name)
+        public async Task<TypeWrapper> GetModelAsync(string className)
         {
-            var controllers = await GetControllersAsync();
-            foreach(var controller in controllers)
-            {
-                foreach(var endpoint in controller.Endpoints)
-                {
-                    foreach (var input in endpoint.Inputs)
-                    {
-                        var inputModel = GetModelRecursive(input.Type, name);
-                        if (inputModel is not null) return inputModel;
-                    }
+            var project = await GetProjectAsync();
+            if (project is null) return default;
+            
+            var projects = new [] { project }.Concat(GetProjectReferences(project)).ToArray();
+            var classes = await GetClassesAsync(projects);
+            var @class = classes.FirstOrDefault(c => c.Declaration.Identifier.Text == className);
+            if (@class is null) return default;
 
-                    var outputModel = GetModelRecursive(endpoint.Output, name);
-                    if (outputModel is not null) return outputModel;
-                }
-            }
-
-            return default;
+            return GetModelType(@class.TypeSymbol);
         }
 
-        private TypeWrapper GetModelRecursive(TypeWrapper typeBase, string name)
+        public async Task<bool> ExistModelAsync(string className)
         {
-            if (typeBase is null) return default;
-            
-            if (typeBase is Core.Models.Metadata.Array array)
-                return GetModelRecursive(array.Type, name);
+            return await GetModelAsync(className) is not null;
+        }
 
-            if (typeBase is Class dto)
-            {
-                if (dto.Name == name) return typeBase;
+        public async Task<bool> IsContextEntityFramework(string className)
+        {
+            var project = await GetProjectAsync();
+            if (project is null) return default;
 
-                foreach (var property in dto.Properties)
-                {
-                    var model = GetModelRecursive(property.Type, name);
-                    if (model is not null) return model;
-                }
-            }
+            var projects = new[] { project }.Concat(GetProjectReferences(project)).ToArray();
+            var classes = await GetClassesAsync(projects);
+            var @class = classes.FirstOrDefault(c => c.Declaration.Identifier.Text == className);
+            if (@class is null) return false;
 
-            return default;
+            return @class.TypeSymbol.ImplementsClass("DbContext", "Microsoft.EntityFrameworkCore");
         }
 
         private void FillEndpoints(Controller controller, ITypeSymbol classSymbol)
@@ -191,7 +177,7 @@ namespace TesTool.Infra.Services
             endpoint.Output = GetModelType(returnType);
         }
 
-        protected override string GetProjectFile()
+        protected override string GetProjectPathFile()
             => _settingInfraService.GetStringAsync(SettingEnumerator.PROJECT_DIRECTORY.Key).Result;
     }
 }

@@ -1,15 +1,10 @@
 ﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TesTool.Core.Enumerations;
 using TesTool.Core.Interfaces.Services;
 using TesTool.Core.Models.Metadata;
-using TesTool.Infra.Extensions;
 
 namespace TesTool.Infra.Services
 {
@@ -27,54 +22,27 @@ namespace TesTool.Infra.Services
 
         public async Task<bool> ClassExistAsync(string className)
         {
-            return await GetTypeSymbolAsync(className) is not null;
+            var classes = await GetClassesAsync();
+            return classes.Any(c => c.Declaration.Identifier.Text == className);
         }
 
-        public async Task<IEnumerable<string>> GetNotFoundClassesAsync(IEnumerable<string> regexNames)
+        public async Task<Class> GetClassAsync(string className)
         {
-            var project = GetProject();
-            if (project is null) return default;
-
-            var notFounded = regexNames.ToList();
-            await ForEachClassesAsync((@class, root, model) => {
-                if (!notFounded.Any()) return true;
-
-                var declaredSymbol = model.GetDeclaredSymbol(@class) as ITypeSymbol;
-                notFounded.RemoveAll(regex => Regex.IsMatch(declaredSymbol.GetName(), regex));
-                return notFounded.Any();
-            });
-
-            return notFounded;
-        }
-
-        public async Task<Class> GetClassAsync(string name)
-        {
-            var typeSymbol = await GetTypeSymbolAsync(name);
-            if (typeSymbol is null) return default;
-            return GetModelType(typeSymbol) as Class;
+            var classes = await GetClassesAsync();
+            var @class = classes.FirstOrDefault(c => c.Declaration.Identifier.Text == className);
+            if (@class is null) return default;
+            
+            return GetModelType(@class.TypeSymbol) as Class;
         }
 
         public async Task<string> GetPathClassAsync(string className)
         {
-            var project = GetProject();
-            if (project is null) return default;
-
-            var compilation = await GetCompilationAsync(project);
-            foreach (var documentId in project.DocumentIds)
-            {
-                var document = project.GetDocument(documentId);
-                var root = await document.GetSyntaxRootAsync();
-                var tree = await document.GetSyntaxTreeAsync();
-                var model = compilation.GetSemanticModel(tree);
-                var classes = root.DescendantNodes().OfType<ClassDeclarationSyntax>();
-                if (classes.Any(c => c.Identifier.Text == className)) return document.FilePath;
-            }
-
-            return default;
+            var classes = await GetClassesAsync();
+            return classes.FirstOrDefault(c => c.Declaration.Identifier.Text == className)?.FilePath;
         }
 
-        private string _cacheProjectPath;
-        protected override string GetProjectFile()
+        private static string _cacheProjectPath;
+        protected override string GetProjectPathFile()
         {
             if (!string.IsNullOrWhiteSpace(_cacheProjectPath)) return _cacheProjectPath;
             

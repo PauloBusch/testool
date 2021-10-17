@@ -11,6 +11,5 @@ namespace TesTool.Core.Interfaces.Services
         Task<bool> ClassExistAsync(string className);
         Task<Class> GetClassAsync(string className);
         Task<string> GetPathClassAsync(string className);
-        Task<IEnumerable<string>> GetNotFoundClassesAsync(IEnumerable<string> regexNames);
     }
 }

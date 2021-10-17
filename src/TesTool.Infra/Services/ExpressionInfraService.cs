@@ -1,7 +1,7 @@
 ﻿using Bogus;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
-using Newtonsoft.Json;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TesTool.Core.Interfaces.Services;
@@ -41,7 +41,7 @@ namespace TesTool.Infra.Services
                     .WithReferences(typeof(Faker).Assembly)
                     .WithImports("Bogus");
                 var result = await CSharpScript.EvaluateAsync<object>(codeRun, imports);
-                return JsonConvert.SerializeObject(result);
+                return JsonSerializer.Serialize(result);
             } catch
             {
                 return expression;

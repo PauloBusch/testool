@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
 using System.Threading.Tasks;
 using TesTool.Core.Enumerations;
 using TesTool.Core.Interfaces.Services;
@@ -24,7 +24,7 @@ namespace TesTool.Infra.Services
             if (string.IsNullOrWhiteSpace(conventionPathFile) || !File.Exists(conventionPathFile)) return defaultConventions;
 
             var conventionJson = File.ReadAllText(conventionPathFile);
-            var conventions = JsonConvert.DeserializeObject<List<Convention>>(conventionJson);
+            var conventions = JsonSerializer.Deserialize<List<Convention>>(conventionJson);
             conventions.AddRange(defaultConventions);
             return conventions;
         }

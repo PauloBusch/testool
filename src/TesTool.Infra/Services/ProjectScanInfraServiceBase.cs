@@ -1,16 +1,23 @@
-﻿using Buildalyzer;
-using Buildalyzer.Workspaces;
+﻿using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.MSBuild;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Bson;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
-using TesTool.Core.Exceptions;
 using TesTool.Core.Interfaces.Services;
 using TesTool.Core.Models.Enumerators;
 using TesTool.Core.Models.Metadata;
 using TesTool.Infra.Extensions;
+using TesTool.Infra.Models;
 
 namespace TesTool.Infra.Services
 {
@@ -28,61 +35,60 @@ namespace TesTool.Infra.Services
             _loggerInfraService = loggerInfraService;
         }
 
-        protected abstract string GetProjectFile();
+        protected abstract string GetProjectPathFile();
 
         public async Task<bool> ProjectExistAsync()
         {
-            var projectFile = GetProjectFile();
+            var projectFile = GetProjectPathFile();
             if (string.IsNullOrWhiteSpace(projectFile)) return false;
-            return await Task.FromResult(GetProject() is not null);
+            return await GetProjectAsync() is not null;
         }
 
-        protected async Task<ITypeSymbol> GetTypeSymbolAsync(string name)
+        protected async Task<IEnumerable<ClassContext>> GetClassesAsync(IEnumerable<Project> projects)
         {
-            var project = GetProject();
-            if (project is null) return default;
+            var classes = new List<ClassContext>();
+            if (projects is null || !projects.Any()) return classes;
 
-            var typeSymbol = null as ITypeSymbol;
-            await ForEachClassesAsync((@class, root, model) => {
-                var declaredSymbol = model.GetDeclaredSymbol(@class) as ITypeSymbol;
-                var equalType = declaredSymbol.GetName() == name;
-                if (equalType) typeSymbol = declaredSymbol;
-                return !equalType;
-            });
-
-            return typeSymbol;
+            foreach (var project in projects) classes.AddRange(await GetClassesAsync(project));
+            return classes;
         }
 
-        protected async Task ForEachClassesAsync(
-            Func<
-                ClassDeclarationSyntax, 
-                SyntaxNode, 
-                SemanticModel,
-                bool
-            > iterator
-        ) 
+        protected async Task<IEnumerable<ClassContext>> GetClassesAsync()
         {
-            var project = GetProject();
-            if (project is null) throw new ProjectNotFoundException(_projectType);
+            var project = await GetProjectAsync();
+            if (project is null) return new List<ClassContext>();
 
+            return await GetClassesAsync(project);
+        }
+
+        private static List<ProjectContext> _cacheProjectContext = new List<ProjectContext>();
+        private async Task<IEnumerable<ClassContext>> GetClassesAsync(Project project)
+        {
+            var existProjectContext = _cacheProjectContext.FirstOrDefault(p => p.Id == project.Id);
+            if (existProjectContext is not null) return existProjectContext.Classes;
+
+            var projectContext = new ProjectContext(project.Id);
             var compilation = await GetCompilationAsync(project);
-            foreach (var documentId in project.DocumentIds)
+            foreach (var document in project.Documents)
             {
-                var document = project.GetDocument(documentId);
                 var root = await document.GetSyntaxRootAsync();
                 var tree = await document.GetSyntaxTreeAsync();
                 var model = compilation.GetSemanticModel(tree);
                 var classes = root.DescendantNodes().OfType<ClassDeclarationSyntax>();
                 foreach (var @class in classes)
                 {
-                    var @continue = iterator(@class, root, model);
-                    if (!@continue) return;
+                    var typeSymbol = model.GetDeclaredSymbol(@class) as ITypeSymbol;
+                    var classContext = new ClassContext(@class, typeSymbol, root, document.FilePath);
+                    projectContext.Classes.Add(classContext);
                 }
             }
+
+            _cacheProjectContext.Add(projectContext);
+            return projectContext.Classes;
         }
 
-        private readonly Stack<int> _stackCalls = new Stack<int>();
-        private readonly IDictionary<int, Class> _cacheDtos = new Dictionary<int, Class>();
+        private static Stack<int> _stackCalls = new Stack<int>();
+        private static IDictionary<int, Class> _cacheDtos = new Dictionary<int, Class>();
         protected TypeWrapper GetModelType(ITypeSymbol typeSymbol)
         {
             var hash = (typeSymbol as dynamic).GetHashCode();
@@ -159,30 +165,51 @@ namespace TesTool.Infra.Services
             return @class;
         }
 
-        private readonly IDictionary<string, Project> _cacheProjects = new Dictionary<string, Project>();
-        protected Project GetProject()
+        private static readonly List<Project> _cacheProjects = new List<Project>();
+        protected async Task<Project> GetProjectAsync()
         {
-            var path = GetProjectFile();
-            if (string.IsNullOrWhiteSpace(path)) return default;
-            if (_cacheProjects.ContainsKey(path)) return _cacheProjects[path];
+            var projectPathFile = GetProjectPathFile();
+            if (string.IsNullOrWhiteSpace(projectPathFile)) return default;
+            
+            var projectName = Path.GetFileNameWithoutExtension(projectPathFile);
+            var existingProject = _cacheProjects.FirstOrDefault(p => p.Name == projectName);
+            if (existingProject is not null) return existingProject;
 
-            var manager = new AnalyzerManager();
-            var analyzer = manager.GetProject(path);
-            var workspace = analyzer.GetWorkspace();
-            var project = workspace.CurrentSolution.Projects.FirstOrDefault();
-            _cacheProjects.Add(path, project);
+            if (MSBuildLocator.CanRegister) MSBuildLocator.RegisterDefaults();
+            using var workspace = MSBuildWorkspace.Create();
+            var project = await workspace.OpenProjectAsync(projectPathFile);
+            _cacheProjects.Add(project);
             return project;
         }
 
-        private readonly IDictionary<string, Compilation> _cacheCompilation = new Dictionary<string, Compilation>();
+        protected IEnumerable<Project> GetProjectReferences(Project project)
+        {
+            var projects = new List<Project>();
+            foreach (var projectReference in project.ProjectReferences)
+            {
+                var existingProject = _cacheProjects.FirstOrDefault(p => p.Id == projectReference.ProjectId);
+                if (existingProject is not null)
+                {
+                    projects.Add(existingProject);
+                    continue;
+                }
+
+                var projectChild = project.Solution.GetProject(projectReference.ProjectId);
+                _cacheProjects.Add(projectChild);
+                projects.Add(projectChild);
+            }
+            return projects;
+        }
+
+        private static readonly IDictionary<ProjectId, Compilation> _cacheCompilation = new Dictionary<ProjectId, Compilation>();
         protected async Task<Compilation> GetCompilationAsync(Project project)
         {
-            if (_cacheCompilation.ContainsKey(project.Name)) return _cacheCompilation[project.Name];
+            if (_cacheCompilation.ContainsKey(project.Id)) return _cacheCompilation[project.Id];
             var compilation = await project.GetCompilationAsync();
-            _cacheCompilation.Add(project.Name, compilation);
+            _cacheCompilation.Add(project.Id, compilation);
             return compilation;
         }
 
-        public string GetNamespace() => GetProject()?.AssemblyName;
+        public string GetNamespace() => GetProjectAsync().Result?.AssemblyName;
     }
 }

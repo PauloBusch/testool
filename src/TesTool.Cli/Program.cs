@@ -1,11 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using TesTool.Core.Exceptions;
 using TesTool.Core.Interfaces.Services;
-using TesTool.Core.Models.Templates.Comparator;
-using TesTool.Core.Models.Templates.Factory;
 
 namespace TesTool.Cli
 {
@@ -31,9 +30,13 @@ namespace TesTool.Cli
                 var console = serviceProvider.GetService<ILoggerInfraService>();
                 var jsonOptions = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
 
+                //var webApiScanInfraService = serviceProvider.GetService<IWebApiScanInfraService>() as WebApiScanInfraService;
+                //webApiScanInfraService.TestBuild().Wait();
+
                 /*
                 var project = serviceProvider.GetService<IWebApiScanInfraService>();
-                project.GetControllersAsync().Result.ToList().ForEach(c =>
+                var controllers = await project.GetControllersAsync();
+                controllers.ToList().ForEach(c =>
                 {
                     console.LogInformation("\n" + (c.Authorize ? "[Authorize] " : "[AllowAnonymous] ") + c.Route);
                     c.Endpoints.ToList().ForEach(e =>
@@ -44,14 +47,14 @@ namespace TesTool.Cli
                         {
                             console.LogInformation($"   [{i.Source.Name}] {i.Name}");
                             //console.LogInformation($"   [{i.Source.Name}] {i.Name} PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
-                            //console.LogInformation(JsonConvert.SerializeObject(i, Formatting.Indented, jsonOptions));
+                            console.LogInformation(JsonConvert.SerializeObject(i, Formatting.Indented, jsonOptions));
                         });
                         //console.LogInformation($" [{e.Method.Name}] {e.Route} RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
-                        //console.LogInformation(JsonConvert.SerializeObject(e.Output, Formatting.Indented, jsonOptions));
+                        console.LogInformation(JsonConvert.SerializeObject(e.Output, Formatting.Indented, jsonOptions));
                     });
                 });
-                */
                 
+
                 /*
                 var model = new ComparatorFactory(
                     "ComparerFactory",
@@ -67,7 +70,7 @@ namespace TesTool.Cli
                 var templateService = serviceProvider.GetService<ITemplateCodeInfraService>();
                 console.LogInformation(templateService.ProcessComparerFactory(model));
                 */
-                        
+
             }
             catch (TesToolExceptionBase exception)
             {
