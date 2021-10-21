@@ -4,7 +4,7 @@ using TesTool.Core.Interfaces.Services;
 using TesTool.Core.Interfaces.Services.Factories;
 using TesTool.Core.Interfaces.Services.Fakers;
 using TesTool.Core.Models.Metadata;
-using TesTool.Core.Models.Templates.Factory;
+using TesTool.Core.Models.Templates.Factories;
 
 namespace TesTool.Core.Commands.Generate.Fakers
 {
@@ -43,17 +43,17 @@ namespace TesTool.Core.Commands.Generate.Fakers
         protected override async Task<string> BuildSourceCodeAsync(Class @class, string fakerName)
         {
             var templateModel = await _fakeEntityService.GetFakerModelAsync(@class, Static);
-            return _templateCodeInfraService.BuildModel(templateModel);
+            return _templateCodeInfraService.BuildModelFaker(templateModel);
         }
 
         protected override async Task AppendFactoryMethodAsync(Class @class, string fakerName, string factoryName)
         {
             var factoryTemplateModel = _factoryModelService.GetModelFactory(factoryName);
             factoryTemplateModel.AddNamespace(_fakeEntityService.GetNamespace());
-            factoryTemplateModel.AddMethod(new ModelFactoryMethod(ClassName, fakerName));
+            factoryTemplateModel.AddMethod(new ModelFakerFactoryMethod(ClassName, fakerName));
 
             var factoryPathFile = await _testScanInfraService.GetPathClassAsync(factoryName);
-            var factorySourceCode = _templateCodeInfraService.BuildModelFactory(factoryTemplateModel);
+            var factorySourceCode = _templateCodeInfraService.BuildModelFakerFactory(factoryTemplateModel);
             var mergedSourceCode = await _testCodeInfraService.MergeClassCodeAsync(factoryName, factorySourceCode);
             await _fileSystemInfraService.SaveFileAsync(factoryPathFile, mergedSourceCode);
         }

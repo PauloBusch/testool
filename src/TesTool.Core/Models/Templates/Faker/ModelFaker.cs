@@ -2,12 +2,12 @@
 
 namespace TesTool.Core.Models.Templates.Faker
 {
-    public class Model
+    public class ModelFaker
     {
         private List<string> _namespaces;
         private List<ModelProperty> _properties;
 
-        public Model(string name, string fakerNamespace)
+        public ModelFaker(string name, string fakerNamespace)
         {
             Name = name;
             FakerNamespace = fakerNamespace;

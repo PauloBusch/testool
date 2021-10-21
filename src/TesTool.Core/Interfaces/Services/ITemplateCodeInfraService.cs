@@ -1,14 +1,17 @@
 ﻿using TesTool.Core.Models.Templates.Comparator;
-using TesTool.Core.Models.Templates.Factory;
+using TesTool.Core.Models.Templates.Factories;
 using TesTool.Core.Models.Templates.Faker;
 
 namespace TesTool.Core.Interfaces.Services
 {
     public interface ITemplateCodeInfraService
     {
-        string BuildModel(Model model);
-        string BuildModelFactory(ModelFactory model);
-        string BuildModelFactoryMethod(ModelFactoryMethod model);
+        string BuildModelFaker(ModelFaker model);
+        string BuildModelFakerFactory(ModelFakerFactory model);
+        string BuildModelFakerFactoryMethod(ModelFakerFactoryMethod model);
+
+        string BuildEntityFakerFactory(EntityFakerFactory model);
+        string BuildEntityFakerFactoryMethod(EntityFakerFactoryMethod model);
 
         string BuildCompareStatic(CompareStatic model);
         string BuildCompareDynamic(CompareDynamic model);

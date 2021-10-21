@@ -2,7 +2,7 @@
   "profiles": {
     "TesTool.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "g factory entity CipContext"
+      "commandLineArgs": "g factory entity FcbContext"
     }
   }
 }

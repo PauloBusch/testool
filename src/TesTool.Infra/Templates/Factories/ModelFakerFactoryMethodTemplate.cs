@@ -16,9 +16,9 @@ namespace TesTool.Infra.Templates.Factories
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ComparatorFactoryMethodTemplate.tt"
+    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryMethodTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public partial class ComparatorFactoryMethodTemplate : ComparatorFactoryMethodTemplateBase
+    public partial class ModelFakerFactoryMethodTemplate : ModelFakerFactoryMethodTemplateBase
     {
 #line hidden
         /// <summary>
@@ -28,14 +28,14 @@ namespace TesTool.Infra.Templates.Factories
         {
             this.Write("public ");
             
-            #line 4 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ComparatorFactoryMethodTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Method.Name));
+            #line 4 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryMethodTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Method.Faker));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 4 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ComparatorFactoryMethodTemplate.tt"
+            #line 4 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Method.Name));
             
             #line default
@@ -44,9 +44,9 @@ namespace TesTool.Infra.Templates.Factories
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 5 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ComparatorFactoryMethodTemplate.tt"
+        #line 5 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryMethodTemplate.tt"
  
-    public ComparatorFactoryMethod Method { get; set; } 
+    public ModelFakerFactoryMethod Method { get; set; } 
 
         
         #line default
@@ -60,7 +60,7 @@ namespace TesTool.Infra.Templates.Factories
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public class ComparatorFactoryMethodTemplateBase
+    public class ModelFakerFactoryMethodTemplateBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

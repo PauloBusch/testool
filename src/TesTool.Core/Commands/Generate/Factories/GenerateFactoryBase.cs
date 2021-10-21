@@ -17,8 +17,8 @@ namespace TesTool.Core.Commands.Generate.Factory
         
         private readonly Setting _setting;
         private readonly TestClass _testClass;
-        private readonly ISettingInfraService _settingInfraService;
 
+        protected readonly ISettingInfraService _settingInfraService;
         protected readonly ITemplateCodeInfraService _templateCodeInfraService;
         protected readonly ITestScanInfraService _testScanInfraService;
 
@@ -56,7 +56,7 @@ namespace TesTool.Core.Commands.Generate.Factory
                 throw new DuplicatedSourceFileException(factoryName);
 
             await _fileSystemInfraService.SaveFileAsync(filePath, factorySourceCode);
-            await _settingInfraService.SetStringAsync(_setting.Key, factoryName);
+            await _settingInfraService.SetStringAsync(_setting, factoryName);
         }
 
         private string GetFactoryName()

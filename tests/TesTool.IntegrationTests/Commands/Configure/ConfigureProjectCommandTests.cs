@@ -33,7 +33,7 @@ namespace TesTool.IntegrationTests.Commands.Configure
 
             await command.ExecuteAsync();
 
-            Assert.NotEqual(expectedPath, await _settingsService.GetStringAsync(SettingEnumerator.PROJECT_DIRECTORY.Key));
+            Assert.NotEqual(expectedPath, await _settingsService.GetStringAsync(SettingEnumerator.PROJECT_DIRECTORY));
             _loggerServiceMock.Verify(l => l.LogError(It.IsAny<string>()), Times.Once);
         }
 
@@ -47,7 +47,7 @@ namespace TesTool.IntegrationTests.Commands.Configure
 
             await command.ExecuteAsync();
 
-            Assert.Equal(@"Assets\sample.csproj", await _settingsService.GetStringAsync(SettingEnumerator.PROJECT_DIRECTORY.Key));
+            Assert.Equal(@"Assets\sample.csproj", await _settingsService.GetStringAsync(SettingEnumerator.PROJECT_DIRECTORY));
             _loggerServiceMock.Verify(l => l.LogError(It.IsAny<string>()), Times.Never);
         }
     }

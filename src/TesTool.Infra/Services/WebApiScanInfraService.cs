@@ -98,7 +98,7 @@ namespace TesTool.Infra.Services
             return GetModelType(@class.TypeSymbol);
         }
 
-        public async Task<bool> ExistModelAsync(string className)
+        public async Task<bool> ModelExistAsync(string className)
         {
             return await GetModelAsync(className) is not null;
         }
@@ -178,6 +178,6 @@ namespace TesTool.Infra.Services
         }
 
         protected override string GetProjectPathFile()
-            => _settingInfraService.GetStringAsync(SettingEnumerator.PROJECT_DIRECTORY.Key).Result;
+            => _settingInfraService.GetStringAsync(SettingEnumerator.PROJECT_DIRECTORY).Result;
     }
 }

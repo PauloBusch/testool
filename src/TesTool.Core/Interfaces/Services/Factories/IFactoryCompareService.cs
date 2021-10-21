@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using TesTool.Core.Models.Templates.Factory;
+using TesTool.Core.Models.Templates.Factories;
 
 namespace TesTool.Core.Interfaces.Services.Factories
 {

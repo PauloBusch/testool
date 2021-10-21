@@ -53,7 +53,7 @@ namespace TesTool.Core.Commands.Configure
                 await _fileSystemInfraService.SaveFileAsync(ConfigurationPath, jsonConventions);
             }
 
-            await _settingsService.SetStringAsync(SettingEnumerator.CONVENTION_PATH_FILE.Key, ConfigurationPath);
+            await _settingsService.SetStringAsync(SettingEnumerator.CONVENTION_PATH_FILE, ConfigurationPath);
         }
     }
 }

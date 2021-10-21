@@ -38,8 +38,16 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>ComparatorStaticTemplate.cs</LastGenOutput>
     </None>
-    <None Update="Templates\Fakers\FakerTemplate.tt">
-      <LastGenOutput>FakerTemplate.cs</LastGenOutput>
+    <None Update="Templates\Factories\EntityFakerFactoryMethodTemplate.tt">
+      <LastGenOutput>EntityFakerFactoryMethodTemplate.cs</LastGenOutput>
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+    </None>
+    <None Update="Templates\Factories\EntityFakerFactoryTemplate.tt">
+      <LastGenOutput>EntityFakerFactoryTemplate.cs</LastGenOutput>
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+    </None>
+    <None Update="Templates\Fakers\ModelFakerTemplate.tt">
+      <LastGenOutput>ModelFakerTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
     <None Update="Templates\Factories\ComparatorFactoryMethodTemplate.tt">
@@ -50,13 +58,13 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>HttpRequestTemplate.cs</LastGenOutput>
     </None>
-    <None Update="Templates\Factories\ModelFactoryMethodTemplate.tt">
-      <LastGenOutput>ModelFactoryMethodTemplate.cs</LastGenOutput>
+    <None Update="Templates\Factories\ModelFakerFactoryMethodTemplate.tt">
+      <LastGenOutput>ModelFakerFactoryMethodTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
-    <None Update="Templates\Factories\ModelFactoryTemplate.tt">
+    <None Update="Templates\Factories\ModelFakerFactoryTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>ModelFactoryTemplate.cs</LastGenOutput>
+      <LastGenOutput>ModelFakerFactoryTemplate.cs</LastGenOutput>
     </None>
   </ItemGroup>
 
@@ -90,20 +98,30 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ComparatorFactoryTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Update="Templates\Factories\ModelFactoryMethodTemplate.cs">
+    <Compile Update="Templates\Factories\EntityFakerFactoryMethodTemplate.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>ModelFactoryMethodTemplate.tt</DependentUpon>
+      <DependentUpon>EntityFakerFactoryMethodTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Update="Templates\Factories\ModelFactoryTemplate.cs">
+    <Compile Update="Templates\Factories\EntityFakerFactoryTemplate.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>ModelFactoryTemplate.tt</DependentUpon>
+      <DependentUpon>EntityFakerFactoryTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Update="Templates\Fakers\FakerTemplate.cs">
+    <Compile Update="Templates\Factories\ModelFakerFactoryMethodTemplate.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>FakerTemplate.tt</DependentUpon>
+      <DependentUpon>ModelFakerFactoryMethodTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Templates\Factories\ModelFakerFactoryTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ModelFakerFactoryTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Templates\Fakers\ModelFakerTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ModelFakerTemplate.tt</DependentUpon>
     </Compile>
     <Compile Update="Templates\Helpers\HttpRequestTemplate.cs">
       <DesignTime>True</DesignTime>

@@ -2,7 +2,7 @@
 using System.Linq;
 using TesTool.Core.Interfaces.Services;
 using TesTool.Core.Models.Templates.Comparator;
-using TesTool.Core.Models.Templates.Factory;
+using TesTool.Core.Models.Templates.Factories;
 using TesTool.Infra.Templates.Comparators;
 using TesTool.Infra.Templates.Extensions;
 using TesTool.Infra.Templates.Factories;
@@ -13,9 +13,9 @@ namespace TesTool.Infra.Services
 {
     public class TemplateCodeInfraService : ITemplateCodeInfraService
     {
-        public string BuildModel(Core.Models.Templates.Faker.Model model)
+        public string BuildModelFaker(Core.Models.Templates.Faker.ModelFaker model)
         {
-            var template = new FakerTemplate
+            var template = new ModelFakerTemplate
             {
                 Name = model.Name,
                 FakerNamespace = model.FakerNamespace,
@@ -25,9 +25,9 @@ namespace TesTool.Infra.Services
             return template.TransformText();
         }
 
-        public string BuildModelFactory(ModelFactory model)
+        public string BuildModelFakerFactory(ModelFakerFactory model)
         {
-            var template = new ModelFactoryTemplate
+            var template = new ModelFakerFactoryTemplate
             { 
                 TemplataService = this,
                 Name = model.Name,
@@ -38,9 +38,30 @@ namespace TesTool.Infra.Services
             return template.TransformText();
         }
 
-        public string BuildModelFactoryMethod(ModelFactoryMethod model)
+        public string BuildModelFakerFactoryMethod(ModelFakerFactoryMethod model)
         {
-            var template = new ModelFactoryMethodTemplate { Method = model };
+            var template = new ModelFakerFactoryMethodTemplate { Method = model };
+            return template.TransformText();
+        }
+
+        public string BuildEntityFakerFactory(EntityFakerFactory model)
+        {
+            var template = new EntityFakerFactoryTemplate
+            {
+                TemplataService = this,
+                Name = model.Name,
+                TestBase = model.TestBase,
+                DbContext = model.DbContext,
+                Methods = model.Methods.ToArray(),
+                Namespaces = PrepareNamespaces(model.Namespaces, model.FactoryNamespace),
+                FactoryNamespace = model.FactoryNamespace,
+            };
+            return template.TransformText();
+        }
+
+        public string BuildEntityFakerFactoryMethod(EntityFakerFactoryMethod model)
+        {
+            var template = new EntityFakerFactoryMethodTemplate { Method = model };
             return template.TransformText();
         }
 

@@ -3,10 +3,10 @@ using TesTool.Core.Models.Templates.Factories;
 
 namespace TesTool.Core.Interfaces.Services.Factories
 {
-    public interface IFactoryModelService
+    public interface IFactoryEntityService
     {
         string GetNamespace();
         Task<string> GetFactoryNameAsync();
-        ModelFakerFactory GetModelFactory(string name);
+        Task<EntityFakerFactory> GetEntityFactoryAsync(string name, string dbContext);
     }
 }

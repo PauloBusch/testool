@@ -9,7 +9,7 @@
 // ------------------------------------------------------------------------------
 namespace TesTool.Infra.Templates.Factories
 {
-    using TesTool.Core.Models.Templates.Factory;
+    using TesTool.Core.Models.Templates.Factories;
     using TesTool.Core.Interfaces.Services;
     using System;
     

@@ -7,7 +7,7 @@ using TesTool.Core.Interfaces.Services;
 using TesTool.Core.Interfaces.Services.Factories;
 using TesTool.Core.Models.Metadata;
 using TesTool.Core.Models.Templates.Comparator;
-using TesTool.Core.Models.Templates.Factory;
+using TesTool.Core.Models.Templates.Factories;
 
 namespace TesTool.Core.Commands.Generate
 {

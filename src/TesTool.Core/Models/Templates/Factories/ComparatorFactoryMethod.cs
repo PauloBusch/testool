@@ -1,4 +1,4 @@
-﻿namespace TesTool.Core.Models.Templates.Factory
+﻿namespace TesTool.Core.Models.Templates.Factories
 {
     public class ComparatorFactoryMethod
     {

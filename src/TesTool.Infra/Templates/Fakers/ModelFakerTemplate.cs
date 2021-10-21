@@ -7,18 +7,21 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace TesTool.Infra.Templates.Factories
+namespace TesTool.Infra.Templates.Fakers
 {
-    using TesTool.Core.Models.Templates.Factories;
+    using System.Linq;
+    using System.Text;
+    using System.Collections.Generic;
+    using TesTool.Core.Models.Templates.Faker;
     using System;
     
     /// <summary>
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ComparatorFactoryMethodTemplate.tt"
+    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public partial class ComparatorFactoryMethodTemplate : ComparatorFactoryMethodTemplateBase
+    public partial class ModelFakerTemplate : ModelFakerTemplateBase
     {
 #line hidden
         /// <summary>
@@ -26,27 +29,107 @@ namespace TesTool.Infra.Templates.Factories
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("public ");
             
-            #line 4 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ComparatorFactoryMethodTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Method.Name));
-            
-            #line default
-            #line hidden
-            this.Write(" ");
-            
-            #line 4 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ComparatorFactoryMethodTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Method.Name));
+            #line 7 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
+ 
+  var tab = "    ";
+  var classFakerName = $"{Name}Faker";
+  var expressionInitial = Name.ToLower().ElementAt(0);
+  var useProperties = Properties.Where(p => !p.Unsafe).ToList();
+
             
             #line default
             #line hidden
-            this.Write("() => new();\r\n");
+            this.Write("using Bogus;\r\n");
+            
+            #line 14 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
+ foreach (var @namespace in Namespaces) {
+  
+            
+            #line default
+            #line hidden
+            this.Write("using ");
+            
+            #line 15 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(@namespace));
+            
+            #line default
+            #line hidden
+            this.Write(";\r\n");
+            
+            #line 16 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
+ } 
+            
+            #line default
+            #line hidden
+            this.Write("\r\nnamespace ");
+            
+            #line 18 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(FakerNamespace));
+            
+            #line default
+            #line hidden
+            this.Write(" \r\n{\r\n    public class ");
+            
+            #line 20 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(classFakerName));
+            
+            #line default
+            #line hidden
+            this.Write(" : Faker<");
+            
+            #line 20 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
+            
+            #line default
+            #line hidden
+            this.Write("> \r\n    {\r\n        public ");
+            
+            #line 22 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(classFakerName));
+            
+            #line default
+            #line hidden
+            this.Write("()\r\n        {\r\n            ");
+            
+            #line 24 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
+ foreach (var property in Properties) { 
+              var isFirst = useProperties.First() == property;
+              var isLast = useProperties.Last() == property;
+              var rowStringBuilder = new StringBuilder();
+              if (!isFirst) rowStringBuilder.Append(tab + tab + tab + tab);
+              if (property.Unsafe) rowStringBuilder.Append("// ");
+              if (!isFirst) rowStringBuilder.Append(".");
+              rowStringBuilder.Append($"RuleFor({expressionInitial} => {expressionInitial}.{property.Name}, {property.Expression})");
+              if (isLast) rowStringBuilder.Append(";");
+              rowStringBuilder.Append("\n");
+              
+            
+            #line default
+            #line hidden
+            
+            #line 34 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(rowStringBuilder.ToString()));
+            
+            #line default
+            #line hidden
+            
+            #line 34 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
+
+            } 
+            
+            #line default
+            #line hidden
+            this.Write("        } \r\n    }\r\n}\r\n");
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 5 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ComparatorFactoryMethodTemplate.tt"
- 
-    public ComparatorFactoryMethod Method { get; set; } 
+        #line 39 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
+
+    public string Name { get; set; }
+    public string FakerNamespace { get; set; }
+    public string[] Namespaces { get; set; }
+    public ModelProperty[] Properties { get; set; }
 
         
         #line default
@@ -60,7 +143,7 @@ namespace TesTool.Infra.Templates.Factories
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public class ComparatorFactoryMethodTemplateBase
+    public class ModelFakerTemplateBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

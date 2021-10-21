@@ -10,7 +10,7 @@ using TesTool.Core.Exceptions;
 using TesTool.Core.Interfaces.Services;
 using TesTool.Core.Models.Configuration;
 using TesTool.Core.Models.Metadata;
-using TesTool.Core.Models.Templates.Factory;
+using TesTool.Core.Models.Templates.Factories;
 using TesTool.Core.Models.Templates.Faker;
 
 namespace TesTool.Core.Commands.Generate

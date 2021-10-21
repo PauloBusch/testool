@@ -1,7 +1,7 @@
 ﻿using TesTool.Core.Enumerations;
 using TesTool.Core.Interfaces.Services;
 using TesTool.Core.Interfaces.Services.Factories;
-using TesTool.Core.Models.Templates.Factory;
+using TesTool.Core.Models.Templates.Factories;
 
 namespace TesTool.Core.Services.Factories
 {
@@ -13,15 +13,15 @@ namespace TesTool.Core.Services.Factories
             ITestScanInfraService testScanInfraService, 
             IWebApiScanInfraService webApiScanInfraService
         ) : base(
-            SettingEnumerator.MODEL_FACTORY_NAME,
-            TestClassEnumerator.MODEL_FACTORY,
+            SettingEnumerator.MODEL_FAKER_FACTORY_NAME,
+            TestClassEnumerator.MODEL_FAKER_FACTORY,
             settingInfraService, solutionService, 
             testScanInfraService, webApiScanInfraService
         ) { }
 
-        public ModelFactory GetModelFactory(string name)
+        public ModelFakerFactory GetModelFactory(string name)
         {
-            return new ModelFactory(name, GetNamespace());
+            return new ModelFakerFactory(name, GetNamespace());
         }
 
         public string GetNamespace()

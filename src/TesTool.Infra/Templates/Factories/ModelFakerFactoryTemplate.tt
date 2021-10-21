@@ -11,7 +11,7 @@ namespace <#=FactoryNamespace#>
     public class <#=Name#>
     {
 <#  #><# foreach (var method in Methods) { #>
-        <#=TemplataService.BuildComparatorFactoryMethod(method)#><#
+        <#=TemplataService.BuildModelFakerFactoryMethod(method)#><#
     #><# } #>
     }
 }
@@ -19,6 +19,6 @@ namespace <#=FactoryNamespace#>
     public string Name { get; set; }
     public string FactoryNamespace { get; set; }
     public string[] Namespaces { get; set; }
-    public ComparatorFactoryMethod[] Methods { get; set; }
+    public ModelFakerFactoryMethod[] Methods { get; set; }
     public ITemplateCodeInfraService TemplataService { get; set; }
 #>

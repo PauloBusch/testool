@@ -7,6 +7,6 @@ namespace TesTool.Core.Interfaces.Services.Fakers
     public interface IFakeEntityService
     {
         string GetNamespace();
-        Task<Model> GetFakerModelAsync(Class model, bool @static);
+        Task<ModelFaker> GetFakerModelAsync(Class model, bool @static);
     }
 }

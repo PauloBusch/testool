@@ -35,7 +35,7 @@ namespace TesTool.Core.Services.Factories
 
         public async Task<string> GetFactoryNameAsync()
         {
-            var factoryName = await _settingInfraService.GetStringAsync(_setting.Key);
+            var factoryName = await _settingInfraService.GetStringAsync(_setting);
             return !string.IsNullOrWhiteSpace(factoryName) ? factoryName : _testClass.Name;
         }
     }

@@ -9,16 +9,16 @@
 // ------------------------------------------------------------------------------
 namespace TesTool.Infra.Templates.Factories
 {
-    using TesTool.Core.Models.Templates.Factory;
+    using TesTool.Core.Models.Templates.Factories;
     using System;
     
     /// <summary>
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFactoryMethodTemplate.tt"
+    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\EntityFakerFactoryMethodTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public partial class ModelFactoryMethodTemplate : ModelFactoryMethodTemplateBase
+    public partial class EntityFakerFactoryMethodTemplate : EntityFakerFactoryMethodTemplateBase
     {
 #line hidden
         /// <summary>
@@ -28,25 +28,25 @@ namespace TesTool.Infra.Templates.Factories
         {
             this.Write("public ");
             
-            #line 4 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFactoryMethodTemplate.tt"
+            #line 4 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\EntityFakerFactoryMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Method.Faker));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 4 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFactoryMethodTemplate.tt"
+            #line 4 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\EntityFakerFactoryMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Method.Name));
             
             #line default
             #line hidden
-            this.Write("() => new();\r\n");
+            this.Write("() => new(_context);\r\n");
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 5 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFactoryMethodTemplate.tt"
+        #line 5 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\EntityFakerFactoryMethodTemplate.tt"
  
-    public ModelFactoryMethod Method { get; set; } 
+    public EntityFakerFactoryMethod Method { get; set; } 
 
         
         #line default
@@ -60,7 +60,7 @@ namespace TesTool.Infra.Templates.Factories
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public class ModelFactoryMethodTemplateBase
+    public class EntityFakerFactoryMethodTemplateBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

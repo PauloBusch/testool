@@ -1,8 +1,8 @@
-﻿namespace TesTool.Core.Models.Templates.Factory
+﻿namespace TesTool.Core.Models.Templates.Factories
 {
-    public class ModelFactoryMethod
+    public class EntityFakerFactoryMethod
     {
-        public ModelFactoryMethod(string name, string faker)
+        public EntityFakerFactoryMethod(string name, string faker)
         {
             Name = name;
             Faker = faker;

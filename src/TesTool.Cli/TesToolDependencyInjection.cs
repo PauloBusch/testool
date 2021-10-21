@@ -34,6 +34,7 @@ namespace TesTool.Cli
                 .AddSingleton<ICompareService, CompareService>()
 
                 .AddSingleton<IFactoryModelService, FactoryModelService>()
+                .AddSingleton<IFactoryEntityService, FactoryEntityService>()
                 .AddSingleton<IFactoryCompareService, FactoryCompareService>()
 
                 .AddSingleton<ISolutionService, SolutionService>()

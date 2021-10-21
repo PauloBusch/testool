@@ -1,6 +1,6 @@
 ﻿<#@ template language="C#" #>
 <#@ assembly name="System.Core" #>
-<#@ import namespace="TesTool.Core.Models.Templates.Factory" #>
+<#@ import namespace="TesTool.Core.Models.Templates.Factories" #>
 <#@ import namespace="TesTool.Core.Interfaces.Services" #>
 <# foreach (var @namespace in Namespaces) {
   #>using <#=@namespace#>;
@@ -10,15 +10,26 @@ namespace <#=FactoryNamespace#>
 {
     public class <#=Name#>
     {
+        private readonly <#=TestBase#> _test;
+        private readonly <#=DbContext#> _context;
+
+        public <#=Name#>(<#=TestBase#> test)
+        {
+            _context = test.DbContext;
+            _test = test;
+        }
+
 <#  #><# foreach (var method in Methods) { #>
-        <#=TemplataService.BuildModelFactoryMethod(method)#><#
+        <#=TemplataService.BuildEntityFakerFactoryMethod(method)#><#
     #><# } #>
     }
 }
 <#+
     public string Name { get; set; }
+    public string TestBase { get; set; }
+    public string DbContext { get; set; }
     public string FactoryNamespace { get; set; }
     public string[] Namespaces { get; set; }
-    public ModelFactoryMethod[] Methods { get; set; }
+    public EntityFakerFactoryMethod[] Methods { get; set; }
     public ITemplateCodeInfraService TemplataService { get; set; }
 #>

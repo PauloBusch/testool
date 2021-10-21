@@ -28,10 +28,10 @@ namespace TesTool.Core.Services.Fakers
             _conventionInfraService = conventionInfraService;
         }
 
-        public async Task<Model> GetFakerModelAsync(Class model, bool @static)
+        public async Task<ModelFaker> GetFakerModelAsync(Class model, bool @static)
         {
             var conventions = await _conventionInfraService.GetConfiguredConventionsAsync();
-            var templateModel = new Model(model.Name, GetNamespace());
+            var templateModel = new ModelFaker(model.Name, GetNamespace());
             templateModel.AddNamespace(model.Namespace);
 
             foreach (var property in model.Properties)

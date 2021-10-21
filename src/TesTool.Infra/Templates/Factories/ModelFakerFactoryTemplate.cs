@@ -9,7 +9,7 @@
 // ------------------------------------------------------------------------------
 namespace TesTool.Infra.Templates.Factories
 {
-    using TesTool.Core.Models.Templates.Factory;
+    using TesTool.Core.Models.Templates.Factories;
     using TesTool.Core.Interfaces.Services;
     using System;
     
@@ -17,9 +17,9 @@ namespace TesTool.Infra.Templates.Factories
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFactoryTemplate.tt"
+    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public partial class ModelFactoryTemplate : ModelFactoryTemplateBase
+    public partial class ModelFakerFactoryTemplate : ModelFakerFactoryTemplateBase
     {
 #line hidden
         /// <summary>
@@ -28,7 +28,7 @@ namespace TesTool.Infra.Templates.Factories
         public virtual string TransformText()
         {
             
-            #line 5 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFactoryTemplate.tt"
+            #line 5 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
  foreach (var @namespace in Namespaces) {
   
             
@@ -36,61 +36,61 @@ namespace TesTool.Infra.Templates.Factories
             #line hidden
             this.Write("using ");
             
-            #line 6 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFactoryTemplate.tt"
+            #line 6 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@namespace));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 7 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFactoryTemplate.tt"
+            #line 7 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\r\nnamespace ");
             
-            #line 9 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFactoryTemplate.tt"
+            #line 9 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(FactoryNamespace));
             
             #line default
             #line hidden
             this.Write("\r\n{\r\n    public class ");
             
-            #line 11 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFactoryTemplate.tt"
+            #line 11 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
             this.Write("\r\n    {\r\n");
             
-            #line 13 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFactoryTemplate.tt"
+            #line 13 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
   
             
             #line default
             #line hidden
             
-            #line 13 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFactoryTemplate.tt"
+            #line 13 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
  foreach (var method in Methods) { 
             
             #line default
             #line hidden
             this.Write("        ");
             
-            #line 14 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(TemplataService.BuildModelFactoryMethod(method)));
+            #line 14 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(TemplataService.BuildModelFakerFactoryMethod(method)));
             
             #line default
             #line hidden
             
-            #line 14 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFactoryTemplate.tt"
+            #line 14 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
 
     
             
             #line default
             #line hidden
             
-            #line 15 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFactoryTemplate.tt"
+            #line 15 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
  } 
             
             #line default
@@ -99,12 +99,12 @@ namespace TesTool.Infra.Templates.Factories
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 18 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFactoryTemplate.tt"
+        #line 18 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
 
     public string Name { get; set; }
     public string FactoryNamespace { get; set; }
     public string[] Namespaces { get; set; }
-    public ModelFactoryMethod[] Methods { get; set; }
+    public ModelFakerFactoryMethod[] Methods { get; set; }
     public ITemplateCodeInfraService TemplataService { get; set; }
 
         
@@ -119,7 +119,7 @@ namespace TesTool.Infra.Templates.Factories
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public class ModelFactoryTemplateBase
+    public class ModelFakerFactoryTemplateBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

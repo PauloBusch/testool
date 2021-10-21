@@ -8,7 +8,7 @@ namespace TesTool.Core.Commands.Generate.Factory
     [Command("model", HelpText = "Gerar fábrica de modelo de transporte de dados (DTO).")]
     public class GenerateFactoryModelCommand : GenerateFactoryBase
     {
-        protected readonly IFactoryModelService _factoryModelService;
+        private readonly IFactoryModelService _factoryModelService;
 
         public GenerateFactoryModelCommand(
             ISettingInfraService settingInfraService,
@@ -18,8 +18,8 @@ namespace TesTool.Core.Commands.Generate.Factory
             ITemplateCodeInfraService templateCodeInfraService,
             IEnvironmentInfraService environmentInfraService
         ) : base(
-            SettingEnumerator.MODEL_FACTORY_NAME, 
-            TestClassEnumerator.MODEL_FACTORY,
+            SettingEnumerator.MODEL_FAKER_FACTORY_NAME, 
+            TestClassEnumerator.MODEL_FAKER_FACTORY,
             settingInfraService, environmentInfraService, 
             testScanInfraService, fileSystemInfraService, 
             templateCodeInfraService
@@ -31,7 +31,7 @@ namespace TesTool.Core.Commands.Generate.Factory
         protected override string BuildSourceCode(string factoryName)
         {
             var templateModel = _factoryModelService.GetModelFactory(factoryName);
-            return _templateCodeInfraService.BuildModelFactory(templateModel);
+            return _templateCodeInfraService.BuildModelFakerFactory(templateModel);
         }
     }
 }
