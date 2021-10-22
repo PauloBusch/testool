@@ -30,6 +30,7 @@ namespace TesTool.Cli
                 .AddSingleton<ITestScanInfraService, TestScanInfraService>()
                 .AddSingleton<ITestCodeInfraService, TestCodeInfraService>()
 
+                .AddSingleton<IFakeModelService, FakeModelService>()
                 .AddSingleton<IFakeEntityService, FakeEntityService>()
                 .AddSingleton<ICompareService, CompareService>()
 

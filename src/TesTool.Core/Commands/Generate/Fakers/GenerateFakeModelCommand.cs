@@ -11,12 +11,12 @@ namespace TesTool.Core.Commands.Generate.Fakers
     [Command("model", HelpText = "Gerar código de fabricação de modelo de transporte de dados (DTO).")]
     public class GenerateFakeModelCommand : GenerateFakeBase
     {
-        private readonly IFakeEntityService _fakeEntityService;
+        private readonly IFakeModelService _fakeModelService;
         private readonly IFactoryModelService _factoryModelService;
         private readonly ITestCodeInfraService _testCodeInfraService;
 
         public GenerateFakeModelCommand(
-            IFakeEntityService fakeEntityService,
+            IFakeModelService fakeEntityService,
             IFactoryModelService factoryModelService,
             ITestCodeInfraService testCodeInfraService,
             IEnvironmentInfraService environmentInfraService, 
@@ -30,7 +30,7 @@ namespace TesTool.Core.Commands.Generate.Fakers
             testScanInfraService, templateCodeInfraService
         )
         {
-            _fakeEntityService = fakeEntityService;
+            _fakeModelService = fakeEntityService;
             _factoryModelService = factoryModelService;
             _testCodeInfraService = testCodeInfraService;
         }
@@ -42,14 +42,14 @@ namespace TesTool.Core.Commands.Generate.Fakers
 
         protected override async Task<string> BuildSourceCodeAsync(Class @class, string fakerName)
         {
-            var templateModel = await _fakeEntityService.GetFakerModelAsync(@class, Static);
+            var templateModel = await _fakeModelService.GetFakerModelAsync(@class, Static);
             return _templateCodeInfraService.BuildModelFaker(templateModel);
         }
 
         protected override async Task AppendFactoryMethodAsync(Class @class, string fakerName, string factoryName)
         {
             var factoryTemplateModel = _factoryModelService.GetModelFactory(factoryName);
-            factoryTemplateModel.AddNamespace(_fakeEntityService.GetNamespace());
+            factoryTemplateModel.AddNamespace(_fakeModelService.GetNamespace());
             factoryTemplateModel.AddMethod(new ModelFakerFactoryMethod(ClassName, fakerName));
 
             var factoryPathFile = await _testScanInfraService.GetPathClassAsync(factoryName);

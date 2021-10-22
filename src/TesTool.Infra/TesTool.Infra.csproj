@@ -46,6 +46,10 @@
       <LastGenOutput>EntityFakerFactoryTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
+    <None Update="Templates\Fakers\EntityFakerTemplate.tt">
+      <LastGenOutput>EntityFakerTemplate.cs</LastGenOutput>
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+    </None>
     <None Update="Templates\Fakers\ModelFakerTemplate.tt">
       <LastGenOutput>ModelFakerTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
@@ -117,6 +121,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ModelFakerFactoryTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Templates\Fakers\EntityFakerTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>EntityFakerTemplate.tt</DependentUpon>
     </Compile>
     <Compile Update="Templates\Fakers\ModelFakerTemplate.cs">
       <DesignTime>True</DesignTime>

@@ -10,6 +10,7 @@ namespace TesTool.Core.Interfaces.Services
         string BuildModelFakerFactory(ModelFakerFactory model);
         string BuildModelFakerFactoryMethod(ModelFakerFactoryMethod model);
 
+        string BuildEntityFaker(EntityFaker model);
         string BuildEntityFakerFactory(EntityFakerFactory model);
         string BuildEntityFakerFactoryMethod(EntityFakerFactoryMethod model);
 

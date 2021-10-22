@@ -7,6 +7,7 @@ namespace TesTool.Core.Enumerations
         public static readonly TestClass FIXTURE = new("{PROJECT_NAME}Fixture");
         public static readonly TestClass REQUEST = new("Request");
         public static readonly TestClass TEST_BASE = new("TestBase");
+        public static readonly TestClass ENTITY_FAKER_BASE = new("EntityFakerBase");
 
         // TODO: Rename classes
         public static readonly TestClass MODEL_FAKER_FACTORY = new("ModelFakerFactory1");

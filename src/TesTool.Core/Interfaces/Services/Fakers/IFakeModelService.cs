@@ -4,9 +4,9 @@ using TesTool.Core.Models.Templates.Faker;
 
 namespace TesTool.Core.Interfaces.Services.Fakers
 {
-    public interface IFakeEntityService
+    public interface IFakeModelService
     {
         string GetNamespace();
-        Task<EntityFaker> GetFakerEntityAsync(Class model, bool @static);
+        Task<ModelFaker> GetFakerModelAsync(Class model, bool @static);
     }
 }
