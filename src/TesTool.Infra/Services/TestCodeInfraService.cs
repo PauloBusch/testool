@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using TesTool.Core.Interfaces.Services;
@@ -19,7 +20,13 @@ namespace TesTool.Infra.Services
             var classes = await GetClassesAsync();
             var storedContext = classes.FirstOrDefault(c => c.Declaration.Identifier.Text == className);
             if (storedContext is null) return default;
-            var storedClass = storedContext.Declaration;
+            var storedCode = await File.ReadAllTextAsync(storedContext.FilePath);
+            var compilationUnitStored = SyntaxFactory.ParseCompilationUnit(storedCode);
+            var storedClass = compilationUnitStored.DescendantNodes()
+                .OfType<ClassDeclarationSyntax>()
+                .Single(c => c.Identifier.Text == className);
+            var storedUsings = compilationUnitStored.Usings;
+            var storedMethods = storedClass.Members.OfType<MethodDeclarationSyntax>().ToList();
 
             var compilationUnitGenerated = SyntaxFactory.ParseCompilationUnit(sourceCode);
             var sourceClass = compilationUnitGenerated.DescendantNodes()
@@ -27,10 +34,6 @@ namespace TesTool.Infra.Services
                 .Single(c => c.Identifier.Text == className);
             var sourceUsings = compilationUnitGenerated.Usings;
             var sourceMethods = sourceClass.Members.OfType<MethodDeclarationSyntax>().ToList();
-
-            var compilationUnitStored = storedContext.Root as CompilationUnitSyntax;
-            var storedUsings = compilationUnitStored.Usings;
-            var storedMethods = storedClass.Members.OfType<MethodDeclarationSyntax>().ToList();
 
             var usingsToAppend = sourceUsings.Where(u => !storedUsings.Any(s => s.Name.ToString() == u.Name.ToString())).ToList();
             var methodsToAppend = sourceMethods.Where(s => !storedMethods.Any(m => m.Identifier.Text == s.Identifier.Text)).ToList();

@@ -135,6 +135,16 @@ namespace TesTool.Infra.Services
             var usings = typeSymbol.ContainingNamespace.GetNamespaceTypes();
             foreach (var @using in usings) @class.AddNamespace(@using.ToString());
 
+            var generics = typeSymbol.GetGeneritTypeArguments();
+            foreach (var generic in generics)
+            {
+                _stackCalls.Push(hash);
+                var genericType = GetModelType(generic);
+                _stackCalls.Pop();
+
+                @class.AddGeneric(genericType);
+            }
+
             var propertySymbols = classMembers.OfType<IPropertySymbol>().ToList();
             foreach (var propertySymbol in propertySymbols)
             {
@@ -142,7 +152,10 @@ namespace TesTool.Infra.Services
                 var modelType = GetModelType(propertySymbol.Type);
                 _stackCalls.Pop();
 
-                var property = new Property(propertySymbol.Name, modelType);
+                var fromGeneric = @class.Generics.Any(generic => generic.Wrapper == modelType.Wrapper &&
+                    generic is TypeBase g && modelType is TypeBase t && g == t
+                );
+                var property = new Property(propertySymbol.Name, fromGeneric, modelType);
                 @class.AddProperty(property);
             }
 

@@ -1,0 +1,31 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="TesTool.Core.Enumerations" #>
+<#@ import namespace="TesTool.Core.Models.Enumerators" #>
+<#@ import namespace="TesTool.Core.Interfaces.Services" #>
+<#@ import namespace="TesTool.Core.Models.Templates.Controller" #>
+[Fact]
+public virtual async Task <#=Name#>()
+{
+<#
+    Func<string> buildAssertCode = () => {
+        if (Assert is null) return string.Empty;
+
+        if (Method == HttpMethodEnumerator.POST)
+            return TemplataService.BuildControllerTestMethodSectionAssertPost(Assert);
+        return string.Empty;
+    };
+#>
+<#= TemplataService.BuildControllerTestMethodSectionArrage(Arrage) #>
+<#= TemplataService.BuildControllerTestMethodSectionAct(Act) #>
+<#= buildAssertCode() #>
+}
+<#+
+    public bool Unsafe { get; set; }
+    public string Name { get; set; }
+    public HttpMethod Method { get; set; }
+    public ControllerTestMethodSectionArrage Arrage { get; set; }
+    public ControllerTestMethodSectionAct Act { get; set; }
+    public ControllerTestMethodSectionAssert Assert { get; set; }
+    public ITemplateCodeInfraService TemplataService { get; set; }
+#>

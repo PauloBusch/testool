@@ -1,8 +1,8 @@
 ﻿namespace TesTool.Core.Models.Enumerators
 {
-    public class TestClass
+    public class HelpClass
     {
-        public TestClass(string name)
+        public HelpClass(string name)
         {
             Name = name;
         }

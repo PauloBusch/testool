@@ -59,10 +59,10 @@ namespace TesTool.Core.Commands.Generate
             var controllerName = _controllerService.GetControllerName(Controller);
             var controllerClass = await _webApiScanInfraService.GetControllerAsync(controllerName);
             if (controllerClass is null) throw new ClassNotFoundException(controllerName);
-            if(!await _testScanInfraService.ClassExistAsync(TestClassEnumerator.TEST_BASE.Name))
-                throw new ClassNotFoundException(TestClassEnumerator.TEST_BASE.Name);
-            if (!await _testScanInfraService.ClassExistAsync(TestClassEnumerator.ENTITY_FAKER_FACTORY.Name))
-                throw new ClassNotFoundException(TestClassEnumerator.ENTITY_FAKER_FACTORY.Name);
+            if(!await _testScanInfraService.ClassExistAsync(HelpClassEnumerator.TEST_BASE.Name))
+                throw new ClassNotFoundException(HelpClassEnumerator.TEST_BASE.Name);
+            if (!await _testScanInfraService.ClassExistAsync(HelpClassEnumerator.ENTITY_FAKER_FACTORY.Name))
+                throw new ClassNotFoundException(HelpClassEnumerator.ENTITY_FAKER_FACTORY.Name);
             var dbContextName = await _settingInfraService.GetStringAsync(SettingEnumerator.DB_CONTEXT_NAME);
             if (!await _webApiScanInfraService.ModelExistAsync(dbContextName)) 
                 throw new ClassNotFoundException(dbContextName);
@@ -70,15 +70,15 @@ namespace TesTool.Core.Commands.Generate
             if (!await _testScanInfraService.ClassExistAsync(fixtureClassName))
                 throw new ClassNotFoundException(fixtureClassName);
             var entityName = _controllerService.GetEntityName(controllerName, Entity);
-            var dbEntity = await _controllerService.GetDbSetClassAsync(dbContextName, entityName);
-            if (dbEntity is null) throw new ClassNotFoundException(entityName);
+            var dbSet = await _controllerService.GetDbSetClassAsync(dbContextName, entityName);
+            if (dbSet is null) throw new ClassNotFoundException(entityName);
 
             var controllerTestName = _controllerService.GetControllerTestName(controllerName);
             var filePath = GetControllerTestFilePath(controllerTestName);
             if (await _fileSystemInfraService.FileExistAsync(filePath))
                 throw new DuplicatedSourceFileException(controllerTestName);
 
-            var templateModel = await _controllerService.GetControllerTestAsync(controllerClass, dbEntity);
+            var templateModel = await _controllerService.GetControllerTestAsync(controllerClass, dbSet);
             var commands = await _controllerService.GetRequiredCommandsAsync(templateModel, Static);
             await _commandHandler.HandleManyAsync(commands);
 

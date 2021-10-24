@@ -40,7 +40,6 @@ namespace TesTool.Cli
                 .AddSingleton<ICompareService, CompareService>()
                 .AddSingleton<IControllerService, ControllerService>()
                 .AddSingleton<IPostEndpointTestService, PostEndpointTestService>()
-                .AddSingleton<IEndpointTestFactoryService, EndpointTestFactoryService>()
 
                 .AddSingleton<IFactoryModelService, FactoryModelService>()
                 .AddSingleton<IFactoryEntityService, FactoryEntityService>()
@@ -57,7 +56,7 @@ namespace TesTool.Cli
                 .Where(t => t.IsClass && !t.IsAbstract)
                 .Where(t => typeof(ICommand).IsAssignableFrom(t))
                 .ToList();
-            commandTypes.ForEach(c => services.AddScoped(c));
+            commandTypes.ForEach(c => services.AddTransient(c));
         
             return services;
         }

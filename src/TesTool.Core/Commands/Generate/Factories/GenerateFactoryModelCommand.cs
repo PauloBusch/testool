@@ -16,7 +16,7 @@ namespace TesTool.Core.Commands.Generate.Factory
             IFileSystemInfraService fileSystemInfraService,
             ITemplateCodeInfraService templateCodeInfraService
         ) : base(
-            TestClassEnumerator.MODEL_FAKER_FACTORY,
+            HelpClassEnumerator.MODEL_FAKER_FACTORY,
             testScanInfraService, fileSystemInfraService, 
             templateCodeInfraService
         ) 

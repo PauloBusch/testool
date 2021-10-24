@@ -32,7 +32,7 @@ namespace TesTool.Core.Services
         {
             var fixtureName = _settingInfraService.GetStringAsync(SettingEnumerator.FIXTURE_NAME).Result;
             if (string.IsNullOrWhiteSpace(fixtureName)) 
-                return TestClassEnumerator.FIXTURE.Name.Replace("{PROJECT_NAME}", GetSolutionName());
+                return HelpClassEnumerator.FIXTURE.Name.Replace("{PROJECT_NAME}", GetSolutionName());
             return fixtureName;
         }
 

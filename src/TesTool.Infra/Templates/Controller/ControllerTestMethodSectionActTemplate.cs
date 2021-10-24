@@ -7,19 +7,19 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace TesTool.Infra.Templates.Test
+namespace TesTool.Infra.Templates.Controller
 {
-    using TesTool.Core.Models.Templates.Controller;
-    using TesTool.Core.Interfaces.Services;
+    using TesTool.Core.Extensions;
+    using System.Collections.Generic;
     using System;
     
     /// <summary>
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Test\ControllerTestTemplate.tt"
+    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionActTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public partial class ControllerTestTemplate : ControllerTestTemplateBase
+    public partial class ControllerTestMethodSectionActTemplate : ControllerTestMethodSectionActTemplateBase
     {
 #line hidden
         /// <summary>
@@ -28,123 +28,51 @@ namespace TesTool.Infra.Templates.Test
         public virtual string TransformText()
         {
             
-            #line 5 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Test\ControllerTestTemplate.tt"
+            #line 5 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionActTemplate.tt"
  
-    foreach (var @namespace in Namespaces) 
-    {
+    var returnType = string.IsNullOrWhiteSpace(ReturnType) ? string.Empty : $"<{ReturnType}>";
+    var responseVariables = string.IsNullOrWhiteSpace(ReturnType) ? "response" : "(response, result)";
+    var uri = string.IsNullOrWhiteSpace(Route) ? "Uri" : $"new System.Uri($\"{{Uri}}/{Route}\")";
+
+    var parameters = new List<string> { uri };
+    if (!string.IsNullOrWhiteSpace(BodyModel)) parameters.Add($"{BodyModel.ToLowerCaseFirst()}Request");
+    if (!string.IsNullOrWhiteSpace(QueryModel)) parameters.Add($"{QueryModel.ToLowerCaseFirst()}Request");
 
             
             #line default
             #line hidden
-            this.Write("using ");
+            this.Write("    var ");
             
-            #line 9 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Test\ControllerTestTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(@namespace));
-            
-            #line default
-            #line hidden
-            this.Write(";\r\n");
-            
-            #line 10 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Test\ControllerTestTemplate.tt"
- 
-    } 
-
+            #line 14 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionActTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(responseVariables));
             
             #line default
             #line hidden
+            this.Write(" = await Request.PostAsync");
             
-            #line 13 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Test\ControllerTestTemplate.tt"
- 
-    if (Methods.Length > 0) 
-    { 
-
-            
-            #line default
-            #line hidden
-            this.Write("using System.Threading.Tasks;\r\nusing Xunit;\r\n");
-            
-            #line 19 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Test\ControllerTestTemplate.tt"
- 
-    } 
-
-            
-            #line default
-            #line hidden
-            this.Write("\r\nnamespace ");
-            
-            #line 23 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Test\ControllerTestTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
-            
-            #line default
-            #line hidden
-            this.Write("\r\n{\r\n    public class ");
-            
-            #line 25 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Test\ControllerTestTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
-            
-            #line default
-            #line hidden
-            this.Write(" : TestBase\r\n    {\r\n        public ");
-            
-            #line 27 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Test\ControllerTestTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
+            #line 14 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionActTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(returnType));
             
             #line default
             #line hidden
             this.Write("(");
             
-            #line 27 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Test\ControllerTestTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(FixtureName));
+            #line 14 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionActTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(string.Join(", ", parameters)));
             
             #line default
             #line hidden
-            this.Write(" fixture) : base(fixture, \"");
-            
-            #line 27 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Test\ControllerTestTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(BaseRoute));
-            
-            #line default
-            #line hidden
-            this.Write("\") { }\r\n");
-            
-            #line 28 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Test\ControllerTestTemplate.tt"
-
-    PushIndent("        ");
-    foreach (var method in Methods) 
-    {
-
-            
-            #line default
-            #line hidden
-            
-            #line 33 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Test\ControllerTestTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(TemplataService.BuildControllerTestMethod(method)));
-            
-            #line default
-            #line hidden
-            this.Write("\r\n");
-            
-            #line 34 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Test\ControllerTestTemplate.tt"
-
-    }
-    ClearIndent();
-
-            
-            #line default
-            #line hidden
-            this.Write("    }\r\n}\r\n");
+            this.Write(");\r\n");
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 40 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Test\ControllerTestTemplate.tt"
+        #line 15 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionActTemplate.tt"
 
-    public string Name { get; set; }
-    public string BaseRoute { get; set; }
-    public string Namespace { get; set; }
-    public string FixtureName { get; set; }
-    public string[] Namespaces { get; set; }
-    public ControllerTestMethod[] Methods { get; set; }
-    public ITemplateCodeInfraService TemplataService { get; set; }
+    public string Route { get; set; }
+    public string Method { get; set; }
+    public string ReturnType { get; set; }
+    public string BodyModel { get; set; }
+    public string QueryModel { get; set; }
 
         
         #line default
@@ -158,7 +86,7 @@ namespace TesTool.Infra.Templates.Test
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public class ControllerTestTemplateBase
+    public class ControllerTestMethodSectionActTemplateBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

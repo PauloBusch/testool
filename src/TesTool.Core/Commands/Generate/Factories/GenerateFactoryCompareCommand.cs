@@ -16,7 +16,7 @@ namespace TesTool.Core.Commands.Generate.Factory
             IFileSystemInfraService fileSystemInfraService,
             ITemplateCodeInfraService templateCodeInfraService
         ) : base(
-            TestClassEnumerator.COMPARE_FACTORY,
+            HelpClassEnumerator.COMPARE_FACTORY,
             testScanInfraService, fileSystemInfraService, templateCodeInfraService
         ) 
         { 

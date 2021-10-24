@@ -8,7 +8,7 @@ namespace TesTool.Core.Models.Metadata
             string name, 
             TypeWrapper type, 
             InputSource source
-        ) : base(name, type)
+        ) : base(name, default, type)
         {
             Source = source;
         }

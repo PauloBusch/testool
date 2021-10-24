@@ -1,0 +1,24 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="TesTool.Core.Extensions" #>
+<#@ import namespace="TesTool.Core.Models.Templates.Faker" #>
+<# 
+    foreach (var entity in Entities) 
+    { 
+#>
+    var <#= entity.ToLowerCaseFirst() #> = EntityFactory.<#=entity#>().Generate();
+<# 
+    } 
+#>
+<# 
+    foreach (var model in Models) 
+    { 
+#>
+    var <#= model.ToLowerCaseFirst() #>Request = ModelFactory.<#=model#>().Generate();
+<# 
+    }
+#>
+<#+
+    public string[] Models { get; set; }
+    public string[] Entities { get; set; }
+#>

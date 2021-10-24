@@ -12,13 +12,13 @@ namespace TesTool.Core.Commands.Generate.Factory
     [Command("factory", Order = 3, HelpText = "Gerar código de chamadas de fabricação.")]
     public abstract class GenerateFactoryBase : GenerateCommandBase
     {        
-        private readonly TestClass _testClass;
+        private readonly HelpClass _testClass;
 
         protected readonly ITemplateCodeInfraService _templateCodeInfraService;
         protected readonly ITestScanInfraService _testScanInfraService;
 
         protected GenerateFactoryBase(
-            TestClass testClass,
+            HelpClass testClass,
             ITestScanInfraService testScanInfraService,
             IFileSystemInfraService fileSystemInfraService,
             ITemplateCodeInfraService templateCodeInfraService

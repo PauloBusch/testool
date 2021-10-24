@@ -40,8 +40,8 @@ namespace TesTool.Core.Commands.Generate.Fakers
 
         protected override async Task GenerateAsync()
         {
-            if (!await _testScanInfraService.ClassExistAsync(TestClassEnumerator.ENTITY_FAKER_BASE.Name))
-                throw new ClassNotFoundException(TestClassEnumerator.ENTITY_FAKER_BASE.Name);
+            if (!await _testScanInfraService.ClassExistAsync(HelpClassEnumerator.ENTITY_FAKER_BASE.Name))
+                throw new ClassNotFoundException(HelpClassEnumerator.ENTITY_FAKER_BASE.Name);
 
             await base.GenerateAsync();
         }

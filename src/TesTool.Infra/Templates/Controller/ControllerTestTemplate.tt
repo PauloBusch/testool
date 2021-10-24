@@ -25,6 +25,7 @@ namespace <#= Namespace #>
     public class <#= Name #> : TestBase
     {
         public <#= Name #>(<#= FixtureName #> fixture) : base(fixture, "<#= BaseRoute #>") { }
+
 <#
     PushIndent("        ");
     foreach (var method in Methods) 

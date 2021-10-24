@@ -73,6 +73,20 @@ namespace TesTool.Core.Services
             return templateModel;
         }
 
+        public string GetComparatorNameOrDefault(string sourceClassName, string targetClassName)
+        {
+            if (string.IsNullOrWhiteSpace(sourceClassName) || string.IsNullOrWhiteSpace(targetClassName)) return default;
+
+            var comparator = GetComparatorClassAsync(sourceClassName, targetClassName).Result;
+            if (comparator is null) return GetComparatorName(sourceClassName, targetClassName);
+            return comparator.Name;
+        }
+
+        public string GetComparatorName(string sourceClassName, string targetClassName)
+        {
+            return $"{sourceClassName}Equals{targetClassName}";
+        }
+
         public async Task<Class> GetComparatorClassAsync(string sourceClassName, string targetClassName)
         {
             var comparatorClassName1 = $"{sourceClassName}Equals{targetClassName}";
@@ -89,11 +103,6 @@ namespace TesTool.Core.Services
         public string GetNamespace()
         {
             return _solutionService.GetTestNamespace("Assertions.Comparators");
-        }
-
-        public string GetComparatorName(string sourceClassName, string targetClassName)
-        {
-            return $"{sourceClassName}Equals{targetClassName}";
         }
 
         public string GetDirectoryBase()

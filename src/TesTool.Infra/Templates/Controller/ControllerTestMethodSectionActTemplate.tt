@@ -1,0 +1,21 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="TesTool.Core.Extensions" #>
+<#@ import namespace="System.Collections.Generic" #>
+<# 
+    var returnType = string.IsNullOrWhiteSpace(ReturnType) ? string.Empty : $"<{ReturnType}>";
+    var responseVariables = string.IsNullOrWhiteSpace(ReturnType) ? "response" : "(response, result)";
+    var uri = string.IsNullOrWhiteSpace(Route) ? "Uri" : $"new System.Uri($\"{{Uri}}/{Route}\")";
+
+    var parameters = new List<string> { uri };
+    if (!string.IsNullOrWhiteSpace(BodyModel)) parameters.Add($"{BodyModel.ToLowerCaseFirst()}Request");
+    if (!string.IsNullOrWhiteSpace(QueryModel)) parameters.Add($"{QueryModel.ToLowerCaseFirst()}Request");
+#>
+    var <#= responseVariables #> = await Request.PostAsync<#= returnType #>(<#= string.Join(", ", parameters) #>);
+<#+
+    public string Route { get; set; }
+    public string Method { get; set; }
+    public string ReturnType { get; set; }
+    public string BodyModel { get; set; }
+    public string QueryModel { get; set; }
+#>

@@ -5,14 +5,14 @@ namespace TesTool.Core.Services.Factories
 {
     public abstract class FactoryServiceBase
     {
-        private readonly TestClass _testClass;
+        private readonly HelpClass _testClass;
 
         protected readonly ISolutionService _solutionService;
         protected readonly ITestScanInfraService _testScanInfraService;
         protected readonly IWebApiScanInfraService _webApiScanInfraService;
 
         protected FactoryServiceBase(
-            TestClass testClass,
+            HelpClass testClass,
             ISolutionService solutionService,
             ITestScanInfraService testScanInfraService, 
             IWebApiScanInfraService webApiScanInfraService

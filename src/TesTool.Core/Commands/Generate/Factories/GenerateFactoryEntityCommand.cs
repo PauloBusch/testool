@@ -28,7 +28,7 @@ namespace TesTool.Core.Commands.Generate.Factory
             IFileSystemInfraService fileSystemInfraService, 
             ITemplateCodeInfraService templateCodeInfraService
         ) : base(
-            TestClassEnumerator.ENTITY_FAKER_FACTORY,
+            HelpClassEnumerator.ENTITY_FAKER_FACTORY,
             testScanInfraService, fileSystemInfraService, templateCodeInfraService
         ) 
         {
@@ -40,8 +40,8 @@ namespace TesTool.Core.Commands.Generate.Factory
 
         protected override async Task GenerateAsync()
         {
-            if (!await _testScanInfraService.ClassExistAsync(TestClassEnumerator.TEST_BASE.Name))
-                throw new ClassNotFoundException(TestClassEnumerator.TEST_BASE.Name);
+            if (!await _testScanInfraService.ClassExistAsync(HelpClassEnumerator.TEST_BASE.Name))
+                throw new ClassNotFoundException(HelpClassEnumerator.TEST_BASE.Name);
             if (!await _webApiScanInfraService.ProjectExistAsync())
                 throw new ProjectNotFoundException(ProjectTypeEnumerator.WEB_API);
             if (!await _webApiScanInfraService.ModelExistAsync(DbContext))

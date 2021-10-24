@@ -6,11 +6,11 @@ using TesTool.Core.Models.Templates.Controller;
 using TesTool.Core.Models.Templates.Factories;
 using TesTool.Core.Models.Templates.Faker;
 using TesTool.Infra.Templates.Comparators;
+using TesTool.Infra.Templates.Controller;
 using TesTool.Infra.Templates.Extensions;
 using TesTool.Infra.Templates.Factories;
 using TesTool.Infra.Templates.Fakers;
 using TesTool.Infra.Templates.Helpers;
-using TesTool.Infra.Templates.Test;
 
 namespace TesTool.Infra.Services
 {
@@ -36,8 +36,55 @@ namespace TesTool.Infra.Services
             var template = new ControllerTestMethodTemplate
             {
                 Name = model.Name,
+                TemplataService = this,
+                Unsafe = model.Unsafe,
+                Method = model.Method,
+                Arrage = model.Arrage,
+                Act = model.Act,
+                Assert = model.Assert
+            };
+            return template.TransformText();
+        }
+
+        public string BuildControllerTestMethodSectionArrage(ControllerTestMethodSectionArrage model)
+        {
+            var template = new ControllerTestMethodSectionArrageTemplate
+            {
                 Entities = model.Entities.ToArray(),
                 Models = model.Models.ToArray()
+            };
+            return template.TransformText();
+        }
+
+        public string BuildControllerTestMethodSectionAct(ControllerTestMethodSectionAct model)
+        {
+            var template = new ControllerTestMethodSectionActTemplate
+            {
+                Route = model.Route,
+                Method = model.Method,
+                ReturnType = model.ReturnType,
+                BodyModel = model.BodyModel,
+                QueryModel = model.QueryModel
+            };
+            return template.TransformText();
+        }
+
+        public string BuildControllerTestMethodSectionAssertPost(ControllerTestMethodSectionAssert model)
+        {
+            var template = new ControllerTestMethodSectionAssertPostTemplate
+            {
+                HaveOutput = model.HaveOutput,
+                RequestHaveKey = model.RequestHaveKey,
+                ResponseHaveKey = model.ResponseHaveKey,
+                ResponseIsGeneric = model.ResponseIsGeneric,
+                EntityKey = model.EntityKey,
+                EntityDbSet = model.EntityDbSet,
+                PropertyData = model.PropertyData,
+                EntityName = model.EntityName,
+                RequestModel = model.RequestModel,
+                ComparatorModel = model.ComparatorModel,
+                ComparatorEntity = model.ComparatorEntity
+
             };
             return template.TransformText();
         }

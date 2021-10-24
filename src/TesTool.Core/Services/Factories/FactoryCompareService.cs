@@ -12,7 +12,7 @@ namespace TesTool.Core.Services.Factories
             ITestScanInfraService testScanInfraService,
             IWebApiScanInfraService webApiScanInfraService
         ) : base(
-            TestClassEnumerator.COMPARE_FACTORY,
+            HelpClassEnumerator.COMPARE_FACTORY,
             solutionService, testScanInfraService, 
             webApiScanInfraService
         )

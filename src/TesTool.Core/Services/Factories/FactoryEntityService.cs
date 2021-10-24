@@ -14,7 +14,7 @@ namespace TesTool.Core.Services.Factories
             ITestScanInfraService testScanInfraService, 
             IWebApiScanInfraService webApiScanInfraService
         ) : base(
-            TestClassEnumerator.ENTITY_FAKER_FACTORY,
+            HelpClassEnumerator.ENTITY_FAKER_FACTORY,
             solutionService, testScanInfraService, webApiScanInfraService
         ) { }
 
@@ -26,7 +26,7 @@ namespace TesTool.Core.Services.Factories
         public async Task<EntityFakerFactory> GetEntityFactoryAsync(string name, string dbContext)
         {
             var dbContextClass = await _webApiScanInfraService.GetModelAsync(dbContext) as Class;
-            var testBaseClass = await _testScanInfraService.GetClassAsync(TestClassEnumerator.TEST_BASE.Name);
+            var testBaseClass = await _testScanInfraService.GetClassAsync(HelpClassEnumerator.TEST_BASE.Name);
             return new EntityFakerFactory(name, GetNamespace(), testBaseClass, dbContextClass);
         }
 

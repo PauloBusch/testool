@@ -12,7 +12,7 @@ namespace TesTool.Core.Services.Factories
             ITestScanInfraService testScanInfraService, 
             IWebApiScanInfraService webApiScanInfraService
         ) : base(
-            TestClassEnumerator.MODEL_FAKER_FACTORY,
+            HelpClassEnumerator.MODEL_FAKER_FACTORY,
             solutionService, testScanInfraService, webApiScanInfraService
         ) { }
 

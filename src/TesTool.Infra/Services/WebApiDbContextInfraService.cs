@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TesTool.Core.Interfaces.Services;
 using TesTool.Core.Models.Metadata;
+using TesTool.Core.Models.Metadata.Types;
 using TesTool.Infra.Extensions;
 
 namespace TesTool.Infra.Services
@@ -37,15 +38,15 @@ namespace TesTool.Infra.Services
             );
         }
 
-        public async Task<IEnumerable<Class>> GetDbSetClassesAsync(string dbContext)
+        public async Task<IEnumerable<DbSet>> GetDbSetsAsync(string dbContext)
         {
             var dbContextClass = await GetModelAsync(dbContext) as Class;
             return dbContextClass.Properties
-                .Select(p => p.Type as Array)
-                .Where(t => t is not null)
-                .Where(a => a.Name == "DbSet" && a.Namespace == "Microsoft.EntityFrameworkCore")
-                .Select(a => a.Type as Class)
-                .Where(c => c is not null)
+                .Where(p => p.Type is Array)
+                .Select(p => new { p.Name, Type = p.Type as Array })
+                .Where(p => p.Type.Name == "DbSet" && p.Type.Namespace == "Microsoft.EntityFrameworkCore")
+                .Where(p => p.Type.Type is Class)
+                .Select(p => new DbSet(p.Type.Type as Class, p.Name))
                 .ToArray();
         }
     }

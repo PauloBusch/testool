@@ -70,11 +70,23 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>ModelFakerFactoryTemplate.cs</LastGenOutput>
     </None>
-    <None Update="Templates\Test\ControllerTestMethodTemplate.tt">
+    <None Update="Templates\Controller\ControllerTestMethodSectionActTemplate.tt">
+      <LastGenOutput>ControllerTestMethodSectionActTemplate.cs</LastGenOutput>
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+    </None>
+    <None Update="Templates\Controller\ControllerTestMethodSectionAssertPostTemplate.tt">
+      <LastGenOutput>ControllerTestMethodSectionAssertPostTemplate.cs</LastGenOutput>
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+    </None>
+    <None Update="Templates\Controller\ControllerTestMethodSectionArrageTemplate.tt">
+      <LastGenOutput>ControllerTestMethodSectionArrageTemplate.cs</LastGenOutput>
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+    </None>
+    <None Update="Templates\Controller\ControllerTestMethodTemplate.tt">
       <LastGenOutput>ControllerTestMethodTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
-    <None Update="Templates\Test\ControllerTestTemplate.tt">
+    <None Update="Templates\Controller\ControllerTestTemplate.tt">
       <LastGenOutput>ControllerTestTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
@@ -94,6 +106,31 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ComparatorStaticTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Templates\Controller\ControllerTestMethodSectionActTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ControllerTestMethodSectionActTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Templates\Controller\ControllerTestMethodSectionArrageTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ControllerTestMethodSectionArrageTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Templates\Controller\ControllerTestMethodSectionAssertPostTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ControllerTestMethodSectionAssertPostTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Templates\Controller\ControllerTestMethodTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ControllerTestMethodTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Templates\Controller\ControllerTestTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ControllerTestTemplate.tt</DependentUpon>
     </Compile>
     <Compile Update="Templates\Extensions\AssertExtensionsTemplate.cs">
       <DesignTime>True</DesignTime>
@@ -149,16 +186,6 @@
       <DependentUpon>ModelFakerFactoryMethodTemplate.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Templates\Test\ControllerTestMethodTemplate.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ControllerTestMethodTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Update="Templates\Test\ControllerTestTemplate.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ControllerTestTemplate.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 

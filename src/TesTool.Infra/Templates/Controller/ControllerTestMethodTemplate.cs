@@ -7,17 +7,19 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace TesTool.Infra.Templates.Test
+namespace TesTool.Infra.Templates.Controller
 {
-    using TesTool.Core.Extensions;
-    using TesTool.Core.Models.Templates.Faker;
+    using TesTool.Core.Enumerations;
+    using TesTool.Core.Models.Enumerators;
+    using TesTool.Core.Interfaces.Services;
+    using TesTool.Core.Models.Templates.Controller;
     using System;
     
     /// <summary>
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Test\ControllerTestMethodTemplate.tt"
+    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
     public partial class ControllerTestMethodTemplate : ControllerTestMethodTemplateBase
     {
@@ -27,87 +29,61 @@ namespace TesTool.Infra.Templates.Test
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("\r\n[Fact]\r\npublic virtual async Task ");
+            this.Write("[Fact]\r\npublic virtual async Task ");
             
-            #line 7 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Test\ControllerTestMethodTemplate.tt"
+            #line 8 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
             this.Write("()\r\n{\r\n");
             
-            #line 9 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Test\ControllerTestMethodTemplate.tt"
- 
-    foreach (var entity in Entities) 
-    { 
+            #line 10 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
 
-            
-            #line default
-            #line hidden
-            this.Write("    var ");
-            
-            #line 13 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Test\ControllerTestMethodTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(entity.Variable));
-            
-            #line default
-            #line hidden
-            this.Write(" = EntityFactory.");
-            
-            #line 13 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Test\ControllerTestMethodTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(entity.Name));
-            
-            #line default
-            #line hidden
-            this.Write("().Generate();\r\n");
-            
-            #line 14 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Test\ControllerTestMethodTemplate.tt"
- 
-    } 
+    Func<string> buildAssertCode = () => {
+        if (Assert is null) return string.Empty;
+
+        if (Method == HttpMethodEnumerator.POST)
+            return TemplataService.BuildControllerTestMethodSectionAssertPost(Assert);
+        return string.Empty;
+    };
 
             
             #line default
             #line hidden
             
-            #line 17 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Test\ControllerTestMethodTemplate.tt"
- 
-    foreach (var model in Models) 
-    { 
-
+            #line 19 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(TemplataService.BuildControllerTestMethodSectionArrage(Arrage)));
             
             #line default
             #line hidden
-            this.Write("    var ");
+            this.Write("\r\n");
             
-            #line 21 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Test\ControllerTestMethodTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(model.Variable));
-            
-            #line default
-            #line hidden
-            this.Write(" = ModelFactory.");
-            
-            #line 21 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Test\ControllerTestMethodTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(model.Name));
+            #line 20 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(TemplataService.BuildControllerTestMethodSectionAct(Act)));
             
             #line default
             #line hidden
-            this.Write("().Generate();\r\n");
+            this.Write("\r\n");
             
-            #line 22 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Test\ControllerTestMethodTemplate.tt"
- 
-    }
-
+            #line 21 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(buildAssertCode()));
             
             #line default
             #line hidden
-            this.Write("}\r\n");
+            this.Write("\r\n}\r\n");
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 26 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Test\ControllerTestMethodTemplate.tt"
+        #line 23 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
 
+    public bool Unsafe { get; set; }
     public string Name { get; set; }
-    public FakerDeclaration[] Entities { get; set; }
-    public FakerDeclaration[] Models { get; set; }
+    public HttpMethod Method { get; set; }
+    public ControllerTestMethodSectionArrage Arrage { get; set; }
+    public ControllerTestMethodSectionAct Act { get; set; }
+    public ControllerTestMethodSectionAssert Assert { get; set; }
+    public ITemplateCodeInfraService TemplataService { get; set; }
 
         
         #line default
