@@ -22,19 +22,20 @@ namespace TesTool.Core.Commands.Generate.Fakers
         protected readonly ITemplateCodeInfraService _templateCodeInfraService;
 
         public GenerateFakeBase(
-            IEnvironmentInfraService environmentInfraService,
             IFileSystemInfraService fileSystemInfraService,
             IWebApiScanInfraService webApiScanInfraService,
             ITestScanInfraService testScanInfraService,
             ITemplateCodeInfraService templateCodeInfraService
-        ) : base(environmentInfraService, fileSystemInfraService)
+        ) : base(fileSystemInfraService)
         {
             _webApiScanInfraService = webApiScanInfraService;
             _testScanInfraService = testScanInfraService;
             _templateCodeInfraService = templateCodeInfraService;
         }
 
-        protected abstract Task<string> GetFactoryNameAsync();
+        protected abstract string GetFactoryName();
+        protected abstract string GetFakerName(string className);
+        protected abstract string GetOutputDirectory();
         protected abstract Task<string> BuildSourceCodeAsync(Class @class, string fakerName);
         protected abstract Task AppendFactoryMethodAsync(Class @class, string fakerName, string factoryName);
 
@@ -45,14 +46,14 @@ namespace TesTool.Core.Commands.Generate.Fakers
             if (!await _testScanInfraService.ProjectExistAsync())
                 throw new ProjectNotFoundException(ProjectTypeEnumerator.INTEGRATION_TESTS);
 
-            var factoryName = await GetFactoryNameAsync();
+            var factoryName = GetFactoryName();
             if (!await _testScanInfraService.ClassExistAsync(factoryName))
                 throw new ClassNotFoundException(factoryName);
 
             Class @class = await _webApiScanInfraService.GetModelAsync(ClassName) as Class;
             if (@class is null) throw new ModelNotFoundException(ClassName);
 
-            var fakerName = GetFakerName();
+            var fakerName = GetFakerName(ClassName);
             if (await _testScanInfraService.ClassExistAsync(fakerName))
                 throw new DuplicatedClassException(fakerName);
 
@@ -65,14 +66,9 @@ namespace TesTool.Core.Commands.Generate.Fakers
             await AppendFactoryMethodAsync(@class, fakerName, factoryName);
         }
 
-        protected string GetFakerName()
-        {
-            return $"{ClassName}Faker";
-        }
-
         protected string GetFakerFilePath()
         {
-            var fileName = $"{GetFakerName()}.cs";
+            var fileName = $"{GetFakerName(ClassName)}.cs";
             return Path.Combine(GetOutputDirectory(), fileName);
         }
     }

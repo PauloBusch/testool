@@ -8,20 +8,21 @@ namespace TesTool.Core.Services.Factories
     public class FactoryModelService : FactoryServiceBase, IFactoryModelService
     {
         public FactoryModelService(
-            ISettingInfraService settingInfraService,
             ISolutionService solutionService,
             ITestScanInfraService testScanInfraService, 
             IWebApiScanInfraService webApiScanInfraService
         ) : base(
-            SettingEnumerator.MODEL_FAKER_FACTORY_NAME,
             TestClassEnumerator.MODEL_FAKER_FACTORY,
-            settingInfraService, solutionService, 
-            testScanInfraService, webApiScanInfraService
+            solutionService, testScanInfraService, webApiScanInfraService
         ) { }
 
         public ModelFakerFactory GetModelFactory(string name)
         {
             return new ModelFakerFactory(name, GetNamespace());
+        }
+        public string GetDirectoryBase()
+        {
+            return $"{_testScanInfraService.GetDirectoryBase()}/Fakers";
         }
 
         public string GetNamespace()

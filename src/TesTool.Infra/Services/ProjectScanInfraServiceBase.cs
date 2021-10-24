@@ -119,7 +119,7 @@ namespace TesTool.Infra.Services
                 var modelType = GetModelType(enumerableInnerType);
                 _stackCalls.Pop();
 
-                return new Core.Models.Metadata.Array(modelType);
+                return new Core.Models.Metadata.Array(name, @namespace, modelType);
             }
 
             if (typeSymbol.TypeKind == TypeKind.Interface) return default;

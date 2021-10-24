@@ -70,6 +70,14 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>ModelFakerFactoryTemplate.cs</LastGenOutput>
     </None>
+    <None Update="Templates\Test\ControllerTestMethodTemplate.tt">
+      <LastGenOutput>ControllerTestMethodTemplate.cs</LastGenOutput>
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+    </None>
+    <None Update="Templates\Test\ControllerTestTemplate.tt">
+      <LastGenOutput>ControllerTestTemplate.cs</LastGenOutput>
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -141,6 +149,16 @@
       <DependentUpon>ModelFakerFactoryMethodTemplate.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Templates\Test\ControllerTestMethodTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ControllerTestMethodTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Templates\Test\ControllerTestTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ControllerTestTemplate.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 

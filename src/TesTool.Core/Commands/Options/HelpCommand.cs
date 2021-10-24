@@ -34,7 +34,7 @@ namespace TesTool.Core.Commands.Help
             _loggerService = loggerService;
         }
 
-        public async Task ExecuteAsync()
+        public async Task ExecuteAsync(ICommandContext context)
         {
             if (string.IsNullOrWhiteSpace(Command))
             {

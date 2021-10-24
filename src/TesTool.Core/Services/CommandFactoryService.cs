@@ -14,18 +14,15 @@ namespace TesTool.Core.Services
     public class CommandFactoryService : ICommandFactoryService
     {
         private readonly ICommandExplorerService _commandExplorerService;
-        private readonly ILoggerInfraService _loggerService;
         private readonly IServiceProvider _serviceProvider;
 
         public CommandFactoryService(
             ICommandExplorerService commandExplorerService,
-            ILoggerInfraService loggerService,
             IServiceProvider serviceProvider
         )
         {
             _commandExplorerService = commandExplorerService;
             _serviceProvider = serviceProvider;
-            _loggerService = loggerService;
         }
 
         public ICommand CreateCommand(string[] arguments)

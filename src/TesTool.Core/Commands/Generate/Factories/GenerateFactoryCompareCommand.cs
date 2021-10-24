@@ -12,17 +12,12 @@ namespace TesTool.Core.Commands.Generate.Factory
 
         public GenerateFactoryCompareCommand(
             IFactoryCompareService factoryCompareService,
-            ISettingInfraService settingInfraService,
-            IEnvironmentInfraService environmentInfraService,
             ITestScanInfraService testScanInfraService,
             IFileSystemInfraService fileSystemInfraService,
             ITemplateCodeInfraService templateCodeInfraService
         ) : base(
-            SettingEnumerator.COMPARATOR_FACTORY_NAME,
             TestClassEnumerator.COMPARE_FACTORY,
-            settingInfraService, environmentInfraService,
-            testScanInfraService, fileSystemInfraService,
-            templateCodeInfraService
+            testScanInfraService, fileSystemInfraService, templateCodeInfraService
         ) 
         { 
             _factoryCompareService = factoryCompareService;    
@@ -33,5 +28,8 @@ namespace TesTool.Core.Commands.Generate.Factory
             var templateModel = _factoryCompareService.GetModelFactory(factoryName);
             return _templateCodeInfraService.BuildComparatorFactory(templateModel);
         }
+
+        protected override string GetOutputDirectory() => string.IsNullOrWhiteSpace(Output)
+            ? _factoryCompareService.GetDirectoryBase() : Output;
     }
 }

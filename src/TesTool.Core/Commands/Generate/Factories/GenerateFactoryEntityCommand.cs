@@ -14,25 +14,26 @@ namespace TesTool.Core.Commands.Generate.Factory
         [Parameter(HelpText = "Nome do contexto de banco de dados.")]
         public string DbContext { get; set; }
 
+        private readonly ISettingInfraService _settingInfraService;
         private readonly IWebApiScanInfraService _webApiScanInfraService;
+        private readonly IWebApiDbContextInfraService _webApiDbContextInfraService;
         private readonly IFactoryEntityService _factoryEntityService;
 
         public GenerateFactoryEntityCommand(
             IFactoryEntityService factoryEntityService,
-            ISettingInfraService settingInfraService, 
-            IEnvironmentInfraService environmentInfraService, 
             ITestScanInfraService testScanInfraService,
+            ISettingInfraService settingInfraService,
+            IWebApiDbContextInfraService webApiDbContextInfraService,
             IWebApiScanInfraService webApiScanInfraService,
             IFileSystemInfraService fileSystemInfraService, 
             ITemplateCodeInfraService templateCodeInfraService
         ) : base(
-            SettingEnumerator.ENTITY_FAKER_FACTORY_NAME,
             TestClassEnumerator.ENTITY_FAKER_FACTORY,
-            settingInfraService, environmentInfraService, 
-            testScanInfraService, fileSystemInfraService, 
-            templateCodeInfraService
+            testScanInfraService, fileSystemInfraService, templateCodeInfraService
         ) 
         {
+            _settingInfraService = settingInfraService;
+            _webApiDbContextInfraService = webApiDbContextInfraService;
             _factoryEntityService = factoryEntityService;
             _webApiScanInfraService = webApiScanInfraService;
         }
@@ -45,7 +46,7 @@ namespace TesTool.Core.Commands.Generate.Factory
                 throw new ProjectNotFoundException(ProjectTypeEnumerator.WEB_API);
             if (!await _webApiScanInfraService.ModelExistAsync(DbContext))
                 throw new ClassNotFoundException(DbContext);
-            if (!await _webApiScanInfraService.IsContextEntityFramework(DbContext))
+            if (!await _webApiDbContextInfraService.IsDbContextClassAsync(DbContext))
                 throw new ValidationException("DbContext informado não é uma classe de contexto de banco de dados do Entity Framework.");
 
             await base.GenerateAsync();
@@ -57,5 +58,8 @@ namespace TesTool.Core.Commands.Generate.Factory
             var templateModel = _factoryEntityService.GetEntityFactoryAsync(factoryName, DbContext).Result;
             return _templateCodeInfraService.BuildEntityFakerFactory(templateModel);
         }
+
+        protected override string GetOutputDirectory() => string.IsNullOrWhiteSpace(Output)
+            ? _factoryEntityService.GetDirectoryBase() : Output;
     }
 }

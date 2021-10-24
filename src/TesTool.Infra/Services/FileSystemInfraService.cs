@@ -13,6 +13,8 @@ namespace TesTool.Infra.Services
 
         public async Task SaveFileAsync(string path, string content)
         {
+            var directory = Path.GetDirectoryName(path);
+            if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
             await File.WriteAllTextAsync(path, content);
         }
     }

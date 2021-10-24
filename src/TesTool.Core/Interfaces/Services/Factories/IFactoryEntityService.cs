@@ -6,7 +6,8 @@ namespace TesTool.Core.Interfaces.Services.Factories
     public interface IFactoryEntityService
     {
         string GetNamespace();
-        Task<string> GetFactoryNameAsync();
+        string GetFactoryName();
+        string GetDirectoryBase();
         Task<EntityFakerFactory> GetEntityFactoryAsync(string name, string dbContext);
     }
 }

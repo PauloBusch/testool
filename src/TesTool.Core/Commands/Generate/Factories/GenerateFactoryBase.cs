@@ -11,35 +11,26 @@ namespace TesTool.Core.Commands.Generate.Factory
 {
     [Command("factory", Order = 3, HelpText = "Gerar código de chamadas de fabricação.")]
     public abstract class GenerateFactoryBase : GenerateCommandBase
-    {
-        [Parameter(IsRequired = false, HelpText = "Nome da classe fábrica.")]
-        public string FactoryName { get; set; }
-        
-        private readonly Setting _setting;
+    {        
         private readonly TestClass _testClass;
 
-        protected readonly ISettingInfraService _settingInfraService;
         protected readonly ITemplateCodeInfraService _templateCodeInfraService;
         protected readonly ITestScanInfraService _testScanInfraService;
 
         protected GenerateFactoryBase(
-            Setting setting,
             TestClass testClass,
-            ISettingInfraService settingInfraService,
-            IEnvironmentInfraService environmentInfraService,
             ITestScanInfraService testScanInfraService,
             IFileSystemInfraService fileSystemInfraService,
             ITemplateCodeInfraService templateCodeInfraService
-        ) : base(environmentInfraService, fileSystemInfraService) 
+        ) : base(fileSystemInfraService) 
         {
-            _setting = setting;
             _testClass = testClass;
-            _settingInfraService = settingInfraService;
             _templateCodeInfraService = templateCodeInfraService;
             _testScanInfraService = testScanInfraService;
         }
 
         protected abstract string BuildSourceCode(string factoryName);
+        protected abstract string GetOutputDirectory();
 
         protected override async Task GenerateAsync()
         {
@@ -56,12 +47,11 @@ namespace TesTool.Core.Commands.Generate.Factory
                 throw new DuplicatedSourceFileException(factoryName);
 
             await _fileSystemInfraService.SaveFileAsync(filePath, factorySourceCode);
-            await _settingInfraService.SetStringAsync(_setting, factoryName);
         }
 
         private string GetFactoryName()
         {
-            return !string.IsNullOrWhiteSpace(FactoryName) ? FactoryName : _testClass.Name;
+            return  _testClass.Name;
         }
 
         private string GetFactoryFilePath()

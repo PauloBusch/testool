@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System;
+using System.Linq;
+using System.Text;
 
 namespace TesTool.Core.Extensions
 {
@@ -23,6 +25,16 @@ namespace TesTool.Core.Extensions
                 stringBuilder.Append(character);
             }
             return stringBuilder.ToString();
+        }
+
+        public static string ToLowerCaseFirst(this string text)
+        {
+            if (string.IsNullOrEmpty(text)) return string.Empty;
+
+            char[] chars = text.ToCharArray();
+            chars[0] = char.ToLower(chars[0]);
+
+            return new string(chars);
         }
     }
 }

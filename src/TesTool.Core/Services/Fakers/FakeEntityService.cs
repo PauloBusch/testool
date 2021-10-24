@@ -28,6 +28,11 @@ namespace TesTool.Core.Services.Fakers
             _settingInfraService = settingInfraService;    
         }
 
+        public string GetDirectoryBase()
+        {
+            return $"{_testScanInfraService.GetDirectoryBase()}/Fakers/Entities";
+        }
+
         public async Task<EntityFaker> GetFakerEntityAsync(Class model, bool @static)
         {
             var dbContext = await _settingInfraService.GetStringAsync(SettingEnumerator.DB_CONTEXT_NAME);

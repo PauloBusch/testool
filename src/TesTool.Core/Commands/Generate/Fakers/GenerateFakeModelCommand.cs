@@ -19,13 +19,11 @@ namespace TesTool.Core.Commands.Generate.Fakers
             IFakeModelService fakeEntityService,
             IFactoryModelService factoryModelService,
             ITestCodeInfraService testCodeInfraService,
-            IEnvironmentInfraService environmentInfraService, 
             IFileSystemInfraService fileSystemInfraService, 
             IWebApiScanInfraService webApiScanInfraService, 
             ITestScanInfraService testScanInfraService, 
             ITemplateCodeInfraService templateCodeInfraService
         ) : base(
-            environmentInfraService, 
             fileSystemInfraService, webApiScanInfraService, 
             testScanInfraService, templateCodeInfraService
         )
@@ -35,9 +33,9 @@ namespace TesTool.Core.Commands.Generate.Fakers
             _testCodeInfraService = testCodeInfraService;
         }
 
-        protected override async Task<string> GetFactoryNameAsync()
+        protected override string GetFactoryName()
         {
-            return await _factoryModelService.GetFactoryNameAsync();
+            return _factoryModelService.GetFactoryName();
         }
 
         protected override async Task<string> BuildSourceCodeAsync(Class @class, string fakerName)
@@ -57,5 +55,13 @@ namespace TesTool.Core.Commands.Generate.Fakers
             var mergedSourceCode = await _testCodeInfraService.MergeClassCodeAsync(factoryName, factorySourceCode);
             await _fileSystemInfraService.SaveFileAsync(factoryPathFile, mergedSourceCode);
         }
+
+        protected override string GetFakerName(string className)
+        {
+            return _fakeModelService.GetFakerName(className);
+        }
+
+        protected override string GetOutputDirectory() => string.IsNullOrWhiteSpace(Output)
+            ? _fakeModelService.GetDirectoryBase() : Output;
     }
 }

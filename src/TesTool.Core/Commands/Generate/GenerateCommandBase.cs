@@ -11,31 +11,24 @@ namespace TesTool.Core.Commands.Generate
     {
         [Option(HelpText = "Diretório de saída.")]
         public string Output { get; set; }
-
-        private readonly IEnvironmentInfraService _environmentInfraService;
-        
+                
         protected readonly IFileSystemInfraService _fileSystemInfraService;
 
         protected GenerateCommandBase(
-            IEnvironmentInfraService environmentInfraService,
             IFileSystemInfraService  fileSystemInfraService
         )
         {
-            _environmentInfraService = environmentInfraService;
             _fileSystemInfraService = fileSystemInfraService;
         }
 
         protected abstract Task GenerateAsync();
 
-        public async Task ExecuteAsync()
+        public async Task ExecuteAsync(ICommandContext context)
         {
             if (!string.IsNullOrWhiteSpace(Output) && !await _fileSystemInfraService.FileExistAsync(Output))
                 throw new DirectoryNotFoundException("Diretório de saída inválido.");
 
             await GenerateAsync();
         }
-
-        protected string GetOutputDirectory() => string.IsNullOrWhiteSpace(Output)
-            ? _environmentInfraService.GetWorkingDirectory() : Output;
     }
 }

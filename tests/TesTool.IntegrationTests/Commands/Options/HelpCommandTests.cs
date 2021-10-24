@@ -3,6 +3,7 @@ using Moq;
 using System.Threading.Tasks;
 using TesTool.Core.Commands.Help;
 using TesTool.Core.Interfaces.Services;
+using TesTool.Core.Models.Metadata;
 using TesTool.IntegrationTests._Common;
 using Xunit;
 
@@ -30,7 +31,7 @@ namespace TesTool.IntegrationTests.Commands.Options
             var command = _factory.CreateCommand(arguments) as HelpCommand;
             Assert.NotNull(command);
 
-            await command.ExecuteAsync();
+            await command.ExecuteAsync(new CommandContext(false));
 
             _loggerServiceMock.Verify(l => l.LogError(It.IsAny<string>()), Times.Once);
         }
@@ -61,7 +62,7 @@ namespace TesTool.IntegrationTests.Commands.Options
             var command = _factory.CreateCommand(rawCommand.Split(" ")) as HelpCommand;
             Assert.NotNull(command);
 
-            await command.ExecuteAsync();
+            await command.ExecuteAsync(new CommandContext(false));
 
             _loggerServiceMock.Verify(l => l.LogInformation(It.IsAny<string>()), Times.AtLeastOnce);
             _loggerServiceMock.Verify(l => l.LogWarning(It.IsAny<string>()), Times.Never);

@@ -7,6 +7,8 @@ namespace TesTool.Core.Interfaces.Services
     public interface ICompareService
     {
         string GetNamespace();
+        string GetDirectoryBase();
+        bool IsComparableClasses(Class source, Class target);
         string GetComparatorName(string sourceClassName, string targetClassName);
         Task<Class> GetComparatorClassAsync(string sourceClassName, string targetClassName);
         Task<CompareDynamic> GetCompareDynamicAsync(Class source, Class target);

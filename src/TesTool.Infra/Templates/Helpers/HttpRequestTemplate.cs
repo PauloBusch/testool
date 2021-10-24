@@ -36,72 +36,92 @@ namespace TesTool.Infra.Templates.Helpers
             #line hidden
             this.Write("\r\n{\r\n    public class Request\r\n    {\r\n        public readonly HttpClient Client;\r" +
                     "\n\r\n        public Request(HttpClient client) => Client = client;\r\n\r\n        publ" +
-                    "ic async Task<(HttpResponseMessage response, TResult result)> GetAsync<TResult>(" +
-                    "Uri uri, dynamic query = null) where TResult : class\r\n        {\r\n            var" +
-                    " request = new HttpRequestMessage\r\n            {\r\n                RequestUri = n" +
-                    "ew Uri($\"{uri}?{GetUrlString(query)}\"),\r\n                Method = HttpMethod.Get" +
-                    "\r\n            };\r\n\r\n            var response = await Client.SendAsync(request);\r" +
-                    "\n            return await GetResultAsync<TResult>(response);\r\n        }\r\n\r\n     " +
-                    "   public async Task<(HttpResponseMessage response, TResult result)> PostAsync<T" +
-                    "Result>(Uri uri, dynamic data, dynamic query = null) where TResult : class\r\n    " +
-                    "    {\r\n            var content = new StringContent(JsonSerializer.Serialize(data" +
-                    "), Encoding.Default, \"application/json\");\r\n\r\n            var response = await Cl" +
-                    "ient.PostAsync(new Uri($\"{uri}?{GetUrlString(query)}\"), content);\r\n            r" +
-                    "eturn await GetResultAsync<TResult>(response);\r\n        }\r\n\r\n        public asyn" +
-                    "c Task<(HttpResponseMessage response, TResult result)> PutAsync<TResult>(Uri uri" +
-                    ", dynamic data, dynamic query = null) where TResult : class\r\n        {\r\n        " +
-                    "    var content = new StringContent(JsonSerializer.Serialize(data), Encoding.Def" +
-                    "ault, \"application/json\");\r\n\r\n            var response = await Client.PutAsync(n" +
-                    "ew Uri($\"{uri}?{GetUrlString(query)}\"), content);\r\n            return await GetR" +
-                    "esultAsync<TResult>(response);\r\n        }\r\n\r\n        public async Task<(HttpResp" +
-                    "onseMessage response, TResult result)> PatchAsync<TResult>(Uri uri, dynamic data" +
-                    " = null, dynamic query = null) where TResult : class\r\n        {\r\n            var" +
-                    " content = new StringContent(JsonSerializer.Serialize(data), Encoding.Default, \"" +
-                    "application/json\");\r\n\r\n            var response = await Client.PatchAsync(new Ur" +
-                    "i($\"{uri}?{GetUrlString(query)}\"), content);\r\n            return await GetResult" +
+                    "ic async Task<HttpResponseMessage> GetAsync(Uri uri, dynamic query = null)\r\n    " +
+                    "    {\r\n            var request = new HttpRequestMessage\r\n            {\r\n        " +
+                    "        RequestUri = new Uri($\"{uri}?{GetUrlString(query)}\"),\r\n                M" +
+                    "ethod = HttpMethod.Get\r\n            };\r\n\r\n            return await Client.SendAs" +
+                    "ync(request);\r\n        }\r\n\r\n        public async Task<(HttpResponseMessage respo" +
+                    "nse, TResult result)> GetAsync<TResult>(Uri uri, dynamic query = null) where TRe" +
+                    "sult : class\r\n        {\r\n            var request = new HttpRequestMessage\r\n     " +
+                    "       {\r\n                RequestUri = new Uri($\"{uri}?{GetUrlString(query)}\"),\r" +
+                    "\n                Method = HttpMethod.Get\r\n            };\r\n\r\n            var resp" +
+                    "onse = await Client.SendAsync(request);\r\n            return await GetResultAsync" +
+                    "<TResult>(response);\r\n        }\r\n\r\n        public async Task<HttpResponseMessage" +
+                    "> PostAsync(Uri uri, dynamic data, dynamic query = null)\r\n        {\r\n           " +
+                    " var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.Def" +
+                    "ault, \"application/json\");\r\n            return await Client.PostAsync(new Uri($\"" +
+                    "{uri}?{GetUrlString(query)}\"), content);\r\n        }\r\n\r\n        public async Task" +
+                    "<(HttpResponseMessage response, TResult result)> PostAsync<TResult>(Uri uri, dyn" +
+                    "amic data, dynamic query = null) where TResult : class\r\n        {\r\n            v" +
+                    "ar content = new StringContent(JsonSerializer.Serialize(data), Encoding.Default," +
+                    " \"application/json\");\r\n\r\n            var response = await Client.PostAsync(new U" +
+                    "ri($\"{uri}?{GetUrlString(query)}\"), content);\r\n            return await GetResul" +
+                    "tAsync<TResult>(response);\r\n        }\r\n\r\n        public async Task<HttpResponseM" +
+                    "essage> PutAsync(Uri uri, dynamic data, dynamic query = null)\r\n        {\r\n      " +
+                    "      var content = new StringContent(JsonConvert.SerializeObject(data), Encodin" +
+                    "g.Default, \"application/json\");\r\n            return await Client.PutAsync(new Ur" +
+                    "i($\"{uri}?{GetUrlString(query)}\"), content);\r\n        }\r\n\r\n        public async " +
+                    "Task<(HttpResponseMessage response, TResult result)> PutAsync<TResult>(Uri uri, " +
+                    "dynamic data, dynamic query = null) where TResult : class\r\n        {\r\n          " +
+                    "  var content = new StringContent(JsonSerializer.Serialize(data), Encoding.Defau" +
+                    "lt, \"application/json\");\r\n\r\n            var response = await Client.PutAsync(new" +
+                    " Uri($\"{uri}?{GetUrlString(query)}\"), content);\r\n            return await GetRes" +
+                    "ultAsync<TResult>(response);\r\n        }\r\n\r\n        public async Task<HttpRespons" +
+                    "eMessage> PatchAsync(Uri uri, dynamic data = null, dynamic query = null)\r\n      " +
+                    "  {\r\n            var content = new StringContent(JsonConvert.SerializeObject(dat" +
+                    "a), Encoding.Default, \"application/json\");\r\n\r\n            return await Client.Pa" +
+                    "tchAsync(new Uri($\"{uri}?{GetUrlString(query)}\"), content);\r\n        }\r\n\r\n      " +
+                    "  public async Task<(HttpResponseMessage response, TResult result)> PatchAsync<T" +
+                    "Result>(Uri uri, dynamic data = null, dynamic query = null) where TResult : clas" +
+                    "s\r\n        {\r\n            var content = new StringContent(JsonSerializer.Seriali" +
+                    "ze(data), Encoding.Default, \"application/json\");\r\n\r\n            var response = a" +
+                    "wait Client.PatchAsync(new Uri($\"{uri}?{GetUrlString(query)}\"), content);\r\n     " +
+                    "       return await GetResultAsync<TResult>(response);\r\n        }\r\n\r\n        pub" +
+                    "lic async Task<HttpResponseMessage> DeleteAsync(Uri uri, dynamic query = null)\r\n" +
+                    "        {\r\n            return await Client.DeleteAsync(new Uri($\"{uri}?{GetUrlSt" +
+                    "ring(query)}\"));\r\n        }\r\n\r\n        public async Task<(HttpResponseMessage re" +
+                    "sponse, TResult result)> DeleteAsync<TResult>(Uri uri, dynamic query = null) whe" +
+                    "re TResult : class\r\n        {\r\n            var response = await Client.DeleteAsy" +
+                    "nc(new Uri($\"{uri}?{GetUrlString(query)}\"));\r\n            return await GetResult" +
                     "Async<TResult>(response);\r\n        }\r\n\r\n        public async Task<(HttpResponseM" +
-                    "essage response, TResult result)> DeleteAsync<TResult>(Uri uri, dynamic query = " +
-                    "null) where TResult : class\r\n        {\r\n            var response = await Client." +
-                    "DeleteAsync(new Uri($\"{uri}?{GetUrlString(query)}\"));\r\n            return await " +
-                    "GetResultAsync<TResult>(response);\r\n        }\r\n\r\n        public async Task<(Http" +
-                    "ResponseMessage response, FileInfo file)> DownloadFile(Uri uri, dynamic query = " +
-                    "null)\r\n        {\r\n            var request = new HttpRequestMessage\r\n            " +
-                    "{\r\n                RequestUri = new Uri($\"{uri}?{GetUrlString(query)}\"),\r\n      " +
-                    "          Method = HttpMethod.Get\r\n            };\r\n\r\n            var response = " +
-                    "await Client.SendAsync(request);\r\n            try\r\n            {\r\n              " +
-                    "  if (response.StatusCode != HttpStatusCode.OK) return (response, null);\r\n      " +
-                    "          var fileName = $\"{Guid.NewGuid()}{Path.GetExtension(response.Content.H" +
-                    "eaders.ContentDisposition?.FileNameStar)}\";\r\n                var filePath = Path" +
-                    ".Combine(Path.GetTempPath(), fileName);\r\n                using var contentStream" +
-                    " = await response.Content.ReadAsStreamAsync();\r\n                using var fileSt" +
-                    "ream = new FileStream(filePath, FileMode.Create);\r\n                await content" +
-                    "Stream.CopyToAsync(fileStream);\r\n\r\n                return (response, new FileInf" +
-                    "o(filePath));\r\n            }\r\n            catch (Exception e)\r\n            {\r\n  " +
-                    "              throw new Exception($\"Could not download file\", e);\r\n            }" +
-                    "\r\n        }\r\n\r\n        #region Private Methods\r\n\r\n        private async Task<(Ht" +
-                    "tpResponseMessage response, TResult result)> GetResultAsync<TResult>(HttpRespons" +
-                    "eMessage response) where TResult : class\r\n        {\r\n            var json = awai" +
-                    "t response.Content.ReadAsStringAsync();\r\n            try\r\n            {\r\n       " +
-                    "         var result = JsonSerializer.Deserialize<TResult>(json);\r\n              " +
-                    "  return (response, result);\r\n            }\r\n            catch (Exception e)\r\n  " +
-                    "          {\r\n                throw new Exception($\"Could not deserialize object." +
-                    " Current JSON: {json}\", e);\r\n            }\r\n        }\r\n\r\n        private string " +
-                    "GetUrlString(object data = null)\r\n        {\r\n            if (data == null) retur" +
-                    "n string.Empty;\r\n\r\n            var parameters = new List<string>();\r\n           " +
-                    " var properties = data.GetType().GetProperties();\r\n            foreach (var prop" +
-                    "erty in properties)\r\n            {\r\n                var value = property.GetValu" +
-                    "e(data);\r\n                if (value == null) continue;\r\n\r\n                var ty" +
-                    "pe = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;" +
-                    "\r\n                var valueJson = JsonSerializer.Serialize(value);\r\n            " +
-                    "    parameters.Add($\"{HttpUtility.UrlEncode(property.Name)}={HttpUtility.UrlEnco" +
-                    "de(valueJson)}\");\r\n\r\n                throw new InvalidOperationException($\"Not c" +
-                    "onfigured conversion from type {property.PropertyType.Name}\");\r\n            }\r\n\r" +
-                    "\n            return string.Join(\"&\", parameters);\r\n        }\r\n\r\n        #endregi" +
-                    "on\r\n    }\r\n}\r\n");
+                    "essage response, FileInfo file)> DownloadFile(Uri uri, dynamic query = null)\r\n  " +
+                    "      {\r\n            var request = new HttpRequestMessage\r\n            {\r\n      " +
+                    "          RequestUri = new Uri($\"{uri}?{GetUrlString(query)}\"),\r\n               " +
+                    " Method = HttpMethod.Get\r\n            };\r\n\r\n            var response = await Cli" +
+                    "ent.SendAsync(request);\r\n            try\r\n            {\r\n                if (res" +
+                    "ponse.StatusCode != HttpStatusCode.OK) return (response, null);\r\n               " +
+                    " var fileName = $\"{Guid.NewGuid()}{Path.GetExtension(response.Content.Headers.Co" +
+                    "ntentDisposition?.FileNameStar)}\";\r\n                var filePath = Path.Combine(" +
+                    "Path.GetTempPath(), fileName);\r\n                using var contentStream = await " +
+                    "response.Content.ReadAsStreamAsync();\r\n                using var fileStream = ne" +
+                    "w FileStream(filePath, FileMode.Create);\r\n                await contentStream.Co" +
+                    "pyToAsync(fileStream);\r\n\r\n                return (response, new FileInfo(filePat" +
+                    "h));\r\n            }\r\n            catch (Exception e)\r\n            {\r\n           " +
+                    "     throw new Exception($\"Could not download file\", e);\r\n            }\r\n       " +
+                    " }\r\n\r\n        #region Private Methods\r\n\r\n        private async Task<(HttpRespons" +
+                    "eMessage response, TResult result)> GetResultAsync<TResult>(HttpResponseMessage " +
+                    "response) where TResult : class\r\n        {\r\n            var json = await respons" +
+                    "e.Content.ReadAsStringAsync();\r\n            try\r\n            {\r\n                " +
+                    "var result = JsonSerializer.Deserialize<TResult>(json);\r\n                return " +
+                    "(response, result);\r\n            }\r\n            catch (Exception e)\r\n           " +
+                    " {\r\n                throw new Exception($\"Could not deserialize object. Current " +
+                    "JSON: {json}\", e);\r\n            }\r\n        }\r\n\r\n        private string GetUrlStr" +
+                    "ing(object data = null)\r\n        {\r\n            if (data == null) return string." +
+                    "Empty;\r\n\r\n            var parameters = new List<string>();\r\n            var prop" +
+                    "erties = data.GetType().GetProperties();\r\n            foreach (var property in p" +
+                    "roperties)\r\n            {\r\n                var value = property.GetValue(data);\r" +
+                    "\n                if (value == null) continue;\r\n\r\n                var type = Null" +
+                    "able.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;\r\n       " +
+                    "         var valueJson = JsonSerializer.Serialize(value);\r\n                param" +
+                    "eters.Add($\"{HttpUtility.UrlEncode(property.Name)}={HttpUtility.UrlEncode(valueJ" +
+                    "son)}\");\r\n\r\n                throw new InvalidOperationException($\"Not configured" +
+                    " conversion from type {property.PropertyType.Name}\");\r\n            }\r\n\r\n        " +
+                    "    return string.Join(\"&\", parameters);\r\n        }\r\n\r\n        #endregion\r\n    }" +
+                    "\r\n}\r\n");
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 129 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Helpers\HttpRequestTemplate.tt"
+        #line 164 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Helpers\HttpRequestTemplate.tt"
 
     public string Namespace { get; set; }
 

@@ -22,7 +22,7 @@ namespace TesTool.Core.Commands.Configure
             _settingsService = settingsService;
         }
 
-        public override async Task ExecuteAsync()
+        public override async Task ExecuteAsync(ICommandContext context)
         {
             if (Directory.Exists(ProjectPath))
             {

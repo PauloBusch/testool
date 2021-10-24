@@ -11,16 +11,12 @@ namespace TesTool.Core.Commands.Generate.Factory
         private readonly IFactoryModelService _factoryModelService;
 
         public GenerateFactoryModelCommand(
-            ISettingInfraService settingInfraService,
             IFactoryModelService factoryModelService,
             ITestScanInfraService testScanInfraService,
             IFileSystemInfraService fileSystemInfraService,
-            ITemplateCodeInfraService templateCodeInfraService,
-            IEnvironmentInfraService environmentInfraService
+            ITemplateCodeInfraService templateCodeInfraService
         ) : base(
-            SettingEnumerator.MODEL_FAKER_FACTORY_NAME, 
             TestClassEnumerator.MODEL_FAKER_FACTORY,
-            settingInfraService, environmentInfraService, 
             testScanInfraService, fileSystemInfraService, 
             templateCodeInfraService
         ) 
@@ -33,5 +29,8 @@ namespace TesTool.Core.Commands.Generate.Factory
             var templateModel = _factoryModelService.GetModelFactory(factoryName);
             return _templateCodeInfraService.BuildModelFakerFactory(templateModel);
         }
+
+        protected override string GetOutputDirectory() => string.IsNullOrWhiteSpace(Output)
+            ? _factoryModelService.GetDirectoryBase() : Output;
     }
 }

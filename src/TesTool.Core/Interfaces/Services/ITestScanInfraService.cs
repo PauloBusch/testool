@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using TesTool.Core.Models.Metadata;
 
 namespace TesTool.Core.Interfaces.Services
@@ -7,6 +6,7 @@ namespace TesTool.Core.Interfaces.Services
     public interface ITestScanInfraService
     {
         string GetNamespace();
+        string GetDirectoryBase();
         Task<bool> ProjectExistAsync();
         Task<bool> ClassExistAsync(string className);
         Task<Class> GetClassAsync(string className);

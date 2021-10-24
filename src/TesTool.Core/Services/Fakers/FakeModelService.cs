@@ -18,6 +18,11 @@ namespace TesTool.Core.Services.Fakers
             expressionInfraService, conventionInfraService
         ) { }
 
+        public string GetDirectoryBase()
+        {
+            return $"{_testScanInfraService.GetDirectoryBase()}/Fakers/Models";
+        }
+
         public async Task<ModelFaker> GetFakerModelAsync(Class model, bool @static)
         {
             var templateModel = new ModelFaker(model.Name, GetNamespace());

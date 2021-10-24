@@ -35,7 +35,7 @@ namespace TesTool.Core.Commands.Configure
             _serializerInfraService = serializerInfraService;
         }
 
-        public override async Task ExecuteAsync()
+        public override async Task ExecuteAsync(ICommandContext context)
         {
             if (Init && await _fileSystemInfraService.FileExistAsync(ConfigurationPath))
                 throw new DuplicatedSourceFileException(Path.GetFileName(ConfigurationPath));

@@ -3,6 +3,7 @@ using Moq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TesTool.Core.Commands.Options;
+using TesTool.Core.Models.Metadata;
 using TesTool.IntegrationTests._Common;
 using Xunit;
 
@@ -19,7 +20,7 @@ namespace TesTool.IntegrationTests.Commands
         [Fact]
         public async Task ShouldLogVersionAsync()
         {
-            await _command.ExecuteAsync();
+            await _command.ExecuteAsync(new CommandContext(false));
 
             var regex = new Regex(@"^\d+.\d+.\d+.\d+$");
             _loggerServiceMock.Verify(l => l.LogInformation(It.Is<string>(v => regex.IsMatch(v))), Times.Once);

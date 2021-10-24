@@ -18,7 +18,7 @@ namespace TesTool.Core.Commands.Options
             _loggerService = loggerService;
         }
 
-        public Task ExecuteAsync()
+        public Task ExecuteAsync(ICommandContext context)
         {
             var assembly = Assembly.GetExecutingAssembly();
             var version = FileVersionInfo.GetVersionInfo(assembly.Location).FileVersion;

@@ -2,6 +2,7 @@
 using System.Linq;
 using TesTool.Core.Interfaces.Services;
 using TesTool.Core.Models.Templates.Comparator;
+using TesTool.Core.Models.Templates.Controller;
 using TesTool.Core.Models.Templates.Factories;
 using TesTool.Core.Models.Templates.Faker;
 using TesTool.Infra.Templates.Comparators;
@@ -9,11 +10,38 @@ using TesTool.Infra.Templates.Extensions;
 using TesTool.Infra.Templates.Factories;
 using TesTool.Infra.Templates.Fakers;
 using TesTool.Infra.Templates.Helpers;
+using TesTool.Infra.Templates.Test;
 
 namespace TesTool.Infra.Services
 {
     public class TemplateCodeInfraService : ITemplateCodeInfraService
     {
+        public string BuildControllerTest(ControllerTest model)
+        {
+            var template = new ControllerTestTemplate
+            {
+                Name = model.Name,
+                TemplataService = this,
+                Namespace = model.Namespace,
+                BaseRoute = model.BaseRoute,
+                FixtureName = model.FixtureName,
+                Namespaces = PrepareNamespaces(model.Namespaces, model.Namespace),
+                Methods = model.Methods.ToArray()
+            };
+            return template.TransformText();
+        }
+
+        public string BuildControllerTestMethod(ControllerTestMethod model)
+        {
+            var template = new ControllerTestMethodTemplate
+            {
+                Name = model.Name,
+                Entities = model.Entities.ToArray(),
+                Models = model.Models.ToArray()
+            };
+            return template.TransformText();
+        }
+
         public string BuildModelFaker(ModelFaker model)
         {
             var template = new ModelFakerTemplate

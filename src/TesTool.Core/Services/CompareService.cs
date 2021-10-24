@@ -23,8 +23,7 @@ namespace TesTool.Core.Services
 
         public async Task<CompareDynamic> GetCompareDynamicAsync(Class source, Class target)
         {
-            var propertiesToAssert = source.Properties.Where(p => target.Properties.Any(p1 => p1.Name == p.Name && p1.Type.Wrapper == p.Type.Wrapper));
-            if (!propertiesToAssert.Any()) throw new ValidationException("None properties to assert Equals.");
+            if (!IsComparableClasses(source, target)) throw new ValidationException("None properties to assert Equals.");
 
             var sourceClassName = source.Name;
             var targetClassName = target.Name;
@@ -95,6 +94,17 @@ namespace TesTool.Core.Services
         public string GetComparatorName(string sourceClassName, string targetClassName)
         {
             return $"{sourceClassName}Equals{targetClassName}";
+        }
+
+        public string GetDirectoryBase()
+        {
+            return $"{_testScanInfraService.GetDirectoryBase()}/Assertions/Comparators";
+        }
+
+        public bool IsComparableClasses(Class source, Class target)
+        {
+            if (source is null || target is null) return false;
+            return source.Properties.Where(p => target.Properties.Any(p1 => p1.Name == p.Name && p1.Type.Wrapper == p.Type.Wrapper)).Any();
         }
     }
 }

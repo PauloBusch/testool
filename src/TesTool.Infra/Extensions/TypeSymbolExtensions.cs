@@ -68,12 +68,14 @@ namespace TesTool.Infra.Extensions
         public static string GetName(this ITypeSymbol type)
         {
             var display = type.GetDisplayString();
+            if (display.Contains("<")) display = display.Split("<").First();
             return display.Split(".").Last();
         }
 
         public static string GetNamespace(this ITypeSymbol type)
         {
             var display = type.GetDisplayString();
+            if (display.Contains("<")) display = display.Split("<").First();
             var displayParts = display.Split(".");
             var name = displayParts.Last();
             return string.Join(".", displayParts.Where(p => p != name));

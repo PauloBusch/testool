@@ -1,4 +1,5 @@
 ﻿using TesTool.Core.Models.Templates.Comparator;
+using TesTool.Core.Models.Templates.Controller;
 using TesTool.Core.Models.Templates.Factories;
 using TesTool.Core.Models.Templates.Faker;
 
@@ -6,6 +7,9 @@ namespace TesTool.Core.Interfaces.Services
 {
     public interface ITemplateCodeInfraService
     {
+        string BuildControllerTest(ControllerTest model);
+        string BuildControllerTestMethod(ControllerTestMethod model);
+
         string BuildModelFaker(ModelFaker model);
         string BuildModelFakerFactory(ModelFakerFactory model);
         string BuildModelFakerFactoryMethod(ModelFakerFactoryMethod model);

@@ -2,7 +2,7 @@
   "profiles": {
     "TesTool.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "g faker model UserModel"
+      "commandLineArgs": "g controller User"
     }
   }
 }

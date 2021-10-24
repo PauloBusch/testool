@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using TesTool.Core.Commands.Configure;
 using TesTool.Core.Enumerations;
 using TesTool.Core.Interfaces.Services;
+using TesTool.Core.Models.Metadata;
 using TesTool.IntegrationTests._Common;
 using Xunit;
 
@@ -31,7 +32,7 @@ namespace TesTool.IntegrationTests.Commands.Configure
             var expectedPath = arguments.Last();
             var command = _factory.CreateCommand(arguments) as ConfigureProjectCommand;
 
-            await command.ExecuteAsync();
+            await command.ExecuteAsync(new CommandContext(false));
 
             Assert.NotEqual(expectedPath, await _settingsService.GetStringAsync(SettingEnumerator.PROJECT_DIRECTORY));
             _loggerServiceMock.Verify(l => l.LogError(It.IsAny<string>()), Times.Once);
@@ -45,7 +46,7 @@ namespace TesTool.IntegrationTests.Commands.Configure
         {
             var command = _factory.CreateCommand(rawCommand.Split(" ")) as ConfigureProjectCommand;
 
-            await command.ExecuteAsync();
+            await command.ExecuteAsync(new CommandContext(false));
 
             Assert.Equal(@"Assets\sample.csproj", await _settingsService.GetStringAsync(SettingEnumerator.PROJECT_DIRECTORY));
             _loggerServiceMock.Verify(l => l.LogError(It.IsAny<string>()), Times.Never);

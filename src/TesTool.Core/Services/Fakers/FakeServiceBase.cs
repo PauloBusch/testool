@@ -30,6 +30,11 @@ namespace TesTool.Core.Services.Fakers
             _conventionInfraService = conventionInfraService;
         }
 
+        public string GetFakerName(string className)
+        {
+            return $"{className}Faker";
+        }
+
         protected abstract T MapProperty<T>(string name, string expression, bool @unsafe) where T : PropertyBase;
 
         protected async Task<T> FillTemplateAsync<T, TProperty>(T templateModel, Class model, bool @static) 

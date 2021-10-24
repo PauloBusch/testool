@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TesTool.Core.Exceptions;
 using TesTool.Core.Interfaces.Services;
+using TesTool.Core.Services.Handlers;
 
 namespace TesTool.Cli
 {
@@ -24,8 +25,9 @@ namespace TesTool.Cli
                     .BuildServiceProvider();
 
                 var argumentsCoreService = serviceProvider.GetService<ICommandFactoryService>();
-
-                await argumentsCoreService.CreateCommand(args)?.ExecuteAsync();
+                var commandHandler = serviceProvider.GetService<ICommandHandler>();
+                var command = argumentsCoreService.CreateCommand(args);
+                if (command is not null) await commandHandler.HandleAsync(command, cascade: false);
 
                 var console = serviceProvider.GetService<ILoggerInfraService>();
                 var jsonOptions = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };

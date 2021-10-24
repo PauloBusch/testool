@@ -39,9 +39,8 @@ namespace TesTool.Core.Commands.Generate
             ITestCodeInfraService testCodeInfraService,
             ITemplateCodeInfraService templateCodeInfraService,
             IWebApiScanInfraService webApiScanInfraService,
-            IEnvironmentInfraService environmentInfraService,
             IFileSystemInfraService fileSystemInfraService
-        ) : base(environmentInfraService, fileSystemInfraService)
+        ) : base(fileSystemInfraService)
         {
             _compareService = compareService;
             _solutionService = solutionService;
@@ -59,7 +58,7 @@ namespace TesTool.Core.Commands.Generate
             if (!await _testScanInfraService.ProjectExistAsync())
                 throw new ProjectNotFoundException(ProjectTypeEnumerator.INTEGRATION_TESTS);
 
-            var factoryName = await _factoryCompareService.GetFactoryNameAsync();
+            var factoryName = _factoryCompareService.GetFactoryName();
             if (!await _testScanInfraService.ClassExistAsync(factoryName))
                 throw new ClassNotFoundException(factoryName);
 
@@ -93,7 +92,7 @@ namespace TesTool.Core.Commands.Generate
         }
 
         public async Task AppendComparatorFactoryMethodAsync() {
-            var templateModel = _factoryCompareService.GetModelFactory(await _factoryCompareService.GetFactoryNameAsync());
+            var templateModel = _factoryCompareService.GetModelFactory(_factoryCompareService.GetFactoryName());
             templateModel.AddNamespace(_compareService.GetNamespace());
             templateModel.AddMethod(new ComparatorFactoryMethod(GetComparatorName()));
 
@@ -133,5 +132,8 @@ namespace TesTool.Core.Commands.Generate
             var fileName = $"{GetComparatorName()}.cs";
             return Path.Combine(GetOutputDirectory(), fileName);
         }
+
+        private string GetOutputDirectory() => string.IsNullOrWhiteSpace(Output)
+            ? _compareService.GetDirectoryBase() : Output;
     }
 }

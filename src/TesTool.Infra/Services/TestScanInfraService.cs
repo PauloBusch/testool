@@ -41,6 +41,12 @@ namespace TesTool.Infra.Services
             return classes.FirstOrDefault(c => c.Declaration.Identifier.Text == className)?.FilePath;
         }
 
+        public string GetDirectoryBase()
+        {
+            var projectPathFile = GetProjectPathFile();
+            return Path.GetDirectoryName(projectPathFile);
+        }
+
         private static string _cacheProjectPath;
         protected override string GetProjectPathFile()
         {

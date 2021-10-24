@@ -14,9 +14,8 @@ namespace TesTool.Core.Commands.Generate
         public bool Static { get; set; }
 
         public GenerateProjectCommand(
-            IEnvironmentInfraService environmentInfraService,
             IFileSystemInfraService fileSystemInfraService
-        ) : base(environmentInfraService, fileSystemInfraService) { }
+        ) : base(fileSystemInfraService) { }
 
         protected override Task GenerateAsync()
         {

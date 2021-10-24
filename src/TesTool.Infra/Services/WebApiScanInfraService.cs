@@ -103,19 +103,6 @@ namespace TesTool.Infra.Services
             return await GetModelAsync(className) is not null;
         }
 
-        public async Task<bool> IsContextEntityFramework(string className)
-        {
-            var project = await GetProjectAsync();
-            if (project is null) return default;
-
-            var projects = new[] { project }.Concat(GetProjectReferences(project)).ToArray();
-            var classes = await GetClassesAsync(projects);
-            var @class = classes.FirstOrDefault(c => c.Declaration.Identifier.Text == className);
-            if (@class is null) return false;
-
-            return @class.TypeSymbol.ImplementsClass("DbContext", "Microsoft.EntityFrameworkCore");
-        }
-
         private void FillEndpoints(Controller controller, ITypeSymbol classSymbol)
         {
             var methodSymbols = classSymbol.GetMethods();

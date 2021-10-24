@@ -8,17 +8,20 @@ namespace TesTool.Core.Services.Factories
     public class FactoryCompareService : FactoryServiceBase, IFactoryCompareService
     {
         public FactoryCompareService(
-            ISettingInfraService settingInfraService,
             ISolutionService solutionService,
             ITestScanInfraService testScanInfraService,
             IWebApiScanInfraService webApiScanInfraService
         ) : base(
-            SettingEnumerator.COMPARATOR_FACTORY_NAME,
             TestClassEnumerator.COMPARE_FACTORY,
-            settingInfraService, solutionService,
-            testScanInfraService, webApiScanInfraService
+            solutionService, testScanInfraService, 
+            webApiScanInfraService
         )
         { }
+
+        public string GetDirectoryBase()
+        {
+            return $"{_testScanInfraService.GetDirectoryBase()}/Assertions";
+        }
 
         public ComparatorFactory GetModelFactory(string name)
         {

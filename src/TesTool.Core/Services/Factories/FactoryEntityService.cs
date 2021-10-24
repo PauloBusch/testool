@@ -10,16 +10,18 @@ namespace TesTool.Core.Services.Factories
     public class FactoryEntityService : FactoryServiceBase, IFactoryEntityService
     {
         public FactoryEntityService(
-            ISettingInfraService settingInfraService, 
             ISolutionService solutionService, 
             ITestScanInfraService testScanInfraService, 
             IWebApiScanInfraService webApiScanInfraService
         ) : base(
-            SettingEnumerator.ENTITY_FAKER_FACTORY_NAME,
             TestClassEnumerator.ENTITY_FAKER_FACTORY,
-            settingInfraService, solutionService,
-            testScanInfraService, webApiScanInfraService
+            solutionService, testScanInfraService, webApiScanInfraService
         ) { }
+
+        public string GetDirectoryBase()
+        {
+            return $"{_testScanInfraService.GetDirectoryBase()}/Fakers";
+        }
 
         public async Task<EntityFakerFactory> GetEntityFactoryAsync(string name, string dbContext)
         {

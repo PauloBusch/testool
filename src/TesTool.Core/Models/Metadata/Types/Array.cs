@@ -1,8 +1,9 @@
 ﻿namespace TesTool.Core.Models.Metadata
 {
-    public class Array : TypeWrapper
+    public class Array : TypeBase
     {
-        public Array(TypeWrapper type) : base(nameof(Array)) 
+        public Array(string name, string @namespace, TypeWrapper type) 
+            : base(nameof(Array), name, @namespace) 
         { 
             Type = type;    
         }

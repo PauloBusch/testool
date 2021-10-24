@@ -1,0 +1,48 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="TesTool.Core.Models.Templates.Controller" #>
+<#@ import namespace="TesTool.Core.Interfaces.Services" #>
+<# 
+    foreach (var @namespace in Namespaces) 
+    {
+#>
+using <#= @namespace #>;
+<# 
+    } 
+#>
+<# 
+    if (Methods.Length > 0) 
+    { 
+#>
+using System.Threading.Tasks;
+using Xunit;
+<# 
+    } 
+#>
+
+namespace <#= Namespace #>
+{
+    public class <#= Name #> : TestBase
+    {
+        public <#= Name #>(<#= FixtureName #> fixture) : base(fixture, "<#= BaseRoute #>") { }
+<#
+    PushIndent("        ");
+    foreach (var method in Methods) 
+    {
+#>
+<#= TemplataService.BuildControllerTestMethod(method) #>
+<#
+    }
+    ClearIndent();
+#>
+    }
+}
+<#+
+    public string Name { get; set; }
+    public string BaseRoute { get; set; }
+    public string Namespace { get; set; }
+    public string FixtureName { get; set; }
+    public string[] Namespaces { get; set; }
+    public ControllerTestMethod[] Methods { get; set; }
+    public ITemplateCodeInfraService TemplataService { get; set; }
+#>
