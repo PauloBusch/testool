@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using TesTool.Core.Enumerations;
+using TesTool.Core.Extensions;
 using TesTool.Core.Interfaces.Services;
 using TesTool.Core.Models.Enumerators;
 using TesTool.Core.Models.Metadata;
@@ -41,13 +43,16 @@ namespace TesTool.Core.Services.Endpoints
         protected ControllerTestMethodSectionAct GetActSection(Endpoint endpoint, DbSet dbSet = default)
         {
             // TODO: map route
-            return new ControllerTestMethodSectionAct(
-                endpoint.Route,
+            var actSection = new ControllerTestMethodSectionAct(
+                GetRouteResolved(endpoint, dbSet),
                 _requestMethod.Name,
                 GetReturnType(endpoint.Output),
                 GetInputBodyClass(endpoint.Inputs)?.Name,
                 GetInputQueryClass(endpoint.Inputs)?.Name
             );
+
+            if (Regex.IsMatch(actSection.Route ?? string.Empty, "{{.*?}}")) actSection.MarkAsUnsafe();
+            return actSection;
         }
 
         protected ControllerTestMethodSectionAssert GetAssertSection(Endpoint endpoint, DbSet dbSet)
@@ -164,6 +169,53 @@ namespace TesTool.Core.Services.Endpoints
             var propertyKey = entity.Properties.FirstOrDefault(p => p.Name.Equals(expectedKey, StringComparison.OrdinalIgnoreCase));
             propertyKey ??= entity.Properties.FirstOrDefault(p => p.Name.EndsWith(expectedKey, StringComparison.OrdinalIgnoreCase));
             return propertyKey?.Name;
+        }
+
+        private string GetRouteResolved(Endpoint endpoint, DbSet dbSet = default)
+        {
+            if (string.IsNullOrWhiteSpace(endpoint.Route)) return default;
+
+            var replacedRoute = endpoint.Route;
+            var groups = Regex.Matches(replacedRoute, "{(.*?)}");
+            foreach (Match match in groups.Reverse())
+            {
+                if (match.Groups.Count < 2) continue;
+                var group = match.Groups[1];
+
+                var param = group.Value;
+                if (dbSet is not null)
+                {
+                    var variable = dbSet.Entity.Name.ToLowerCaseFirst();
+                    var entityProperty = dbSet.Entity.Properties
+                        .FirstOrDefault(p => p.Name.Equals(param, StringComparison.OrdinalIgnoreCase));
+                    if (entityProperty is not null)
+                    {
+                        replacedRoute = group.ReplaceValue(replacedRoute, $"{variable}.{entityProperty.Name}");
+                        continue;
+                    }
+                }
+
+                var inputs = new [] {
+                    GetInputBodyClass(endpoint.Inputs),
+                    GetInputQueryClass(endpoint.Inputs)
+                }.Where(i => i is not null);
+
+                foreach (var input in inputs)
+                {
+                    var variable = $"{input.Name.ToLowerCaseFirst()}Request";
+                    var modelProperty = input.Properties
+                        .FirstOrDefault(p => p.Name.Equals(param, StringComparison.OrdinalIgnoreCase)); ;
+                    if (modelProperty is not null)
+                    {
+                        replacedRoute = group.ReplaceValue(replacedRoute, $"{variable}.{modelProperty.Name}");
+                        break;
+                    }
+                }
+
+                replacedRoute = group.ReplaceValue(replacedRoute, $"{{{param}}}");
+            }
+
+            return replacedRoute;
         }
     }
 }

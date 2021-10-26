@@ -23,7 +23,6 @@ namespace TesTool.Core.Models.Templates.Controller
             _requiredNamespaces = new List<string>();
         }
 
-        public bool Unsafe { get; private set; }
         public string Name { get; private set; }
         public HttpMethod Method { get; private set; }
         public IReadOnlyCollection<string> RequiredNamespaces => _requiredNamespaces.AsReadOnly();
@@ -32,7 +31,6 @@ namespace TesTool.Core.Models.Templates.Controller
         public ControllerTestMethodSectionAssert Assert { get; private set; }
         public void AddRequiredNamespaces(IEnumerable<string> namespaces) 
             => _requiredNamespaces.AddRange(namespaces);
-        public void MarkAsUnsafe() => Unsafe = true;
         public void Rename(string name) => Name = name;
     }
 }

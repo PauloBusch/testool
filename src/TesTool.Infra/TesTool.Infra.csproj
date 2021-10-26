@@ -22,6 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Templates\Controller\ControllerTestMethodSectionAssertPutTemplate.tt">
+      <LastGenOutput>ControllerTestMethodSectionAssertPutTemplate.cs</LastGenOutput>
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+    </None>
     <None Update="Templates\Extensions\AssertExtensionsTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>AssertExtensionsTemplate.cs</LastGenOutput>
@@ -121,6 +125,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ControllerTestMethodSectionAssertPostTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Templates\Controller\ControllerTestMethodSectionAssertPutTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ControllerTestMethodSectionAssertPutTemplate.tt</DependentUpon>
     </Compile>
     <Compile Update="Templates\Controller\ControllerTestMethodTemplate.cs">
       <DesignTime>True</DesignTime>

@@ -142,7 +142,7 @@ namespace TesTool.Infra.Services
                 var genericType = GetModelType(generic);
                 _stackCalls.Pop();
 
-                @class.AddGeneric(genericType);
+                if (genericType is not null) @class.AddGeneric(genericType);
             }
 
             var propertySymbols = classMembers.OfType<IPropertySymbol>().ToList();

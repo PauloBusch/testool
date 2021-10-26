@@ -10,9 +10,16 @@
     var parameters = new List<string> { uri };
     if (!string.IsNullOrWhiteSpace(BodyModel)) parameters.Add($"{BodyModel.ToLowerCaseFirst()}Request");
     if (!string.IsNullOrWhiteSpace(QueryModel)) parameters.Add($"{QueryModel.ToLowerCaseFirst()}Request");
+    if (Unsafe)
+    {
 #>
-    var <#= responseVariables #> = await Request.PostAsync<#= returnType #>(<#= string.Join(", ", parameters) #>);
+    // TODO: Resolve unsafe route parameters
+<#
+    }
+#>
+    var <#= responseVariables #> = await Request.<#= Method #><#= returnType #>(<#= string.Join(", ", parameters) #>);
 <#+
+    public bool Unsafe { get; set; }
     public string Route { get; set; }
     public string Method { get; set; }
     public string ReturnType { get; set; }

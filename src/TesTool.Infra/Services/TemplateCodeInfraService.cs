@@ -37,7 +37,6 @@ namespace TesTool.Infra.Services
             {
                 Name = model.Name,
                 TemplataService = this,
-                Unsafe = model.Unsafe,
                 Method = model.Method,
                 Arrage = model.Arrage,
                 Act = model.Act,
@@ -62,6 +61,7 @@ namespace TesTool.Infra.Services
             {
                 Route = model.Route,
                 Method = model.Method,
+                Unsafe = model.Unsafe,
                 ReturnType = model.ReturnType,
                 BodyModel = model.BodyModel,
                 QueryModel = model.QueryModel
@@ -76,6 +76,24 @@ namespace TesTool.Infra.Services
                 HaveOutput = model.HaveOutput,
                 RequestHaveKey = model.RequestHaveKey,
                 ResponseHaveKey = model.ResponseHaveKey,
+                ResponseIsGeneric = model.ResponseIsGeneric,
+                EntityKey = model.EntityKey,
+                EntityDbSet = model.EntityDbSet,
+                PropertyData = model.PropertyData,
+                EntityName = model.EntityName,
+                RequestModel = model.RequestModel,
+                ComparatorModel = model.ComparatorModel,
+                ComparatorEntity = model.ComparatorEntity
+
+            };
+            return template.TransformText();
+        }
+
+        public string BuildControllerTestMethodSectionAssertPut(ControllerTestMethodSectionAssert model)
+        {
+            var template = new ControllerTestMethodSectionAssertPutTemplate
+            {
+                HaveOutput = model.HaveOutput,
                 ResponseIsGeneric = model.ResponseIsGeneric,
                 EntityKey = model.EntityKey,
                 EntityDbSet = model.EntityDbSet,

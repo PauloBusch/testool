@@ -23,6 +23,7 @@ namespace TesTool.Core.Services
         private readonly IFakeEntityService _fakeEntityService;
         private readonly ITestScanInfraService _testScanInfraService;
         private readonly IPostEndpointTestService _postEndpointTestService;
+        private readonly IPutEndpointTestService _putEndpointTestService;
         private readonly IWebApiDbContextInfraService _webApiDbContextInfraService;
 
         public ControllerService(
@@ -32,6 +33,7 @@ namespace TesTool.Core.Services
             IFakeEntityService fakeEntityService,
             ITestScanInfraService testScanInfraService,
             IPostEndpointTestService postEndpointTestService,
+            IPutEndpointTestService putEndpointTestService,
             IWebApiDbContextInfraService webApiDbContextInfraService
         )
         {
@@ -41,6 +43,7 @@ namespace TesTool.Core.Services
             _fakeEntityService = fakeEntityService;
             _testScanInfraService = testScanInfraService;
             _postEndpointTestService = postEndpointTestService;
+            _putEndpointTestService = putEndpointTestService;
             _webApiDbContextInfraService = webApiDbContextInfraService;
         }
 
@@ -66,6 +69,8 @@ namespace TesTool.Core.Services
             {
                 if (endpoint.Method == HttpMethodEnumerator.POST)
                     templateModel.AddMethod(_postEndpointTestService.GetControllerTestMethod(endpoint, dbSet));
+                if (endpoint.Method == HttpMethodEnumerator.PUT)
+                    templateModel.AddMethod(_putEndpointTestService.GetControllerTestMethod(endpoint, dbSet));
             }
 
             templateModel.RenameDuplicatedMethods();

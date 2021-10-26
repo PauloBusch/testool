@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using TesTool.Core.Enumerations;
 using TesTool.Core.Models.Metadata;
 
 namespace TesTool.Core.Models.Templates.Controller
@@ -33,7 +34,7 @@ namespace TesTool.Core.Models.Templates.Controller
         public string Namespace { get; private set; }
         public string FixtureName { get; private set; }
         public IReadOnlyCollection<string> Namespaces => _namespaces.AsReadOnly();
-        public IReadOnlyCollection<ControllerTestMethod> Methods => _methods.AsReadOnly();
+        public IReadOnlyCollection<ControllerTestMethod> Methods => SortedMethods();
 
         public void AddMethod(ControllerTestMethod method) 
         {
@@ -52,6 +53,12 @@ namespace TesTool.Core.Models.Templates.Controller
                 for (var index = 1; index < methods.Count; index++)
                     methods.ElementAt(index).Rename(group.Key + index);
             }
+        }
+
+        private IReadOnlyCollection<ControllerTestMethod> SortedMethods()
+        {
+            var allMethods = HttpMethodEnumerator.GetAll().ToList();
+            return _methods.OrderBy(m => allMethods.IndexOf(m.Method)).ToList().AsReadOnly();
         }
     }
 }

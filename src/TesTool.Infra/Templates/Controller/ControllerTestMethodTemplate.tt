@@ -5,7 +5,7 @@
 <#@ import namespace="TesTool.Core.Interfaces.Services" #>
 <#@ import namespace="TesTool.Core.Models.Templates.Controller" #>
 [Fact]
-public virtual async Task <#=Name#>()
+public async Task <#=Name#>()
 {
 <#
     Func<string> buildAssertCode = () => {
@@ -13,6 +13,8 @@ public virtual async Task <#=Name#>()
 
         if (Method == HttpMethodEnumerator.POST)
             return TemplataService.BuildControllerTestMethodSectionAssertPost(Assert);
+        if (Method == HttpMethodEnumerator.PUT)
+            return TemplataService.BuildControllerTestMethodSectionAssertPut(Assert);
         return string.Empty;
     };
 #>
@@ -21,7 +23,6 @@ public virtual async Task <#=Name#>()
 <#= buildAssertCode() #>
 }
 <#+
-    public bool Unsafe { get; set; }
     public string Name { get; set; }
     public HttpMethod Method { get; set; }
     public ControllerTestMethodSectionArrage Arrage { get; set; }

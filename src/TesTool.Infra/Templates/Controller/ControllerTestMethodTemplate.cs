@@ -29,7 +29,7 @@ namespace TesTool.Infra.Templates.Controller
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("[Fact]\r\npublic virtual async Task ");
+            this.Write("[Fact]\r\npublic async Task ");
             
             #line 8 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
@@ -45,6 +45,8 @@ namespace TesTool.Infra.Templates.Controller
 
         if (Method == HttpMethodEnumerator.POST)
             return TemplataService.BuildControllerTestMethodSectionAssertPost(Assert);
+        if (Method == HttpMethodEnumerator.PUT)
+            return TemplataService.BuildControllerTestMethodSectionAssertPut(Assert);
         return string.Empty;
     };
 
@@ -52,21 +54,21 @@ namespace TesTool.Infra.Templates.Controller
             #line default
             #line hidden
             
-            #line 19 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
+            #line 21 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TemplataService.BuildControllerTestMethodSectionArrage(Arrage)));
             
             #line default
             #line hidden
             this.Write("\r\n");
             
-            #line 20 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
+            #line 22 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TemplataService.BuildControllerTestMethodSectionAct(Act)));
             
             #line default
             #line hidden
             this.Write("\r\n");
             
-            #line 21 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
+            #line 23 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(buildAssertCode()));
             
             #line default
@@ -75,9 +77,8 @@ namespace TesTool.Infra.Templates.Controller
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 23 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
+        #line 25 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
 
-    public bool Unsafe { get; set; }
     public string Name { get; set; }
     public HttpMethod Method { get; set; }
     public ControllerTestMethodSectionArrage Arrage { get; set; }

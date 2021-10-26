@@ -21,20 +21,16 @@
     CompareFactory.<#= ComparatorModel #>().Equals(<#= RequestModel.ToLowerCaseFirst() #>Request, <#= responseVariable #>);<#
         }
     }
-    if (!string.IsNullOrWhiteSpace(ComparatorEntity) && !string.IsNullOrWhiteSpace(RequestModel) && (RequestHaveKey || ResponseHaveKey)) 
+    if (!string.IsNullOrWhiteSpace(ComparatorEntity) && !string.IsNullOrWhiteSpace(RequestModel)) 
     {
         var entityVariable = EntityName.ToLowerCaseFirst();
-        var responseVariable = ResponseIsGeneric ? "modelResponse" : "result";
-        var modelWithKey = ResponseHaveKey ? responseVariable : $"{RequestModel.ToLowerCaseFirst()}Request";
 #>      
-    var <#= entityVariable #> = await DbContext.<#= EntityDbSet #>.FindAsync(<#= modelWithKey #>.<#= EntityKey #>);
+    await DbContext.Entry(<#= entityVariable #>).ReloadAsync();
     CompareFactory.<#= ComparatorEntity #>().Equals(<#= RequestModel.ToLowerCaseFirst() #>Request, <#= entityVariable #>);<#
     }
 #>
 <#+        
     public bool HaveOutput { get; set; }
-    public bool RequestHaveKey { get; set; }
-    public bool ResponseHaveKey { get; set; }
     public bool ResponseIsGeneric { get; set; }
     public string EntityKey { get; set; }
     public string EntityDbSet { get; set; }
