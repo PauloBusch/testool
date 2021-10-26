@@ -15,6 +15,8 @@ public async Task <#=Name#>()
             return TemplataService.BuildControllerTestMethodSectionAssertPost(Assert);
         if (Method == HttpMethodEnumerator.PUT)
             return TemplataService.BuildControllerTestMethodSectionAssertPut(Assert);
+        if (Method == HttpMethodEnumerator.DELETE)
+            return TemplataService.BuildControllerTestMethodSectionAssertDelete(Assert);
         return string.Empty;
     };
 #>

@@ -157,8 +157,6 @@ namespace TesTool.Infra.Templates.Controller
         
     public bool HaveOutput { get; set; }
     public bool ResponseIsGeneric { get; set; }
-    public string EntityKey { get; set; }
-    public string EntityDbSet { get; set; }
     public string PropertyData { get; set; }
     public string EntityName { get; set; }
     public string RequestModel { get; set; }

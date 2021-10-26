@@ -28,7 +28,7 @@ namespace <#= Namespace #>
 
 <#
     PushIndent("        ");
-    foreach (var method in Methods) 
+    foreach (var method in Methods)
     {
 #>
 <#= TemplataService.BuildControllerTestMethod(method) #>

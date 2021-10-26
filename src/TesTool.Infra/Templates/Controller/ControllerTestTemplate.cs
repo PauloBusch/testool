@@ -110,7 +110,7 @@ namespace TesTool.Infra.Templates.Controller
             #line 29 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestTemplate.tt"
 
     PushIndent("        ");
-    foreach (var method in Methods) 
+    foreach (var method in Methods)
     {
 
             

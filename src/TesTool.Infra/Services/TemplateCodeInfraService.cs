@@ -16,6 +16,13 @@ namespace TesTool.Infra.Services
 {
     public class TemplateCodeInfraService : ITemplateCodeInfraService
     {
+        private readonly ISolutionService _solutionService;
+
+        public TemplateCodeInfraService(ISolutionService solutionService)
+        {
+            _solutionService = solutionService;
+        }
+
         public string BuildControllerTest(ControllerTest model)
         {
             var template = new ControllerTestTemplate
@@ -84,7 +91,6 @@ namespace TesTool.Infra.Services
                 RequestModel = model.RequestModel,
                 ComparatorModel = model.ComparatorModel,
                 ComparatorEntity = model.ComparatorEntity
-
             };
             return template.TransformText();
         }
@@ -95,14 +101,25 @@ namespace TesTool.Infra.Services
             {
                 HaveOutput = model.HaveOutput,
                 ResponseIsGeneric = model.ResponseIsGeneric,
-                EntityKey = model.EntityKey,
-                EntityDbSet = model.EntityDbSet,
                 PropertyData = model.PropertyData,
                 EntityName = model.EntityName,
                 RequestModel = model.RequestModel,
                 ComparatorModel = model.ComparatorModel,
                 ComparatorEntity = model.ComparatorEntity
+            };
+            return template.TransformText();
+        }
 
+        public string BuildControllerTestMethodSectionAssertDelete(ControllerTestMethodSectionAssert model)
+        {
+            var template = new ControllerTestMethodSectionAssertDeleteTemplate
+            {
+                HaveOutput = model.HaveOutput,
+                ResponseIsGeneric = model.ResponseIsGeneric,
+                PropertyData = model.PropertyData,
+                EntityName = model.EntityName,
+                EntityKey = model.EntityKey,
+                EntityDbSet = model.EntityDbSet
             };
             return template.TransformText();
         }
@@ -233,9 +250,11 @@ namespace TesTool.Infra.Services
 
         private string[] PrepareNamespaces(IEnumerable<string> namespaces, string currentNamespace)
         {
+            var baseTestNamespace = _solutionService.GetTestNamespace();
             return namespaces
                 .Distinct()
                 .Where(n => n != currentNamespace)
+                .Where(n => n != baseTestNamespace)
                 .OrderBy(n => n)
                 .ToArray();
         }

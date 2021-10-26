@@ -6,7 +6,7 @@
     foreach (var entity in Entities) 
     { 
 #>
-    var <#= entity.ToLowerCaseFirst() #> = EntityFactory.<#=entity#>().Generate();
+    var <#= entity.ToLowerCaseFirst() #> = EntityFactory.<#=entity#>().Save();
 <# 
     } 
 #>

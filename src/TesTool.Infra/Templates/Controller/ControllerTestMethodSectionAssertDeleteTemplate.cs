@@ -9,17 +9,17 @@
 // ------------------------------------------------------------------------------
 namespace TesTool.Infra.Templates.Controller
 {
+    using System.Linq;
     using TesTool.Core.Extensions;
-    using TesTool.Core.Models.Templates.Faker;
     using System;
     
     /// <summary>
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionArrageTemplate.tt"
+    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertDeleteTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public partial class ControllerTestMethodSectionArrageTemplate : ControllerTestMethodSectionArrageTemplateBase
+    public partial class ControllerTestMethodSectionAssertDeleteTemplate : ControllerTestMethodSectionAssertDeleteTemplateBase
     {
 #line hidden
         /// <summary>
@@ -27,65 +27,123 @@ namespace TesTool.Infra.Templates.Controller
         /// </summary>
         public virtual string TransformText()
         {
+            this.Write("    response.EnsureSuccessStatusCode();\r\n");
             
-            #line 5 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionArrageTemplate.tt"
+            #line 6 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertDeleteTemplate.tt"
  
-    foreach (var entity in Entities) 
-    { 
+    if (HaveOutput) 
+    {
+        var responseVariable = ResponseIsGeneric ? "modelResponse" : "result";
+        if (ResponseIsGeneric)
+        {
 
             
             #line default
             #line hidden
             this.Write("    var ");
             
-            #line 9 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionArrageTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(entity.ToLowerCaseFirst()));
+            #line 13 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(responseVariable));
             
             #line default
             #line hidden
-            this.Write(" = EntityFactory.");
+            this.Write(" = result?.");
             
-            #line 9 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionArrageTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(entity));
+            #line 13 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(PropertyData));
             
             #line default
             #line hidden
-            this.Write("().Save();\r\n");
+            this.Write(";\r\n");
             
-            #line 10 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionArrageTemplate.tt"
- 
-    } 
+            #line 14 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+
+        }
 
             
             #line default
             #line hidden
+            this.Write("    Assert.NotNull(");
             
-            #line 13 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionArrageTemplate.tt"
- 
-    foreach (var model in Models) 
-    { 
+            #line 17 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(responseVariable));
+            
+            #line default
+            #line hidden
+            this.Write(");\r\n");
+            
+            #line 18 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+
+    }
+    if (!string.IsNullOrWhiteSpace(EntityKey)) 
+    {
+        var initialEntity = EntityName.ToLower().ElementAt(0);
+        var entityVariable = EntityName.ToLowerCaseFirst();
+        var existEntityVariable = $"exist{EntityName}";
 
             
             #line default
             #line hidden
             this.Write("    var ");
             
-            #line 17 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionArrageTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(model.ToLowerCaseFirst()));
+            #line 26 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(existEntityVariable));
             
             #line default
             #line hidden
-            this.Write("Request = ModelFactory.");
+            this.Write(" = await DbContext.");
             
-            #line 17 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionArrageTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(model));
+            #line 26 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(EntityDbSet));
             
             #line default
             #line hidden
-            this.Write("().Generate();\r\n");
+            this.Write(".AnyAsync(");
             
-            #line 18 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionArrageTemplate.tt"
- 
+            #line 26 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(initialEntity));
+            
+            #line default
+            #line hidden
+            this.Write(" => ");
+            
+            #line 26 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(initialEntity));
+            
+            #line default
+            #line hidden
+            this.Write(".");
+            
+            #line 26 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(EntityKey));
+            
+            #line default
+            #line hidden
+            this.Write(" == ");
+            
+            #line 26 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(entityVariable));
+            
+            #line default
+            #line hidden
+            this.Write(".");
+            
+            #line 26 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(EntityKey));
+            
+            #line default
+            #line hidden
+            this.Write(");\r\n    Assert.False(");
+            
+            #line 27 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(existEntityVariable));
+            
+            #line default
+            #line hidden
+            this.Write(");");
+            
+            #line 27 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+
     }
 
             
@@ -94,10 +152,14 @@ namespace TesTool.Infra.Templates.Controller
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 21 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionArrageTemplate.tt"
-
-    public string[] Models { get; set; }
-    public string[] Entities { get; set; }
+        #line 30 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+        
+    public bool HaveOutput { get; set; }
+    public bool ResponseIsGeneric { get; set; }
+    public string EntityKey { get; set; }
+    public string EntityDbSet { get; set; }
+    public string PropertyData { get; set; }
+    public string EntityName { get; set; }
 
         
         #line default
@@ -111,7 +173,7 @@ namespace TesTool.Infra.Templates.Controller
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public class ControllerTestMethodSectionArrageTemplateBase
+    public class ControllerTestMethodSectionAssertDeleteTemplateBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

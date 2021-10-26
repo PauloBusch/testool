@@ -29,6 +29,8 @@ namespace TesTool.Core.Models.Templates.Controller
         public ControllerTestMethodSectionArrage Arrage { get; private set; }
         public ControllerTestMethodSectionAct Act { get; private set; }
         public ControllerTestMethodSectionAssert Assert { get; private set; }
+        public void AddRequiredNamespace(string @namespace)
+            => _requiredNamespaces.Add(@namespace);
         public void AddRequiredNamespaces(IEnumerable<string> namespaces) 
             => _requiredNamespaces.AddRange(namespaces);
         public void Rename(string name) => Name = name;

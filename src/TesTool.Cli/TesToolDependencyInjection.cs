@@ -39,8 +39,10 @@ namespace TesTool.Cli
                 .AddSingleton<IFakeEntityService, FakeEntityService>()
                 .AddSingleton<ICompareService, CompareService>()
                 .AddSingleton<IControllerService, ControllerService>()
+
                 .AddSingleton<IPostEndpointTestService, PostEndpointTestService>()
                 .AddSingleton<IPutEndpointTestService, PutEndpointTestService>()
+                .AddSingleton<IDeleteEndpointTestService, DeleteEndpointTestService>()
 
                 .AddSingleton<IFactoryModelService, FactoryModelService>()
                 .AddSingleton<IFactoryEntityService, FactoryEntityService>()

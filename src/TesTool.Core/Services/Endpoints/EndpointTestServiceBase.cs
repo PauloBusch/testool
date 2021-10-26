@@ -66,7 +66,7 @@ namespace TesTool.Core.Services.Endpoints
                 responseModel?.Properties.Any(p => p.Name == entityKey) ?? false,
                 endpoint.Output is Class output && output.Generics.Any(),
                 entityKey, dbSet.Property, GetPropertyData(endpoint.Output),
-                dbSet.Entity.Name, requestModel.Name,
+                dbSet.Entity.Name, requestModel?.Name,
                 _compareService.GetComparatorNameOrDefault(requestModel?.Name, responseModel?.Name),
                 _compareService.GetComparatorNameOrDefault(requestModel?.Name, dbSet.Entity.Name)
             );
@@ -98,7 +98,24 @@ namespace TesTool.Core.Services.Endpoints
             return default;
         }
 
-        public IEnumerable<string> GetOutputNamespaces(TypeWrapper output)
+        protected IEnumerable<string> GetRequitedNamespaces(ControllerTestMethod method, Endpoint endpoint)
+        {
+            var namespaces = new List<string>();
+            namespaces.AddRange(GetActNamespaces(method.Act));
+            namespaces.AddRange(GetOutputNamespaces(endpoint.Output));
+            return namespaces;
+        }
+
+        private IEnumerable<string> GetActNamespaces(ControllerTestMethodSectionAct actSection)
+        {
+            var namespaces = new List<string>();
+            if (actSection is null) return namespaces;
+            if (!string.IsNullOrWhiteSpace(actSection.Route)) namespaces.Add("System");
+
+            return namespaces;
+        }
+
+        private IEnumerable<string> GetOutputNamespaces(TypeWrapper output)
         {
             var namespaces = new List<string>();
             if (output is null) return namespaces;

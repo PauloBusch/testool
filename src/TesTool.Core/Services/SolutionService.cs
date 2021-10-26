@@ -39,10 +39,11 @@ namespace TesTool.Core.Services
         public string GetTestNamespace(string sufix = null)
         {
             var integrationTestNamespace = _testScanInfraService.GetNamespace();
-            if (!string.IsNullOrWhiteSpace(integrationTestNamespace)) return $"{integrationTestNamespace}.{sufix}";
+            var @namespace =  string.IsNullOrWhiteSpace(integrationTestNamespace) 
+                ? _webApiScanInfraService.GetNamespace()
+                : integrationTestNamespace;
 
-            var webApiNamespace = _webApiScanInfraService.GetNamespace();
-            return $"{webApiNamespace}.IntegrationTests.{sufix}";
+            return !string.IsNullOrWhiteSpace(sufix) ? $"{@namespace}.{sufix}" : @namespace;
         }
     }
 }

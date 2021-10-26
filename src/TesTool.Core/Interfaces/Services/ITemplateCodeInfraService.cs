@@ -14,6 +14,7 @@ namespace TesTool.Core.Interfaces.Services
         string BuildControllerTestMethodSectionAct(ControllerTestMethodSectionAct model);
         string BuildControllerTestMethodSectionAssertPost(ControllerTestMethodSectionAssert model);
         string BuildControllerTestMethodSectionAssertPut(ControllerTestMethodSectionAssert model);
+        string BuildControllerTestMethodSectionAssertDelete(ControllerTestMethodSectionAssert model);
 
         string BuildModelFaker(ModelFaker model);
         string BuildModelFakerFactory(ModelFakerFactory model);

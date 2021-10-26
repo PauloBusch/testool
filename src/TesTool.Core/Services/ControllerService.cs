@@ -22,9 +22,11 @@ namespace TesTool.Core.Services
         private readonly IFakeModelService _fakeModelService;
         private readonly IFakeEntityService _fakeEntityService;
         private readonly ITestScanInfraService _testScanInfraService;
+        private readonly IWebApiDbContextInfraService _webApiDbContextInfraService;
+
         private readonly IPostEndpointTestService _postEndpointTestService;
         private readonly IPutEndpointTestService _putEndpointTestService;
-        private readonly IWebApiDbContextInfraService _webApiDbContextInfraService;
+        private readonly IDeleteEndpointTestService _deleteEndpointTestService;
 
         public ControllerService(
             IServiceResolver serviceResolver,
@@ -32,9 +34,10 @@ namespace TesTool.Core.Services
             IFakeModelService fakeModelService,
             IFakeEntityService fakeEntityService,
             ITestScanInfraService testScanInfraService,
+            IWebApiDbContextInfraService webApiDbContextInfraService,
             IPostEndpointTestService postEndpointTestService,
             IPutEndpointTestService putEndpointTestService,
-            IWebApiDbContextInfraService webApiDbContextInfraService
+            IDeleteEndpointTestService deleteEndpointTestService
         )
         {
             _serviceResolver = serviceResolver;
@@ -42,9 +45,11 @@ namespace TesTool.Core.Services
             _fakeModelService = fakeModelService;
             _fakeEntityService = fakeEntityService;
             _testScanInfraService = testScanInfraService;
+            _webApiDbContextInfraService = webApiDbContextInfraService;
+            
             _postEndpointTestService = postEndpointTestService;
             _putEndpointTestService = putEndpointTestService;
-            _webApiDbContextInfraService = webApiDbContextInfraService;
+            _deleteEndpointTestService = deleteEndpointTestService;
         }
 
         public string GetControllerName(string raw)
@@ -71,6 +76,8 @@ namespace TesTool.Core.Services
                     templateModel.AddMethod(_postEndpointTestService.GetControllerTestMethod(endpoint, dbSet));
                 if (endpoint.Method == HttpMethodEnumerator.PUT)
                     templateModel.AddMethod(_putEndpointTestService.GetControllerTestMethod(endpoint, dbSet));
+                if (endpoint.Method == HttpMethodEnumerator.DELETE)
+                    templateModel.AddMethod(_deleteEndpointTestService.GetControllerTestMethod(endpoint, dbSet));
             }
 
             templateModel.RenameDuplicatedMethods();

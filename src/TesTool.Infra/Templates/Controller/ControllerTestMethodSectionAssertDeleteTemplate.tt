@@ -1,5 +1,6 @@
 ﻿<#@ template language="C#" #>
 <#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
 <#@ import namespace="TesTool.Core.Extensions" #>
     response.EnsureSuccessStatusCode();
 <# 
@@ -15,26 +16,22 @@
 #>
     Assert.NotNull(<#= responseVariable #>);
 <#
-        if (!string.IsNullOrWhiteSpace(ComparatorModel))
-        {
-#>
-    CompareFactory.<#= ComparatorModel #>().Equals(<#= RequestModel.ToLowerCaseFirst() #>Request, <#= responseVariable #>);<#
-        }
     }
-    if (!string.IsNullOrWhiteSpace(ComparatorEntity) && !string.IsNullOrWhiteSpace(RequestModel)) 
+    if (!string.IsNullOrWhiteSpace(EntityKey)) 
     {
+        var initialEntity = EntityName.ToLower().ElementAt(0);
         var entityVariable = EntityName.ToLowerCaseFirst();
-#>      
-    await DbContext.Entry(<#= entityVariable #>).ReloadAsync();
-    CompareFactory.<#= ComparatorEntity #>().Equals(<#= RequestModel.ToLowerCaseFirst() #>Request, <#= entityVariable #>);<#
+        var existEntityVariable = $"exist{EntityName}";
+#>
+    var <#= existEntityVariable #> = await DbContext.<#= EntityDbSet #>.AnyAsync(<#= initialEntity #> => <#= initialEntity #>.<#= EntityKey #> == <#= entityVariable #>.<#= EntityKey #>);
+    Assert.False(<#= existEntityVariable #>);<#
     }
 #>
 <#+        
     public bool HaveOutput { get; set; }
     public bool ResponseIsGeneric { get; set; }
+    public string EntityKey { get; set; }
+    public string EntityDbSet { get; set; }
     public string PropertyData { get; set; }
     public string EntityName { get; set; }
-    public string RequestModel { get; set; }
-    public string ComparatorModel { get; set; }
-    public string ComparatorEntity { get; set; }
 #>

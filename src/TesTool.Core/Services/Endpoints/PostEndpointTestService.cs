@@ -21,7 +21,8 @@ namespace TesTool.Core.Services.Endpoints
                 GetActSection(endpoint),
                 GetAssertSection(endpoint, dbSet)
             );
-            testMethod.AddRequiredNamespaces(GetOutputNamespaces(endpoint.Output));
+            var requiredNamespaces = GetRequitedNamespaces(testMethod, endpoint);
+            testMethod.AddRequiredNamespaces(requiredNamespaces);
             return testMethod;
         }
     }

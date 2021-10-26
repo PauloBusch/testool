@@ -32,7 +32,7 @@ namespace TesTool.Infra.Templates.Controller
  
     var returnType = string.IsNullOrWhiteSpace(ReturnType) ? string.Empty : $"<{ReturnType}>";
     var responseVariables = string.IsNullOrWhiteSpace(ReturnType) ? "response" : "(response, result)";
-    var uri = string.IsNullOrWhiteSpace(Route) ? "Uri" : $"new System.Uri($\"{{Uri}}/{Route}\")";
+    var uri = string.IsNullOrWhiteSpace(Route) ? "Uri" : $"new Uri($\"{{Uri}}/{Route}\")";
 
     var parameters = new List<string> { uri };
     if (!string.IsNullOrWhiteSpace(BodyModel)) parameters.Add($"{BodyModel.ToLowerCaseFirst()}Request");
