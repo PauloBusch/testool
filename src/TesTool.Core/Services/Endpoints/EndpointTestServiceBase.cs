@@ -36,7 +36,7 @@ namespace TesTool.Core.Services.Endpoints
             var inputBody = GetInputBodyClass(endpoint.Inputs);
             var inputQuery = GetInputQueryClass(endpoint.Inputs);
             if (inputBody is not null) inputModels.Add(inputBody.Name);
-            if (inputQuery is not null) inputModels.Add(inputBody.Name);
+            if (inputQuery is not null) inputModels.Add(inputQuery.Name);
 
             return new ControllerTestMethodSectionArrage(entities, inputModels);
         }
@@ -79,6 +79,7 @@ namespace TesTool.Core.Services.Endpoints
                 return @class.Name;
             }
 
+            if (wrapper is Field field && field.SystemType == "System.Void") return default; 
             if (wrapper is TypeBase type) return type.Name;
             return default;
         }

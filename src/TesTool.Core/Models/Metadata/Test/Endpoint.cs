@@ -7,14 +7,16 @@ namespace TesTool.Core.Models.Metadata
     {
         private readonly List<Input> _inputs;
 
-        public Endpoint(string route, bool authorize, HttpMethod method)
+        public Endpoint(string route, string name, bool authorize, HttpMethod method)
         {
+            Name = name;
             Route = route;
             Method = method;
             Authorize = authorize;
             _inputs = new List<Input>();
         }
 
+        public string Name { get; private set; }
         public string Route { get; private set; }
         public bool Authorize { get; private set; }
         public HttpMethod Method { get; private set; }

@@ -26,6 +26,10 @@
       <LastGenOutput>ControllerTestMethodSectionAssertDeleteTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
+    <None Update="Templates\Controller\ControllerTestMethodSectionAssertGetOneTemplate.tt">
+      <LastGenOutput>ControllerTestMethodSectionAssertGetOneTemplate.cs</LastGenOutput>
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+    </None>
     <None Update="Templates\Controller\ControllerTestMethodSectionAssertPutTemplate.tt">
       <LastGenOutput>ControllerTestMethodSectionAssertPutTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
@@ -129,6 +133,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ControllerTestMethodSectionAssertDeleteTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Templates\Controller\ControllerTestMethodSectionAssertGetOneTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ControllerTestMethodSectionAssertGetOneTemplate.tt</DependentUpon>
     </Compile>
     <Compile Update="Templates\Controller\ControllerTestMethodSectionAssertPostTemplate.cs">
       <DesignTime>True</DesignTime>

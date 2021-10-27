@@ -1,0 +1,33 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="TesTool.Core.Extensions" #>
+    response.EnsureSuccessStatusCode();
+<# 
+    if (HaveOutput) 
+    {
+        var responseVariable = ResponseIsGeneric ? "modelResponse" : "result";
+        if (ResponseIsGeneric)
+        {
+#>
+    var <#= responseVariable #> = result?.<#= PropertyData #>;
+<#
+        }
+#>
+    Assert.NotNull(<#= responseVariable #>);
+<#
+    }
+    if (!string.IsNullOrWhiteSpace(ComparatorEntity)) 
+    {
+        var entityVariable = EntityName.ToLowerCaseFirst();
+        var responseVariable = ResponseIsGeneric ? "modelResponse" : "result";
+#>
+    CompareFactory.<#= ComparatorEntity #>().Equals(<#= entityVariable #>, <#= responseVariable #>);<#
+    }
+#>
+<#+        
+    public bool HaveOutput { get; set; }
+    public bool ResponseIsGeneric { get; set; }
+    public string PropertyData { get; set; }
+    public string EntityName { get; set; }
+    public string ComparatorEntity { get; set; }
+#>

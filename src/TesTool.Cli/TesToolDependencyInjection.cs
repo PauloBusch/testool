@@ -40,6 +40,7 @@ namespace TesTool.Cli
                 .AddSingleton<ICompareService, CompareService>()
                 .AddSingleton<IControllerService, ControllerService>()
 
+                .AddSingleton<IGetOneEndpointTestService, GetOneEndpointTestService>()
                 .AddSingleton<IPostEndpointTestService, PostEndpointTestService>()
                 .AddSingleton<IPutEndpointTestService, PutEndpointTestService>()
                 .AddSingleton<IDeleteEndpointTestService, DeleteEndpointTestService>()

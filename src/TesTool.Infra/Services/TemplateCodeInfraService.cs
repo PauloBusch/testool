@@ -36,7 +36,7 @@ namespace TesTool.Infra.Services
                 Namespaces = PrepareNamespaces(model.Namespaces, model.Namespace),
                 Methods = model.Methods.ToArray()
             };
-            return template.TransformText();
+            return TrimRows(template.TransformText());
         }
 
         public string BuildControllerTestMethod(ControllerTestMethod model)
@@ -50,7 +50,7 @@ namespace TesTool.Infra.Services
                 Act = model.Act,
                 Assert = model.Assert
             };
-            return template.TransformText();
+            return TrimRows(template.TransformText());
         }
 
         public string BuildControllerTestMethodSectionArrage(ControllerTestMethodSectionArrage model)
@@ -60,7 +60,7 @@ namespace TesTool.Infra.Services
                 Entities = model.Entities.ToArray(),
                 Models = model.Models.ToArray()
             };
-            return template.TransformText();
+            return TrimRows(template.TransformText());
         }
 
         public string BuildControllerTestMethodSectionAct(ControllerTestMethodSectionAct model)
@@ -74,11 +74,13 @@ namespace TesTool.Infra.Services
                 BodyModel = model.BodyModel,
                 QueryModel = model.QueryModel
             };
-            return template.TransformText();
+            return TrimRows(template.TransformText());
         }
 
         public string BuildControllerTestMethodSectionAssert(ControllerTestMethodSectionAssertBase model)
         {
+            if (model is ControllerTestMethodSectionAssertGetOne assertGetOne)
+                return BuildControllerTestMethodSectionAssertGetOne(assertGetOne);
             if (model is ControllerTestMethodSectionAssertPost assertPost) 
                 return BuildControllerTestMethodSectionAssertPost(assertPost);
             if (model is ControllerTestMethodSectionAssertPut assertPut)
@@ -87,6 +89,19 @@ namespace TesTool.Infra.Services
                 return BuildControllerTestMethodSectionAssertDelete(assertDelete);
 
             return default;
+        }
+
+        public string BuildControllerTestMethodSectionAssertGetOne(ControllerTestMethodSectionAssertGetOne model)
+        {
+            var template = new ControllerTestMethodSectionAssertGetOneTemplate
+            {
+                HaveOutput = model.HaveOutput,
+                ResponseIsGeneric = model.ResponseIsGeneric,
+                PropertyData = model.PropertyData,
+                EntityName = model.EntityName,
+                ComparatorEntity = model.ComparatorEntity
+            };
+            return TrimRows(template.TransformText());
         }
 
         public string BuildControllerTestMethodSectionAssertPost(ControllerTestMethodSectionAssertPost model)
@@ -105,7 +120,7 @@ namespace TesTool.Infra.Services
                 ComparatorModel = model.ComparatorModel,
                 ComparatorEntity = model.ComparatorEntity
             };
-            return template.TransformText();
+            return TrimRows(template.TransformText());
         }
 
         public string BuildControllerTestMethodSectionAssertPut(ControllerTestMethodSectionAssertPut model)
@@ -120,7 +135,7 @@ namespace TesTool.Infra.Services
                 ComparatorModel = model.ComparatorModel,
                 ComparatorEntity = model.ComparatorEntity
             };
-            return template.TransformText();
+            return TrimRows(template.TransformText());
         }
 
         public string BuildControllerTestMethodSectionAssertDelete(ControllerTestMethodSectionAssertDelete model)
@@ -134,7 +149,7 @@ namespace TesTool.Infra.Services
                 EntityKey = model.EntityKey,
                 EntityDbSet = model.EntityDbSet
             };
-            return template.TransformText();
+            return TrimRows(template.TransformText());
         }
 
         public string BuildModelFaker(ModelFaker model)
@@ -146,7 +161,7 @@ namespace TesTool.Infra.Services
                 Namespaces = PrepareNamespaces(model.Namespaces, model.FakerNamespace),
                 Properties = model.Properties.ToArray()
             };
-            return template.TransformText();
+            return TrimRows(template.TransformText());
         }
 
         public string BuildModelFakerFactory(ModelFakerFactory model)
@@ -159,13 +174,13 @@ namespace TesTool.Infra.Services
                 Namespaces = PrepareNamespaces(model.Namespaces, model.FactoryNamespace),
                 FactoryNamespace = model.FactoryNamespace,
             };
-            return template.TransformText();
+            return TrimRows(template.TransformText());
         }
 
         public string BuildModelFakerFactoryMethod(ModelFakerFactoryMethod model)
         {
             var template = new ModelFakerFactoryMethodTemplate { Method = model };
-            return template.TransformText();
+            return TrimRows(template.TransformText());
         }
 
         public string BuildEntityFaker(EntityFaker model)
@@ -178,7 +193,7 @@ namespace TesTool.Infra.Services
                 Namespaces = PrepareNamespaces(model.Namespaces, model.FakerNamespace),
                 Properties = model.Properties.ToArray()
             };
-            return template.TransformText();
+            return TrimRows(template.TransformText());
         }
 
         public string BuildEntityFakerFactory(EntityFakerFactory model)
@@ -193,13 +208,13 @@ namespace TesTool.Infra.Services
                 Namespaces = PrepareNamespaces(model.Namespaces, model.FactoryNamespace),
                 FactoryNamespace = model.FactoryNamespace,
             };
-            return template.TransformText();
+            return TrimRows(template.TransformText());
         }
 
         public string BuildEntityFakerFactoryMethod(EntityFakerFactoryMethod model)
         {
             var template = new EntityFakerFactoryMethodTemplate { Method = model };
-            return template.TransformText();
+            return TrimRows(template.TransformText());
         }
 
         public string BuildCompareStatic(CompareStatic model)
@@ -214,7 +229,7 @@ namespace TesTool.Infra.Services
                 TargetClassName = model.TargetClassName,
                 Namespaces = PrepareNamespaces(model.Namespaces, model.ComparatorNamespace)
             };
-            return template.TransformText();
+            return TrimRows(template.TransformText());
         }
 
         public string BuildCompareDynamic(CompareDynamic model)
@@ -227,7 +242,7 @@ namespace TesTool.Infra.Services
                 TargetClassName = model.TargetClassName,
                 Namespaces = PrepareNamespaces(model.Namespaces, model.ComparatorNamespace)
             };
-            return template.TransformText();
+            return TrimRows(template.TransformText());
         }
 
         public string BuildComparatorFactory(ComparatorFactory model)
@@ -240,25 +255,25 @@ namespace TesTool.Infra.Services
                 Namespaces = PrepareNamespaces(model.Namespaces, model.FactoryNamespace),
                 FactoryNamespace = model.FactoryNamespace,
             };
-            return template.TransformText();
+            return TrimRows(template.TransformText());
         }
 
         public string BuildComparatorFactoryMethod(ComparatorFactoryMethod model)
         {
             var template = new ComparatorFactoryMethodTemplate { Method = model };
-            return template.TransformText();
+            return TrimRows(template.TransformText());
         }
 
         public string BuildAssertExtensions(string @namespace)
         {
             var template = new AssertExtensionsTemplate { ExtensionNamespace = @namespace };
-            return template.TransformText();
+            return TrimRows(template.TransformText());
         }
 
         public string BuildHttpRequest(string @namespace)
         {
             var template = new HttpRequestTemplate { Namespace = @namespace };
-            return template.TransformText();
+            return TrimRows(template.TransformText());
         }
 
         private string[] PrepareNamespaces(IEnumerable<string> namespaces, string currentNamespace)
@@ -270,6 +285,11 @@ namespace TesTool.Infra.Services
                 .Where(n => n != baseTestNamespace)
                 .OrderBy(n => n)
                 .ToArray();
+        }
+
+        private static string TrimRows(string code)
+        {
+            return code.Trim('\r', '\n');
         }
     }
 }

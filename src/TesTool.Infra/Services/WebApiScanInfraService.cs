@@ -127,7 +127,7 @@ namespace TesTool.Infra.Services
                     ? authAttribute?.AttributeClass.Name != allowAnonymousAttributeName
                     : authAttribute?.AttributeClass.Name == authorizeAttributeName;
 
-                var endpoint = new Endpoint(route, authorizeEndpoint, methodType);
+                var endpoint = new Endpoint(route, methodSymbol.Name, authorizeEndpoint, methodType);
                 FillInputs(endpoint, methodSymbol);
                 FillOutput(endpoint, methodSymbol);
                 controller.AddEndpoint(endpoint);

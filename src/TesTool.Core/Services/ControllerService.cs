@@ -25,6 +25,7 @@ namespace TesTool.Core.Services
         private readonly ITestScanInfraService _testScanInfraService;
         private readonly IWebApiDbContextInfraService _webApiDbContextInfraService;
 
+        private readonly IGetOneEndpointTestService _getOneEndpointTestService;
         private readonly IPostEndpointTestService _postEndpointTestService;
         private readonly IPutEndpointTestService _putEndpointTestService;
         private readonly IDeleteEndpointTestService _deleteEndpointTestService;
@@ -36,6 +37,7 @@ namespace TesTool.Core.Services
             IFakeEntityService fakeEntityService,
             ITestScanInfraService testScanInfraService,
             IWebApiDbContextInfraService webApiDbContextInfraService,
+            IGetOneEndpointTestService getOneEndpointTestService,
             IPostEndpointTestService postEndpointTestService,
             IPutEndpointTestService putEndpointTestService,
             IDeleteEndpointTestService deleteEndpointTestService
@@ -48,6 +50,7 @@ namespace TesTool.Core.Services
             _testScanInfraService = testScanInfraService;
             _webApiDbContextInfraService = webApiDbContextInfraService;
             
+            _getOneEndpointTestService = getOneEndpointTestService;
             _postEndpointTestService = postEndpointTestService;
             _putEndpointTestService = putEndpointTestService;
             _deleteEndpointTestService = deleteEndpointTestService;
@@ -71,6 +74,7 @@ namespace TesTool.Core.Services
                 fixtureClass, testBaseClass
             );
 
+            var entityKey = GetEntityKey(dbSet.Entity);
             foreach (var endpoint in controller.Endpoints)
             {
                 if (endpoint.Method == HttpMethodEnumerator.POST)
@@ -79,6 +83,19 @@ namespace TesTool.Core.Services
                     templateModel.AddMethod(_putEndpointTestService.GetControllerTestMethod(controller, endpoint, dbSet));
                 if (endpoint.Method == HttpMethodEnumerator.DELETE)
                     templateModel.AddMethod(_deleteEndpointTestService.GetControllerTestMethod(controller, endpoint, dbSet));
+                if (endpoint.Method == HttpMethodEnumerator.GET)
+                {
+                    var returnVoid = endpoint.Output is TypeBase type && type.Name == "Void";
+                    if (returnVoid)
+                    {
+                        templateModel.AddMethod(_getOneEndpointTestService.GetControllerTestMethod(controller, endpoint, dbSet));
+                    } else
+                    {
+                        var output = GetOutputModel(endpoint.Output);
+                        if (output is Class) templateModel.AddMethod(_getOneEndpointTestService.GetControllerTestMethod(controller, endpoint, dbSet));
+                        //if (endpoint.Output is Array)
+                    }
+                }
             }
 
             templateModel.RenameDuplicatedMethods();
@@ -170,6 +187,31 @@ namespace TesTool.Core.Services
             if (!match.Success || match.Groups.Count < 2) return route;
 
             return route.Substring(0, match.Index).Trim('/');
+        }
+
+        private string GetEntityKey(Class entity)
+        {
+            if (entity is null) return default;
+
+            var expectedKey = "Id";
+            var propertyKey = entity.Properties.FirstOrDefault(p => p.Name.Equals(expectedKey, StringComparison.OrdinalIgnoreCase));
+            propertyKey ??= entity.Properties.FirstOrDefault(p => p.Name.EndsWith(expectedKey, StringComparison.OrdinalIgnoreCase));
+            return propertyKey?.Name;
+        }
+
+        private Class GetOutputModel(TypeWrapper wrapper)
+        {
+            if (wrapper is Class @class)
+            {
+                if (!@class.Generics.Any()) return @class;
+
+                var genericProperty = @class.Properties.FirstOrDefault(p => p.FromGeneric);
+                if (genericProperty is null) return @class;
+
+                return GetOutputModel(genericProperty.Type);
+            }
+
+            return default;
         }
     }
 }

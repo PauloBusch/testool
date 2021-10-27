@@ -9,7 +9,9 @@
 public async Task <#=Name#>()
 {
 <#= TemplataService.BuildControllerTestMethodSectionArrage(Arrage) #>
+
 <#= TemplataService.BuildControllerTestMethodSectionAct(Act) #>
+
 <#= TemplataService.BuildControllerTestMethodSectionAssert(Assert) #>
 }
 <#+
