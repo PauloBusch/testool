@@ -13,6 +13,7 @@ namespace TesTool.Infra.Templates.Controller
     using TesTool.Core.Models.Enumerators;
     using TesTool.Core.Interfaces.Services;
     using TesTool.Core.Models.Templates.Controller;
+    using TesTool.Core.Models.Templates.Controller.Asserts;
     using System;
     
     /// <summary>
@@ -31,47 +32,29 @@ namespace TesTool.Infra.Templates.Controller
         {
             this.Write("[Fact]\r\npublic async Task ");
             
-            #line 8 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
+            #line 9 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
             this.Write("()\r\n{\r\n");
             
-            #line 10 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
-
-    Func<string> buildAssertCode = () => {
-        if (Assert is null) return string.Empty;
-
-        if (Method == HttpMethodEnumerator.POST)
-            return TemplataService.BuildControllerTestMethodSectionAssertPost(Assert);
-        if (Method == HttpMethodEnumerator.PUT)
-            return TemplataService.BuildControllerTestMethodSectionAssertPut(Assert);
-        if (Method == HttpMethodEnumerator.DELETE)
-            return TemplataService.BuildControllerTestMethodSectionAssertDelete(Assert);
-        return string.Empty;
-    };
-
-            
-            #line default
-            #line hidden
-            
-            #line 23 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
+            #line 11 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TemplataService.BuildControllerTestMethodSectionArrage(Arrage)));
             
             #line default
             #line hidden
             this.Write("\r\n");
             
-            #line 24 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
+            #line 12 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TemplataService.BuildControllerTestMethodSectionAct(Act)));
             
             #line default
             #line hidden
             this.Write("\r\n");
             
-            #line 25 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(buildAssertCode()));
+            #line 13 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(TemplataService.BuildControllerTestMethodSectionAssert(Assert)));
             
             #line default
             #line hidden
@@ -79,13 +62,13 @@ namespace TesTool.Infra.Templates.Controller
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 27 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
+        #line 15 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
 
     public string Name { get; set; }
     public HttpMethod Method { get; set; }
     public ControllerTestMethodSectionArrage Arrage { get; set; }
     public ControllerTestMethodSectionAct Act { get; set; }
-    public ControllerTestMethodSectionAssert Assert { get; set; }
+    public ControllerTestMethodSectionAssertBase Assert { get; set; }
     public ITemplateCodeInfraService TemplataService { get; set; }
 
         

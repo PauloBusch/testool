@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TesTool.Core.Commands.Generate;
 using TesTool.Core.Commands.Generate.Fakers;
@@ -65,7 +66,7 @@ namespace TesTool.Core.Services
             var testBaseClass = await _testScanInfraService.GetClassAsync(HelpClassEnumerator.TEST_BASE.Name);
             var templateModel = new ControllerTest(
                 name: GetControllerTestName(controller.Name), 
-                baseRoute: controller.Route, 
+                baseRoute: GetBaseRoute(controller.Route), 
                 @namespace: GetNamespace(),
                 fixtureClass, testBaseClass
             );
@@ -73,11 +74,11 @@ namespace TesTool.Core.Services
             foreach (var endpoint in controller.Endpoints)
             {
                 if (endpoint.Method == HttpMethodEnumerator.POST)
-                    templateModel.AddMethod(_postEndpointTestService.GetControllerTestMethod(endpoint, dbSet));
+                    templateModel.AddMethod(_postEndpointTestService.GetControllerTestMethod(controller, endpoint, dbSet));
                 if (endpoint.Method == HttpMethodEnumerator.PUT)
-                    templateModel.AddMethod(_putEndpointTestService.GetControllerTestMethod(endpoint, dbSet));
+                    templateModel.AddMethod(_putEndpointTestService.GetControllerTestMethod(controller, endpoint, dbSet));
                 if (endpoint.Method == HttpMethodEnumerator.DELETE)
-                    templateModel.AddMethod(_deleteEndpointTestService.GetControllerTestMethod(endpoint, dbSet));
+                    templateModel.AddMethod(_deleteEndpointTestService.GetControllerTestMethod(controller, endpoint, dbSet));
             }
 
             templateModel.RenameDuplicatedMethods();
@@ -115,8 +116,7 @@ namespace TesTool.Core.Services
             }
 
             var comparators = controllerTest.Methods
-                .SelectMany(e => new [] { e.Assert.ComparatorModel, e.Assert.ComparatorEntity })
-                .Where(c => !string.IsNullOrWhiteSpace(c))
+                .SelectMany(e => e.Assert.GetComparators())
                 .Distinct()
                 .ToArray();
             foreach (var comparator in comparators)
@@ -162,6 +162,14 @@ namespace TesTool.Core.Services
         public string GetDirectoryBase()
         {
             return $"{_testScanInfraService.GetDirectoryBase()}/Controllers";
+        }
+
+        private string GetBaseRoute(string route)
+        {
+            var match = Regex.Match(route, "{(.*?)}");
+            if (!match.Success || match.Groups.Count < 2) return route;
+
+            return route.Substring(0, match.Index).Trim('/');
         }
     }
 }

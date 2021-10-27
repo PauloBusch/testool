@@ -6,6 +6,6 @@ namespace TesTool.Core.Interfaces.Services.Endpoints
 {
     public interface IPutEndpointTestService 
     {
-        ControllerTestMethod GetControllerTestMethod(Endpoint endpoint, DbSet dbSet);
+        ControllerTestMethod GetControllerTestMethod(Controller controller, Endpoint endpoint, DbSet dbSet);
     }
 }

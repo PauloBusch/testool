@@ -4,31 +4,19 @@
 <#@ import namespace="TesTool.Core.Models.Enumerators" #>
 <#@ import namespace="TesTool.Core.Interfaces.Services" #>
 <#@ import namespace="TesTool.Core.Models.Templates.Controller" #>
+<#@ import namespace="TesTool.Core.Models.Templates.Controller.Asserts" #>
 [Fact]
 public async Task <#=Name#>()
 {
-<#
-    Func<string> buildAssertCode = () => {
-        if (Assert is null) return string.Empty;
-
-        if (Method == HttpMethodEnumerator.POST)
-            return TemplataService.BuildControllerTestMethodSectionAssertPost(Assert);
-        if (Method == HttpMethodEnumerator.PUT)
-            return TemplataService.BuildControllerTestMethodSectionAssertPut(Assert);
-        if (Method == HttpMethodEnumerator.DELETE)
-            return TemplataService.BuildControllerTestMethodSectionAssertDelete(Assert);
-        return string.Empty;
-    };
-#>
 <#= TemplataService.BuildControllerTestMethodSectionArrage(Arrage) #>
 <#= TemplataService.BuildControllerTestMethodSectionAct(Act) #>
-<#= buildAssertCode() #>
+<#= TemplataService.BuildControllerTestMethodSectionAssert(Assert) #>
 }
 <#+
     public string Name { get; set; }
     public HttpMethod Method { get; set; }
     public ControllerTestMethodSectionArrage Arrage { get; set; }
     public ControllerTestMethodSectionAct Act { get; set; }
-    public ControllerTestMethodSectionAssert Assert { get; set; }
+    public ControllerTestMethodSectionAssertBase Assert { get; set; }
     public ITemplateCodeInfraService TemplataService { get; set; }
 #>

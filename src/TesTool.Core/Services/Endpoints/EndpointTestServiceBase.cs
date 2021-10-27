@@ -9,6 +9,7 @@ using TesTool.Core.Models.Enumerators;
 using TesTool.Core.Models.Metadata;
 using TesTool.Core.Models.Metadata.Types;
 using TesTool.Core.Models.Templates.Controller;
+using TesTool.Core.Models.Templates.Controller.Asserts;
 
 namespace TesTool.Core.Services.Endpoints
 {
@@ -40,11 +41,10 @@ namespace TesTool.Core.Services.Endpoints
             return new ControllerTestMethodSectionArrage(entities, inputModels);
         }
 
-        protected ControllerTestMethodSectionAct GetActSection(Endpoint endpoint, DbSet dbSet = default)
+        protected ControllerTestMethodSectionAct GetActSection(Controller controller, Endpoint endpoint, DbSet dbSet = default)
         {
-            // TODO: map route
             var actSection = new ControllerTestMethodSectionAct(
-                GetRouteResolved(endpoint, dbSet),
+                GetRouteResolved(controller, endpoint, dbSet),
                 _requestMethod.Name,
                 GetReturnType(endpoint.Output),
                 GetInputBodyClass(endpoint.Inputs)?.Name,
@@ -55,22 +55,7 @@ namespace TesTool.Core.Services.Endpoints
             return actSection;
         }
 
-        protected ControllerTestMethodSectionAssert GetAssertSection(Endpoint endpoint, DbSet dbSet)
-        {
-            var entityKey = GetEntityKey(dbSet.Entity);
-            var requestModel = GetModelComparableEntity(endpoint.Inputs, dbSet.Entity);
-            var responseModel = GetOutputModel(endpoint.Output);
-            return new ControllerTestMethodSectionAssert(
-                endpoint.Output is TypeBase type && type.Name != "Void",
-                requestModel?.Properties.Any(p => p.Name == entityKey) ?? false,
-                responseModel?.Properties.Any(p => p.Name == entityKey) ?? false,
-                endpoint.Output is Class output && output.Generics.Any(),
-                entityKey, dbSet.Property, GetPropertyData(endpoint.Output),
-                dbSet.Entity.Name, requestModel?.Name,
-                _compareService.GetComparatorNameOrDefault(requestModel?.Name, responseModel?.Name),
-                _compareService.GetComparatorNameOrDefault(requestModel?.Name, dbSet.Entity.Name)
-            );
-        }
+        protected abstract ControllerTestMethodSectionAssertBase GetAssertSection(Endpoint endpoint, DbSet dbSet);
 
         private Class GetInputBodyClass(IEnumerable<Input> inputs) => GetInputClass(inputs, InputSourceEnumerator.BODY);
         private Class GetInputQueryClass(IEnumerable<Input> inputs) => GetInputClass(inputs, InputSourceEnumerator.QUERY);
@@ -134,7 +119,7 @@ namespace TesTool.Core.Services.Endpoints
             return namespaces;
         }
 
-        private string GetPropertyData(TypeWrapper wrapper)
+        protected string GetPropertyData(TypeWrapper wrapper)
         {
             if (wrapper is Class @class)
             {
@@ -152,7 +137,7 @@ namespace TesTool.Core.Services.Endpoints
             return default;
         }
 
-        private Class GetOutputModel(TypeWrapper wrapper)
+        protected Class GetOutputModel(TypeWrapper wrapper)
         {
             if (wrapper is Class @class)
             {
@@ -167,7 +152,7 @@ namespace TesTool.Core.Services.Endpoints
             return default;
         }
 
-        private Class GetModelComparableEntity(IEnumerable<Input> inputs, Class entity)
+        protected Class GetModelComparableEntity(IEnumerable<Input> inputs, Class entity)
         {
             var inputBody = GetInputBodyClass(inputs);
             if (inputBody is not null && _compareService.IsComparableClasses(inputBody, entity)) return inputBody;
@@ -178,7 +163,7 @@ namespace TesTool.Core.Services.Endpoints
             return default;
         }
 
-        private string GetEntityKey(Class entity)
+        protected string GetEntityKey(Class entity)
         {
             if (entity is null) return default;
 
@@ -188,11 +173,13 @@ namespace TesTool.Core.Services.Endpoints
             return propertyKey?.Name;
         }
 
-        private string GetRouteResolved(Endpoint endpoint, DbSet dbSet = default)
+        private string GetRouteResolved(Controller controller, Endpoint endpoint, DbSet dbSet = default)
         {
-            if (string.IsNullOrWhiteSpace(endpoint.Route)) return default;
+            var baseRoute = GetBaseRoute(controller.Route);
+            var endpointRoute = $"{baseRoute}/{(endpoint.Route ?? string.Empty).Trim('/')}".Trim('/');
+            if (string.IsNullOrWhiteSpace(endpointRoute)) return default;
 
-            var replacedRoute = endpoint.Route;
+            var replacedRoute = endpointRoute;
             var groups = Regex.Matches(replacedRoute, "{(.*?)}");
             foreach (Match match in groups.Reverse())
             {
@@ -217,22 +204,32 @@ namespace TesTool.Core.Services.Endpoints
                     GetInputQueryClass(endpoint.Inputs)
                 }.Where(i => i is not null);
 
+                bool resolved = false;
                 foreach (var input in inputs)
                 {
                     var variable = $"{input.Name.ToLowerCaseFirst()}Request";
                     var modelProperty = input.Properties
-                        .FirstOrDefault(p => p.Name.Equals(param, StringComparison.OrdinalIgnoreCase)); ;
+                        .FirstOrDefault(p => p.Name.Equals(param, StringComparison.OrdinalIgnoreCase));
                     if (modelProperty is not null)
                     {
                         replacedRoute = group.ReplaceValue(replacedRoute, $"{variable}.{modelProperty.Name}");
+                        resolved = true;
                         break;
                     }
                 }
 
-                replacedRoute = group.ReplaceValue(replacedRoute, $"{{{param}}}");
+                if (!resolved) replacedRoute = group.ReplaceValue(replacedRoute, $"{{{param}}}");
             }
 
             return replacedRoute;
+        }
+
+        private string GetBaseRoute(string route)
+        {
+            var match = Regex.Match(route, "{(.*?)}");
+            if (!match.Success || match.Groups.Count < 2) return string.Empty;
+
+            return route.Substring(match.Index).Trim('/');
         }
     }
 }

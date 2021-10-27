@@ -3,6 +3,7 @@ using System.Linq;
 using TesTool.Core.Interfaces.Services;
 using TesTool.Core.Models.Templates.Comparator;
 using TesTool.Core.Models.Templates.Controller;
+using TesTool.Core.Models.Templates.Controller.Asserts;
 using TesTool.Core.Models.Templates.Factories;
 using TesTool.Core.Models.Templates.Faker;
 using TesTool.Infra.Templates.Comparators;
@@ -76,7 +77,19 @@ namespace TesTool.Infra.Services
             return template.TransformText();
         }
 
-        public string BuildControllerTestMethodSectionAssertPost(ControllerTestMethodSectionAssert model)
+        public string BuildControllerTestMethodSectionAssert(ControllerTestMethodSectionAssertBase model)
+        {
+            if (model is ControllerTestMethodSectionAssertPost assertPost) 
+                return BuildControllerTestMethodSectionAssertPost(assertPost);
+            if (model is ControllerTestMethodSectionAssertPut assertPut)
+                return BuildControllerTestMethodSectionAssertPut(assertPut);
+            if (model is ControllerTestMethodSectionAssertDelete assertDelete)
+                return BuildControllerTestMethodSectionAssertDelete(assertDelete);
+
+            return default;
+        }
+
+        public string BuildControllerTestMethodSectionAssertPost(ControllerTestMethodSectionAssertPost model)
         {
             var template = new ControllerTestMethodSectionAssertPostTemplate
             {
@@ -95,7 +108,7 @@ namespace TesTool.Infra.Services
             return template.TransformText();
         }
 
-        public string BuildControllerTestMethodSectionAssertPut(ControllerTestMethodSectionAssert model)
+        public string BuildControllerTestMethodSectionAssertPut(ControllerTestMethodSectionAssertPut model)
         {
             var template = new ControllerTestMethodSectionAssertPutTemplate
             {
@@ -110,7 +123,7 @@ namespace TesTool.Infra.Services
             return template.TransformText();
         }
 
-        public string BuildControllerTestMethodSectionAssertDelete(ControllerTestMethodSectionAssert model)
+        public string BuildControllerTestMethodSectionAssertDelete(ControllerTestMethodSectionAssertDelete model)
         {
             var template = new ControllerTestMethodSectionAssertDeleteTemplate
             {

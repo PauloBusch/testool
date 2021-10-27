@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using TesTool.Core.Models.Enumerators;
+using TesTool.Core.Models.Templates.Controller.Asserts;
 
 namespace TesTool.Core.Models.Templates.Controller
 {
@@ -12,7 +13,7 @@ namespace TesTool.Core.Models.Templates.Controller
             HttpMethod method,
             ControllerTestMethodSectionArrage arrage,
             ControllerTestMethodSectionAct act,
-            ControllerTestMethodSectionAssert assert
+            ControllerTestMethodSectionAssertBase assert
         )
         {
             Name = name;
@@ -28,7 +29,7 @@ namespace TesTool.Core.Models.Templates.Controller
         public IReadOnlyCollection<string> RequiredNamespaces => _requiredNamespaces.AsReadOnly();
         public ControllerTestMethodSectionArrage Arrage { get; private set; }
         public ControllerTestMethodSectionAct Act { get; private set; }
-        public ControllerTestMethodSectionAssert Assert { get; private set; }
+        public ControllerTestMethodSectionAssertBase Assert { get; private set; }
         public void AddRequiredNamespace(string @namespace)
             => _requiredNamespaces.Add(@namespace);
         public void AddRequiredNamespaces(IEnumerable<string> namespaces) 

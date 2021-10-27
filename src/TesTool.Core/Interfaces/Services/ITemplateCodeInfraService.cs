@@ -1,5 +1,6 @@
 ﻿using TesTool.Core.Models.Templates.Comparator;
 using TesTool.Core.Models.Templates.Controller;
+using TesTool.Core.Models.Templates.Controller.Asserts;
 using TesTool.Core.Models.Templates.Factories;
 using TesTool.Core.Models.Templates.Faker;
 
@@ -12,9 +13,11 @@ namespace TesTool.Core.Interfaces.Services
 
         string BuildControllerTestMethodSectionArrage(ControllerTestMethodSectionArrage model);
         string BuildControllerTestMethodSectionAct(ControllerTestMethodSectionAct model);
-        string BuildControllerTestMethodSectionAssertPost(ControllerTestMethodSectionAssert model);
-        string BuildControllerTestMethodSectionAssertPut(ControllerTestMethodSectionAssert model);
-        string BuildControllerTestMethodSectionAssertDelete(ControllerTestMethodSectionAssert model);
+        string BuildControllerTestMethodSectionAssert(ControllerTestMethodSectionAssertBase model);
+        
+        string BuildControllerTestMethodSectionAssertPost(ControllerTestMethodSectionAssertPost model);
+        string BuildControllerTestMethodSectionAssertPut(ControllerTestMethodSectionAssertPut model);
+        string BuildControllerTestMethodSectionAssertDelete(ControllerTestMethodSectionAssertDelete model);
 
         string BuildModelFaker(ModelFaker model);
         string BuildModelFakerFactory(ModelFakerFactory model);

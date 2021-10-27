@@ -1,44 +1,46 @@
-﻿namespace TesTool.Core.Models.Templates.Controller
+﻿using System.Collections.Generic;
+
+namespace TesTool.Core.Models.Templates.Controller.Asserts
 {
-    public class ControllerTestMethodSectionAssert
+    public class ControllerTestMethodSectionAssertPost : ControllerTestMethodSectionAssertBase
     {
-        public ControllerTestMethodSectionAssert(
-            bool haveOutput, 
-            bool requestHaveKey, 
-            bool responseHaveKey, 
+        public ControllerTestMethodSectionAssertPost(
+            bool requestHaveKey,
+            bool responseHaveKey,
+            bool haveOutput,
             bool responseIsGeneric,
-            string entityKey, 
-            string entityDbSet, 
-            string propertyData, 
-            string entityName, 
+            string propertyData,
+            string entityName,
+            string entityKey,
+            string entityDbSet,
             string requestModel,
             string comparatorModel,
             string comparatorEntity
-        )
+        ) : base(haveOutput, responseIsGeneric, propertyData, entityName)
         {
-            HaveOutput = haveOutput;
             RequestHaveKey = requestHaveKey;
             ResponseHaveKey = responseHaveKey;
-            ResponseIsGeneric = responseIsGeneric;
             EntityKey = entityKey;
             EntityDbSet = entityDbSet;
-            PropertyData = propertyData;
-            EntityName = entityName;
             RequestModel = requestModel;
             ComparatorModel = comparatorModel;
             ComparatorEntity = comparatorEntity;
         }
 
-        public bool HaveOutput { get; private set; }
         public bool RequestHaveKey { get; private set; }
         public bool ResponseHaveKey { get; private set; }
-        public bool ResponseIsGeneric { get; private set; }
         public string EntityKey { get; private set; }
         public string EntityDbSet { get; private set; }
-        public string PropertyData { get; private set; }
-        public string EntityName { get; private set; }
         public string RequestModel { get; private set; }
         public string ComparatorModel { get; private set; }
         public string ComparatorEntity { get; private set; }
+
+        public override IEnumerable<string> GetComparators()
+        {
+            if (!string.IsNullOrWhiteSpace(ComparatorModel))
+                yield return ComparatorModel;
+            if (!string.IsNullOrWhiteSpace(ComparatorEntity))
+                yield return ComparatorEntity;
+        }
     }
 }
