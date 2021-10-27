@@ -58,7 +58,8 @@ namespace TesTool.Infra.Services
             var template = new ControllerTestMethodSectionArrageTemplate
             {
                 Entities = model.Entities.ToArray(),
-                Models = model.Models.ToArray()
+                Models = model.Models.ToArray(),
+                IsEmpty = model.IsEmpty
             };
             return TrimRows(template.TransformText());
         }

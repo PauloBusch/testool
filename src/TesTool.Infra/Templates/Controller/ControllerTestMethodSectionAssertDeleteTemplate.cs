@@ -63,7 +63,7 @@ namespace TesTool.Infra.Templates.Controller
             
             #line default
             #line hidden
-            this.Write("    Assert.NotNull(");
+            this.Write("    Assert.NotEqual(default, ");
             
             #line 17 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertDeleteTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(responseVariable));

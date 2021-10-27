@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using TesTool.Core.Enumerations;
+using TesTool.Core.Extensions;
 using TesTool.Core.Interfaces.Services;
 using TesTool.Core.Interfaces.Services.Endpoints;
 using TesTool.Core.Models.Metadata;
@@ -17,14 +18,20 @@ namespace TesTool.Core.Services.Endpoints
 
         public ControllerTestMethod GetControllerTestMethod(Controller controller, Endpoint endpoint, DbSet dbSet)
         {
+            var assert = GetAssertSection(endpoint, dbSet) as ControllerTestMethodSectionAssertGetOne;
             var testMethod = new ControllerTestMethod(
                 GetMethodName(endpoint, dbSet), endpoint.Method,
                 GetArrageSection(endpoint, dbSet),
                 GetActSection(controller, endpoint, dbSet),
-                GetAssertSection(endpoint, dbSet)
+                assert
             );
             var requiredNamespaces = GetRequitedNamespaces(testMethod, endpoint);
             testMethod.AddRequiredNamespaces(requiredNamespaces);
+            
+            var entityVariable = dbSet.Entity.Name.ToLowerCaseFirst();
+            if (string.IsNullOrWhiteSpace(assert.ComparatorEntity) && !testMethod.Act.Route.Contains(entityVariable))
+                testMethod.Arrage.RemoveEntity(dbSet.Entity.Name);
+
             return testMethod;
         }
 

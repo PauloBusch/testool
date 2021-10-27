@@ -98,6 +98,7 @@ namespace TesTool.Infra.Templates.Controller
 
     public string[] Models { get; set; }
     public string[] Entities { get; set; }
+    public bool IsEmpty { get; set; }
 
         
         #line default

@@ -40,20 +40,36 @@ namespace TesTool.Infra.Templates.Controller
             this.Write("()\r\n{\r\n");
             
             #line 11 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
+
+    if (!Arrage.IsEmpty) {
+
+            
+            #line default
+            #line hidden
+            
+            #line 14 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TemplataService.BuildControllerTestMethodSectionArrage(Arrage)));
             
             #line default
             #line hidden
             this.Write("\r\n\r\n");
             
-            #line 13 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
+            #line 16 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
+
+    }
+
+            
+            #line default
+            #line hidden
+            
+            #line 19 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TemplataService.BuildControllerTestMethodSectionAct(Act)));
             
             #line default
             #line hidden
             this.Write("\r\n\r\n");
             
-            #line 15 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
+            #line 21 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TemplataService.BuildControllerTestMethodSectionAssert(Assert)));
             
             #line default
@@ -62,7 +78,7 @@ namespace TesTool.Infra.Templates.Controller
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 17 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
+        #line 23 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodTemplate.tt"
 
     public string Name { get; set; }
     public HttpMethod Method { get; set; }

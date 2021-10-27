@@ -79,7 +79,10 @@ namespace TesTool.Core.Services.Endpoints
                 return @class.Name;
             }
 
-            if (wrapper is Field field && field.SystemType == "System.Void") return default; 
+            if (wrapper is Field field) { 
+                if (field.SystemType == "System.Void") return default;
+                if (field.SystemType == "System.Int32") return "int";    
+            }
             if (wrapper is TypeBase type) return type.Name;
             return default;
         }

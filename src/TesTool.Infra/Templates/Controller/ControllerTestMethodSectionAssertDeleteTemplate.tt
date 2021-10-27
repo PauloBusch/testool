@@ -14,7 +14,7 @@
 <#
         }
 #>
-    Assert.NotNull(<#= responseVariable #>);
+    Assert.NotEqual(default, <#= responseVariable #>);
 <#
     }
     if (!string.IsNullOrWhiteSpace(EntityKey)) 

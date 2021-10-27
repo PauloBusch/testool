@@ -8,8 +8,14 @@
 [Fact]
 public async Task <#=Name#>()
 {
+<#
+    if (!Arrage.IsEmpty) {
+#>
 <#= TemplataService.BuildControllerTestMethodSectionArrage(Arrage) #>
 
+<#
+    }
+#>
 <#= TemplataService.BuildControllerTestMethodSectionAct(Act) #>
 
 <#= TemplataService.BuildControllerTestMethodSectionAssert(Assert) #>

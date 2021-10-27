@@ -86,14 +86,15 @@ namespace TesTool.Core.Services
                 if (endpoint.Method == HttpMethodEnumerator.GET)
                 {
                     var returnVoid = endpoint.Output is TypeBase type && type.Name == "Void";
-                    if (returnVoid)
-                    {
-                        templateModel.AddMethod(_getOneEndpointTestService.GetControllerTestMethod(controller, endpoint, dbSet));
-                    } else
+                    if (returnVoid) templateModel.AddMethod(_getOneEndpointTestService.GetControllerTestMethod(controller, endpoint, dbSet));
+                    else
                     {
                         var output = GetOutputModel(endpoint.Output);
-                        if (output is Class) templateModel.AddMethod(_getOneEndpointTestService.GetControllerTestMethod(controller, endpoint, dbSet));
-                        //if (endpoint.Output is Array)
+                        if (output is Models.Metadata.Array)
+                        {
+
+                        }
+                        else templateModel.AddMethod(_getOneEndpointTestService.GetControllerTestMethod(controller, endpoint, dbSet));
                     }
                 }
             }
@@ -199,7 +200,7 @@ namespace TesTool.Core.Services
             return propertyKey?.Name;
         }
 
-        private Class GetOutputModel(TypeWrapper wrapper)
+        private TypeBase GetOutputModel(TypeWrapper wrapper)
         {
             if (wrapper is Class @class)
             {
@@ -210,6 +211,9 @@ namespace TesTool.Core.Services
 
                 return GetOutputModel(genericProperty.Type);
             }
+
+            if (wrapper is Models.Metadata.Array array) 
+                return array;
 
             return default;
         }
