@@ -1,4 +1,6 @@
-﻿namespace TesTool.Core.Models.Templates.Controller.Asserts
+﻿using System.Collections.Generic;
+
+namespace TesTool.Core.Models.Templates.Controller.Asserts
 {
     public class ControllerTestMethodSectionAssertGetOne : ControllerTestMethodSectionAssertBase
     {
@@ -17,5 +19,11 @@
         }
 
         public string ComparatorEntity { get; private set; }
+
+        public override IEnumerable<string> GetComparators()
+        {
+            if (!string.IsNullOrWhiteSpace(ComparatorEntity))
+                yield return ComparatorEntity;
+        }
     }
 }

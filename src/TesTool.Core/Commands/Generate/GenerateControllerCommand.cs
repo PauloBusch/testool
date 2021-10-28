@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Threading.Tasks;
 using TesTool.Core.Attributes;
 using TesTool.Core.Enumerations;
@@ -64,6 +65,8 @@ namespace TesTool.Core.Commands.Generate
             if (!await _testScanInfraService.ClassExistAsync(HelpClassEnumerator.ENTITY_FAKER_FACTORY.Name))
                 throw new ClassNotFoundException(HelpClassEnumerator.ENTITY_FAKER_FACTORY.Name);
             var dbContextName = await _settingInfraService.GetStringAsync(SettingEnumerator.DB_CONTEXT_NAME);
+            if (string.IsNullOrWhiteSpace(dbContextName))
+                throw new ValidationException("Nenhuma classe de banco de dados configurada.");
             if (!await _webApiScanInfraService.ModelExistAsync(dbContextName)) 
                 throw new ClassNotFoundException(dbContextName);
             var fixtureClassName = _solutionService.GetTestFixtureClassName();

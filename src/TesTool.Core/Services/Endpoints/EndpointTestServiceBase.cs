@@ -205,7 +205,8 @@ namespace TesTool.Core.Services.Endpoints
                 if (match.Groups.Count < 2) continue;
                 var group = match.Groups[1];
 
-                var param = group.Value;
+                var param = group.Value.Contains(":") 
+                    ? group.Value.Substring(0, group.Value.IndexOf(":")) : group.Value;
                 if (dbSet is not null)
                 {
                     var variable = dbSet.Entity.Name.ToLowerCaseFirst();

@@ -83,7 +83,11 @@ namespace TesTool.Core.Commands.Generate
             } else
             {
                 var templateModel = await _compareService.GetCompareDynamicAsync(sourceModel, targetModel);
-                await CreateAssertExtensionAsync(templateModel);
+                var extensionClassName = "AssertExtensions";
+                var extensionClass = await _testScanInfraService.GetClassAsync(extensionClassName);
+                if (extensionClass is null) throw new ClassNotFoundException(extensionClassName);
+
+                templateModel.AddNamespace(extensionClass.Namespace);
                 sourceCode = _templateCodeInfraService.BuildCompareDynamic(templateModel);
             }
             
@@ -100,26 +104,6 @@ namespace TesTool.Core.Commands.Generate
             var factorySourceCode = _templateCodeInfraService.BuildComparatorFactory(templateModel);
             var mergedSourceCode = await _testCodeInfraService.MergeClassCodeAsync(templateModel.Name, factorySourceCode);
             await _fileSystemInfraService.SaveFileAsync(factoryPathFile, mergedSourceCode);
-        }
-
-        private async Task CreateAssertExtensionAsync(CompareDynamic templateModel)
-        {
-            var extensionClassName = "AssertExtensions";
-            var extensionClass = await _testScanInfraService.GetClassAsync(extensionClassName);
-            if (extensionClass is null)
-            {
-                var extensionNamespace = _solutionService.GetTestNamespace("Extensions");
-                var extensionFilePath = Path.Combine(GetOutputDirectory(), $"{extensionClassName}.cs");
-                var extensionSourceCode = _templateCodeInfraService.BuildAssertExtensions(extensionNamespace);
-                if (await _fileSystemInfraService.FileExistAsync(extensionFilePath))
-                    throw new DuplicatedSourceFileException(extensionClassName);
-
-                await _fileSystemInfraService.SaveFileAsync(extensionFilePath, extensionSourceCode);
-                templateModel.AddNamespace(extensionNamespace);
-                return;
-            }
-
-            templateModel.AddNamespace(extensionClass.Namespace);
         }
 
         private string GetComparatorName()
