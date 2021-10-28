@@ -29,69 +29,67 @@ namespace TesTool.Infra.Templates.Factories
         {
             
             #line 5 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
- foreach (var @namespace in Namespaces) {
-  
+ 
+    foreach (var @namespace in Namespaces) 
+    {
+
             
             #line default
             #line hidden
             this.Write("using ");
             
-            #line 6 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
+            #line 9 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@namespace));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 7 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
- } 
+            #line 10 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
+ 
+    } 
+
             
             #line default
             #line hidden
             this.Write("\r\nnamespace ");
             
-            #line 9 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
+            #line 14 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(FactoryNamespace));
             
             #line default
             #line hidden
             this.Write("\r\n{\r\n    public class ");
             
-            #line 11 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
+            #line 16 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
             this.Write("\r\n    {\r\n");
             
-            #line 13 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
-  
+            #line 18 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
+ 
+    PushIndent("        ");
+    foreach (var method in Methods) 
+    { 
+
             
             #line default
             #line hidden
             
-            #line 13 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
- foreach (var method in Methods) { 
-            
-            #line default
-            #line hidden
-            this.Write("        ");
-            
-            #line 14 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
+            #line 23 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TemplataService.BuildModelFakerFactoryMethod(method)));
             
             #line default
             #line hidden
+            this.Write("\r\n");
             
-            #line 14 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
+            #line 24 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
+ 
+    }
+    ClearIndent();
 
-    
-            
-            #line default
-            #line hidden
-            
-            #line 15 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
- } 
             
             #line default
             #line hidden
@@ -99,7 +97,7 @@ namespace TesTool.Infra.Templates.Factories
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 18 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
+        #line 30 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Factories\ModelFakerFactoryTemplate.tt"
 
     public string Name { get; set; }
     public string FactoryNamespace { get; set; }

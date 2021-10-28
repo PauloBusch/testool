@@ -78,7 +78,13 @@ namespace TesTool.Core.Services
             if (string.IsNullOrWhiteSpace(sourceClassName) || string.IsNullOrWhiteSpace(targetClassName)) return default;
 
             var comparator = GetComparatorClassAsync(sourceClassName, targetClassName).Result;
-            if (comparator is null) return GetComparatorName(sourceClassName, targetClassName);
+            if (comparator is null)
+            {
+                var classes = new [] { sourceClassName, targetClassName }
+                    .OrderBy(c => c.Length)
+                    .ThenBy(c => c);
+                return GetComparatorName(classes.ElementAt(0), classes.ElementAt(1));
+            }
             return comparator.Name;
         }
 

@@ -32,7 +32,7 @@ namespace TesTool.Core.Services.Endpoints
         {
             var entityKey = GetEntityKey(dbSet.Entity);
             var requestModel = GetModelComparableEntity(endpoint.Inputs, dbSet.Entity);
-            var responseModel = GetOutputModel(endpoint.Output);
+            var responseModel = GetOutputModel(endpoint.Output) as Class;
             return new ControllerTestMethodSectionAssertPost(
                 requestModel?.Properties.Any(p => p.Name == entityKey) ?? false,
                 responseModel?.Properties.Any(p => p.Name == entityKey) ?? false,

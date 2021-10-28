@@ -1,0 +1,34 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="TesTool.Core.Extensions" #>
+    response.EnsureSuccessStatusCode();
+<# 
+    var listVariable = ResponseIsGeneric ? "listResponse" : "result";
+    if (ResponseIsGeneric)
+    {
+#>
+    var <#= listVariable #> = result?.<#= PropertyData #>;
+<#
+    }
+#>
+    Assert.NotEqual(default, <#= listVariable #>);
+    Assert.NotEmpty(<#= listVariable #>);
+<#
+    if (!string.IsNullOrWhiteSpace(ComparatorEntity) && ResponseHaveKey) 
+    {
+        var initialEntity = EntityName.ToLower().ElementAt(0);
+        var entityVariable = EntityName.ToLowerCaseFirst();
+#>
+    var modelResponse = <#= listVariable #>.Single(<#= initialEntity #> => <#= initialEntity #>.<#= EntityKey #> == <#= entityVariable #>.<#= EntityKey #>);
+    CompareFactory.<#= ComparatorEntity #>().Equals(<#= entityVariable #>, modelResponse);<#
+    }
+#>
+<#+        
+    public bool ResponseHaveKey { get; set; }
+    public bool ResponseIsGeneric { get; set; }
+    public string PropertyData { get; set; }
+    public string EntityName { get; set; }
+    public string EntityKey { get; set; }
+    public string ComparatorEntity { get; set; }
+#>

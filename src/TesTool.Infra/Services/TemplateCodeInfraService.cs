@@ -82,6 +82,8 @@ namespace TesTool.Infra.Services
         {
             if (model is ControllerTestMethodSectionAssertGetOne assertGetOne)
                 return BuildControllerTestMethodSectionAssertGetOne(assertGetOne);
+            if (model is ControllerTestMethodSectionAssertGetList assertGetList)
+                return BuildControllerTestMethodSectionAssertGetList(assertGetList);
             if (model is ControllerTestMethodSectionAssertPost assertPost) 
                 return BuildControllerTestMethodSectionAssertPost(assertPost);
             if (model is ControllerTestMethodSectionAssertPut assertPut)
@@ -101,6 +103,20 @@ namespace TesTool.Infra.Services
                 PropertyData = model.PropertyData,
                 EntityName = model.EntityName,
                 ComparatorEntity = model.ComparatorEntity
+            };
+            return TrimRows(template.TransformText());
+        }
+
+        public string BuildControllerTestMethodSectionAssertGetList(ControllerTestMethodSectionAssertGetList model)
+        {
+            var template = new ControllerTestMethodSectionAssertGetListTemplate
+            {
+                ResponseHaveKey = model.ResponseHaveKey,
+                ResponseIsGeneric = model.ResponseIsGeneric,
+                PropertyData = model.PropertyData,
+                EntityName = model.EntityName,
+                ComparatorEntity = model.ComparatorEntity,
+                EntityKey = model.EntityKey
             };
             return TrimRows(template.TransformText());
         }

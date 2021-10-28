@@ -2,17 +2,29 @@
 <#@ assembly name="System.Core" #>
 <#@ import namespace="TesTool.Core.Models.Templates.Factories" #>
 <#@ import namespace="TesTool.Core.Interfaces.Services" #>
-<# foreach (var @namespace in Namespaces) {
-  #>using <#=@namespace#>;
-<# } #>
+<# 
+    foreach (var @namespace in Namespaces) 
+    {
+#>
+using <#= @namespace #>;
+<# 
+    } 
+#>
 
 namespace <#=FactoryNamespace#>
 {
     public class <#=Name#>
     {
-<#  #><# foreach (var method in Methods) { #>
-        <#=TemplataService.BuildModelFakerFactoryMethod(method)#><#
-    #><# } #>
+<# 
+    PushIndent("        ");
+    foreach (var method in Methods) 
+    { 
+#>
+<#=TemplataService.BuildModelFakerFactoryMethod(method)#>
+<# 
+    }
+    ClearIndent();
+#>
     }
 }
 <#+

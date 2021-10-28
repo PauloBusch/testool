@@ -11,14 +11,14 @@ using TesTool.Core.Models.Templates.Controller.Asserts;
 
 namespace TesTool.Core.Services.Endpoints
 {
-    public class GetOneEndpointTestService : EndpointTestServiceBase, IGetOneEndpointTestService
+    public class GetListEndpointTestService : EndpointTestServiceBase, IGetListEndpointTestService
     {
-        public GetOneEndpointTestService(ICompareService compareService)
+        public GetListEndpointTestService(ICompareService compareService)
             : base(RequestMethodEnumerator.GET, compareService) { }
 
         public ControllerTestMethod GetControllerTestMethod(Controller controller, Endpoint endpoint, DbSet dbSet)
         {
-            var assert = GetAssertSection(endpoint, dbSet) as ControllerTestMethodSectionAssertGetOne;
+            var assert = GetAssertSection(endpoint, dbSet) as ControllerTestMethodSectionAssertGetList;
             var testMethod = new ControllerTestMethod(
                 GetMethodName(endpoint, dbSet), endpoint.Method,
                 GetArrageSection(endpoint, dbSet),
@@ -27,21 +27,23 @@ namespace TesTool.Core.Services.Endpoints
             );
             var requiredNamespaces = GetRequitedNamespaces(testMethod, endpoint);
             testMethod.AddRequiredNamespaces(requiredNamespaces);
-            
+            testMethod.AddRequiredNamespace("System.Linq");
+
             var entityVariable = dbSet.Entity.Name.ToLowerCaseFirst();
             if (string.IsNullOrWhiteSpace(assert.ComparatorEntity) && !testMethod.Act.Route.Contains(entityVariable))
                 testMethod.Arrage.RemoveEntity(dbSet.Entity.Name);
-
             return testMethod;
         }
 
         protected override ControllerTestMethodSectionAssertBase GetAssertSection(Endpoint endpoint, DbSet dbSet)
         {
-            var responseModel = GetOutputModel(endpoint.Output);
-            return new ControllerTestMethodSectionAssertGetOne(
-                endpoint.Output is TypeBase type && type.Name != "Void",
-                endpoint.Output is Class output && output.Generics.Any(),
-                GetPropertyData(endpoint.Output), dbSet.Entity.Name,
+            var entityKey = GetEntityKey(dbSet.Entity);
+            var arrayModel = GetOutputModel(endpoint.Output) as Models.Metadata.Array;
+            var responseModel = arrayModel.Type as TypeBase;
+            return new ControllerTestMethodSectionAssertGetList(
+                true, endpoint.Output is Class output && output.Generics.Any(),
+                (responseModel as Class)?.Properties.Any(p => p.Name == entityKey) ?? false,
+                GetPropertyData(endpoint.Output), dbSet.Entity.Name, entityKey,
                 _compareService.GetComparatorNameOrDefault(dbSet.Entity.Name, responseModel?.Name)
             );
         }
@@ -49,12 +51,14 @@ namespace TesTool.Core.Services.Endpoints
         private string GetMethodName(Endpoint endpoint, DbSet dbSet)
         {
             var type = TestMethodEnumerator.RETURN;
-            var entityKey = GetEntityKey(dbSet.Entity);
-            var hasOutput = endpoint.Output is TypeBase typeBase && typeBase.Name != "Void";
-            if (hasOutput && (endpoint.Route?.Contains(entityKey, StringComparison.OrdinalIgnoreCase) ?? false))
-                return type.Name.Replace("{ARTIFACT}", $"By{entityKey}");
-            if (hasOutput && GetOutputModel(endpoint.Output) is Class @class)
-                return type.Name.Replace("{ARTIFACT}", @class.Name);
+            var arrayModel = GetOutputModel(endpoint.Output) as Models.Metadata.Array;
+            var responseModel = arrayModel.Type as TypeBase;
+            if (responseModel is not null)
+            {
+                if (responseModel.Name.Contains(dbSet.Entity.Name))
+                    return type.Name.Replace("{ARTIFACT}", "Many");
+                return type.Name.Replace("{ARTIFACT}", $"{responseModel.Name}Many");
+            }
 
             var action = endpoint.Name.Replace("Async", string.Empty, StringComparison.OrdinalIgnoreCase);
             return TestMethodEnumerator.GENERIC.Name.Replace("{ACTION}", action, StringComparison.OrdinalIgnoreCase);

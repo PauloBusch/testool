@@ -79,6 +79,15 @@ namespace TesTool.Core.Services.Endpoints
                 return @class.Name;
             }
 
+            if (wrapper is Models.Metadata.Array array)
+            {
+                if (array.Generics.Any())
+                {
+                    var generics = array.Generics.Select(g => GetReturnType(g));
+                    return $"{array.Name}<{string.Join(", ", generics)}>";
+                }
+                return $"{GetReturnType(array.Type)}[]";
+            }
             if (wrapper is Field field) { 
                 if (field.SystemType == "System.Void") return default;
                 if (field.SystemType == "System.Int32") return "int";    
@@ -118,6 +127,9 @@ namespace TesTool.Core.Services.Endpoints
                 }
             }
 
+            if (output is Models.Metadata.Array array)
+                namespaces.AddRange(GetOutputNamespaces(array.Type));
+
             if (output is TypeBase type)
                 namespaces.Add(type.Namespace);
             return namespaces;
@@ -141,7 +153,7 @@ namespace TesTool.Core.Services.Endpoints
             return default;
         }
 
-        protected Class GetOutputModel(TypeWrapper wrapper)
+        protected TypeBase GetOutputModel(TypeWrapper wrapper)
         {
             if (wrapper is Class @class)
             {
@@ -152,6 +164,9 @@ namespace TesTool.Core.Services.Endpoints
 
                 return GetOutputModel(genericProperty.Type);
             }
+
+            if (wrapper is Models.Metadata.Array array)
+                return array;
 
             return default;
         }

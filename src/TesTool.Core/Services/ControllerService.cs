@@ -26,6 +26,7 @@ namespace TesTool.Core.Services
         private readonly IWebApiDbContextInfraService _webApiDbContextInfraService;
 
         private readonly IGetOneEndpointTestService _getOneEndpointTestService;
+        private readonly IGetListEndpointTestService _getListEndpointTestService;
         private readonly IPostEndpointTestService _postEndpointTestService;
         private readonly IPutEndpointTestService _putEndpointTestService;
         private readonly IDeleteEndpointTestService _deleteEndpointTestService;
@@ -38,6 +39,7 @@ namespace TesTool.Core.Services
             ITestScanInfraService testScanInfraService,
             IWebApiDbContextInfraService webApiDbContextInfraService,
             IGetOneEndpointTestService getOneEndpointTestService,
+            IGetListEndpointTestService getListEndpointTestService,
             IPostEndpointTestService postEndpointTestService,
             IPutEndpointTestService putEndpointTestService,
             IDeleteEndpointTestService deleteEndpointTestService
@@ -51,6 +53,7 @@ namespace TesTool.Core.Services
             _webApiDbContextInfraService = webApiDbContextInfraService;
             
             _getOneEndpointTestService = getOneEndpointTestService;
+            _getListEndpointTestService = getListEndpointTestService;
             _postEndpointTestService = postEndpointTestService;
             _putEndpointTestService = putEndpointTestService;
             _deleteEndpointTestService = deleteEndpointTestService;
@@ -74,7 +77,6 @@ namespace TesTool.Core.Services
                 fixtureClass, testBaseClass
             );
 
-            var entityKey = GetEntityKey(dbSet.Entity);
             foreach (var endpoint in controller.Endpoints)
             {
                 if (endpoint.Method == HttpMethodEnumerator.POST)
@@ -91,9 +93,7 @@ namespace TesTool.Core.Services
                     {
                         var output = GetOutputModel(endpoint.Output);
                         if (output is Models.Metadata.Array)
-                        {
-
-                        }
+                            templateModel.AddMethod(_getListEndpointTestService.GetControllerTestMethod(controller, endpoint, dbSet));
                         else templateModel.AddMethod(_getOneEndpointTestService.GetControllerTestMethod(controller, endpoint, dbSet));
                     }
                 }
@@ -137,6 +137,7 @@ namespace TesTool.Core.Services
                 .SelectMany(e => e.Assert.GetComparators())
                 .Distinct()
                 .ToArray();
+
             foreach (var comparator in comparators)
             {
                 if (!await _testScanInfraService.ClassExistAsync(comparator))

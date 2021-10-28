@@ -3,7 +3,7 @@
     public class ControllerTestMethodSectionAssertGetOne : ControllerTestMethodSectionAssertBase
     {
         public ControllerTestMethodSectionAssertGetOne(
-            bool haveOutput, 
+            bool haveOutput,
             bool responseIsGeneric, 
             string propertyData, 
             string entityName,

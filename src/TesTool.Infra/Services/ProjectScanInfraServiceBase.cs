@@ -119,7 +119,20 @@ namespace TesTool.Infra.Services
                 var modelType = GetModelType(enumerableInnerType);
                 _stackCalls.Pop();
 
-                return new Core.Models.Metadata.Array(name, @namespace, modelType);
+                var array = new Core.Models.Metadata.Array(name, @namespace, modelType);
+                var arrayGenerics = typeSymbol.GetGeneritTypeArguments();
+                if (arrayGenerics is null) return array;
+
+                foreach (var generic in arrayGenerics)
+                {
+                    _stackCalls.Push(hash);
+                    var genericType = GetModelType(generic);
+                    _stackCalls.Pop();
+
+                    if (genericType is not null) array.AddGeneric(genericType);
+                }
+
+                return array;
             }
 
             if (typeSymbol.TypeKind == TypeKind.Interface) return default;
