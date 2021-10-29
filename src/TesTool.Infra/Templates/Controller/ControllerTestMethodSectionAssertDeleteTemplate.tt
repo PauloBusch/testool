@@ -17,7 +17,7 @@
     Assert.NotEqual(default, <#= responseVariable #>);
 <#
     }
-    if (!string.IsNullOrWhiteSpace(EntityKey)) 
+    if (!string.IsNullOrWhiteSpace(EntityName) && !string.IsNullOrWhiteSpace(EntityKey)) 
     {
         var initialEntity = EntityName.ToLower().ElementAt(0);
         var entityVariable = EntityName.ToLowerCaseFirst();

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TesTool.Core.Interfaces.Services;
 using TesTool.Core.Models.Templates.Comparator;
@@ -300,6 +301,7 @@ namespace TesTool.Infra.Services
                 .Distinct()
                 .Where(n => n != currentNamespace)
                 .Where(n => n != baseTestNamespace)
+                .Where(n => !string.IsNullOrWhiteSpace(n))
                 .OrderBy(n => n)
                 .ToArray();
         }

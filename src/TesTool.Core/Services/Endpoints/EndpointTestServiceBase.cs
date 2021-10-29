@@ -51,7 +51,11 @@ namespace TesTool.Core.Services.Endpoints
                 GetInputQueryClass(endpoint.Inputs)?.Name
             );
 
-            if (Regex.IsMatch(actSection.Route ?? string.Empty, "{{.*?}}")) actSection.MarkAsUnsafe();
+            var requireBody = new [] { RequestMethodEnumerator.POST, RequestMethodEnumerator.PUT };
+            if (requireBody.Contains(_requestMethod) && GetInputBodyClass(endpoint.Inputs) is null)
+                actSection.MarkAsUnsafe();
+            if (Regex.IsMatch(actSection.Route ?? string.Empty, "{{.*?}}")) 
+                actSection.MarkAsUnsafe();
             return actSection;
         }
 
@@ -78,7 +82,8 @@ namespace TesTool.Core.Services.Endpoints
 
                 return @class.Name;
             }
-
+            if (wrapper is Models.Metadata.Nullable nullable)
+                return $"{GetReturnType(nullable.Type)}?";
             if (wrapper is Models.Metadata.Array array)
             {
                 if (array.Generics.Any())
@@ -126,6 +131,9 @@ namespace TesTool.Core.Services.Endpoints
                         namespaces.AddRange(GetOutputNamespaces(generic));
                 }
             }
+
+            if (output is Models.Metadata.Nullable nullable)
+                namespaces.AddRange(GetOutputNamespaces(nullable.Type));
 
             if (output is Models.Metadata.Array array)
                 namespaces.AddRange(GetOutputNamespaces(array.Type));

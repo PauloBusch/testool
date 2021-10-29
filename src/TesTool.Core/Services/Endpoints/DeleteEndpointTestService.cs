@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using TesTool.Core.Enumerations;
 using TesTool.Core.Interfaces.Services;
 using TesTool.Core.Interfaces.Services.Endpoints;
@@ -16,9 +17,8 @@ namespace TesTool.Core.Services.Endpoints
 
         public ControllerTestMethod GetControllerTestMethod(Controller controller, Endpoint endpoint, DbSet dbSet)
         {
-            var type = TestMethodEnumerator.DELETE;
             var testMethod = new ControllerTestMethod(
-                type.Name, endpoint.Method,
+                GetMethodName(endpoint), endpoint.Method,
                 GetArrageSection(endpoint, dbSet),
                 GetActSection(controller, endpoint, dbSet),
                 GetAssertSection(endpoint, dbSet)
@@ -31,13 +31,25 @@ namespace TesTool.Core.Services.Endpoints
 
         protected override ControllerTestMethodSectionAssertBase GetAssertSection(Endpoint endpoint, DbSet dbSet)
         {
-            var entityKey = GetEntityKey(dbSet.Entity);
+            var entityKey = GetEntityKey(dbSet?.Entity);
             return new ControllerTestMethodSectionAssertDelete(
                 endpoint.Output is TypeBase type && type.Name != "Void",
                 endpoint.Output is Class output && output.Generics.Any(),
-                GetPropertyData(endpoint.Output), dbSet.Entity.Name,
-                entityKey, dbSet.Property
+                GetPropertyData(endpoint.Output), dbSet?.Entity.Name,
+                entityKey, dbSet?.Property
             );
+        }
+
+        private string GetMethodName(Endpoint endpoint)
+        {
+            var withSpecificName = !endpoint.Name.Contains("delete", StringComparison.OrdinalIgnoreCase);
+            if (withSpecificName)
+            {
+                var action = endpoint.Name.Replace("Async", string.Empty, StringComparison.OrdinalIgnoreCase);
+                return TestMethodEnumerator.GENERIC.Name.Replace("{ACTION}", action, StringComparison.OrdinalIgnoreCase);
+            }
+
+            return TestMethodEnumerator.DELETE.Name;
         }
     }
 }

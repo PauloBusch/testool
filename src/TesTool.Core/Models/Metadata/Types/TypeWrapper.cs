@@ -2,9 +2,9 @@
 {
     public abstract class TypeWrapper
     {
-        protected TypeWrapper(string wrappper)
+        protected TypeWrapper(string wrapper)
         {
-            Wrapper = wrappper;
+            Wrapper = wrapper;
         }
 
         public string Wrapper { get; protected set; }

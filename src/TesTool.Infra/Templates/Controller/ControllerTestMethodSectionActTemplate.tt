@@ -1,5 +1,6 @@
 ﻿<#@ template language="C#" #>
 <#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
 <#@ import namespace="TesTool.Core.Extensions" #>
 <#@ import namespace="System.Collections.Generic" #>
 <# 
@@ -9,6 +10,7 @@
 
     var parameters = new List<string> { uri };
     if (!string.IsNullOrWhiteSpace(BodyModel)) parameters.Add($"{BodyModel.ToLowerCaseFirst()}Request");
+    else if (new [] { "PostAsync", "PutAsync" }.Contains(Method)) parameters.Add("default");
     if (!string.IsNullOrWhiteSpace(QueryModel)) parameters.Add($"{QueryModel.ToLowerCaseFirst()}Request");
     if (Unsafe)
     {

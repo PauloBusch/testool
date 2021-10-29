@@ -72,15 +72,14 @@ namespace TesTool.Core.Commands.Generate
             var fixtureClassName = _solutionService.GetTestFixtureClassName();
             if (!await _testScanInfraService.ClassExistAsync(fixtureClassName))
                 throw new ClassNotFoundException(fixtureClassName);
-            var entityName = _controllerService.GetEntityName(controllerName, Entity);
-            var dbSet = await _controllerService.GetDbSetClassAsync(dbContextName, entityName);
-            if (dbSet is null) throw new ClassNotFoundException(entityName);
 
             var controllerTestName = _controllerService.GetControllerTestName(controllerName);
             var filePath = GetControllerTestFilePath(controllerTestName);
             if (await _fileSystemInfraService.FileExistAsync(filePath))
                 throw new DuplicatedSourceFileException(controllerTestName);
 
+            var entityName = _controllerService.GetEntityName(controllerName, Entity);
+            var dbSet = await _controllerService.GetDbSetClassAsync(dbContextName, entityName);
             var templateModel = await _controllerService.GetControllerTestAsync(controllerClass, dbSet);
             var commands = await _controllerService.GetRequiredCommandsAsync(templateModel, Static);
             await _commandHandler.HandleManyAsync(commands);

@@ -9,6 +9,7 @@
 // ------------------------------------------------------------------------------
 namespace TesTool.Infra.Templates.Controller
 {
+    using System.Linq;
     using TesTool.Core.Extensions;
     using System.Collections.Generic;
     using System;
@@ -28,7 +29,7 @@ namespace TesTool.Infra.Templates.Controller
         public virtual string TransformText()
         {
             
-            #line 5 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionActTemplate.tt"
+            #line 6 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionActTemplate.tt"
  
     var returnType = string.IsNullOrWhiteSpace(ReturnType) ? string.Empty : $"<{ReturnType}>";
     var responseVariables = string.IsNullOrWhiteSpace(ReturnType) ? "response" : "(response, result)";
@@ -36,6 +37,7 @@ namespace TesTool.Infra.Templates.Controller
 
     var parameters = new List<string> { uri };
     if (!string.IsNullOrWhiteSpace(BodyModel)) parameters.Add($"{BodyModel.ToLowerCaseFirst()}Request");
+    else if (new [] { "PostAsync", "PutAsync" }.Contains(Method)) parameters.Add("default");
     if (!string.IsNullOrWhiteSpace(QueryModel)) parameters.Add($"{QueryModel.ToLowerCaseFirst()}Request");
     if (Unsafe)
     {
@@ -45,7 +47,7 @@ namespace TesTool.Infra.Templates.Controller
             #line hidden
             this.Write("    // TODO: Resolve unsafe route parameters\r\n");
             
-            #line 17 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionActTemplate.tt"
+            #line 19 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionActTemplate.tt"
 
     }
 
@@ -54,27 +56,27 @@ namespace TesTool.Infra.Templates.Controller
             #line hidden
             this.Write("    var ");
             
-            #line 20 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionActTemplate.tt"
+            #line 22 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionActTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(responseVariables));
             
             #line default
             #line hidden
             this.Write(" = await Request.");
             
-            #line 20 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionActTemplate.tt"
+            #line 22 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionActTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Method));
             
             #line default
             #line hidden
             
-            #line 20 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionActTemplate.tt"
+            #line 22 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionActTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(returnType));
             
             #line default
             #line hidden
             this.Write("(");
             
-            #line 20 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionActTemplate.tt"
+            #line 22 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionActTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(string.Join(", ", parameters)));
             
             #line default
@@ -83,7 +85,7 @@ namespace TesTool.Infra.Templates.Controller
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 21 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionActTemplate.tt"
+        #line 23 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionActTemplate.tt"
 
     public bool Unsafe { get; set; }
     public string Route { get; set; }

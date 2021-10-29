@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using TesTool.Core.Enumerations;
 using TesTool.Core.Interfaces.Services;
 using TesTool.Core.Interfaces.Services.Endpoints;
@@ -16,9 +17,8 @@ namespace TesTool.Core.Services.Endpoints
 
         public ControllerTestMethod GetControllerTestMethod(Controller controller, Endpoint endpoint, DbSet dbSet)
         {
-            var type = TestMethodEnumerator.CREATE;
             var testMethod = new ControllerTestMethod(
-                type.Name, endpoint.Method,
+                GetMethodName(endpoint), endpoint.Method,
                 GetArrageSection(endpoint),
                 GetActSection(controller, endpoint),
                 GetAssertSection(endpoint, dbSet)
@@ -30,19 +30,31 @@ namespace TesTool.Core.Services.Endpoints
 
         protected override ControllerTestMethodSectionAssertBase GetAssertSection(Endpoint endpoint, DbSet dbSet)
         {
-            var entityKey = GetEntityKey(dbSet.Entity);
-            var requestModel = GetModelComparableEntity(endpoint.Inputs, dbSet.Entity);
+            var entityKey = GetEntityKey(dbSet?.Entity);
+            var requestModel = GetModelComparableEntity(endpoint.Inputs, dbSet?.Entity);
             var responseModel = GetOutputModel(endpoint.Output) as Class;
             return new ControllerTestMethodSectionAssertPost(
                 requestModel?.Properties.Any(p => p.Name == entityKey) ?? false,
                 responseModel?.Properties.Any(p => p.Name == entityKey) ?? false,
                 endpoint.Output is TypeBase type && type.Name != "Void",
                 endpoint.Output is Class output && output.Generics.Any(),
-                GetPropertyData(endpoint.Output), dbSet.Entity.Name, 
-                entityKey, dbSet.Property, requestModel?.Name,
+                GetPropertyData(endpoint.Output), dbSet?.Entity.Name, 
+                entityKey, dbSet?.Property, requestModel?.Name,
                 _compareService.GetComparatorNameOrDefault(requestModel?.Name, responseModel?.Name),
-                _compareService.GetComparatorNameOrDefault(requestModel?.Name, dbSet.Entity.Name)
+                _compareService.GetComparatorNameOrDefault(requestModel?.Name, dbSet?.Entity.Name)
             );
+        }
+
+        private string GetMethodName(Endpoint endpoint)
+        {
+            var withSpecificName = !endpoint.Name.Contains("post", StringComparison.OrdinalIgnoreCase);
+            if (withSpecificName)
+            {
+                var action = endpoint.Name.Replace("Async", string.Empty, StringComparison.OrdinalIgnoreCase);
+                return TestMethodEnumerator.GENERIC.Name.Replace("{ACTION}", action, StringComparison.OrdinalIgnoreCase);
+            }
+
+            return TestMethodEnumerator.CREATE.Name;
         }
     }
 }

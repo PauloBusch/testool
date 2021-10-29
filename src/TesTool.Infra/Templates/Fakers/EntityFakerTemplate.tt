@@ -21,8 +21,8 @@ namespace <#=FakerNamespace#>
         public <#=classFakerName#>(<#=DbContext#> context) : base(context)
         {
             <# foreach (var property in Properties) { 
-              var isFirst = useProperties.First() == property;
-              var isLast = useProperties.Last() == property;
+              var isFirst = useProperties.FirstOrDefault() == property;
+              var isLast = useProperties.LastOrDefault() == property;
               var rowStringBuilder = new StringBuilder();
               if (!isFirst) rowStringBuilder.Append(tab + tab + tab + tab);
               if (property.Unsafe) rowStringBuilder.Append("// ");

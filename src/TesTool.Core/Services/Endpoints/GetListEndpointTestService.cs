@@ -29,22 +29,24 @@ namespace TesTool.Core.Services.Endpoints
             testMethod.AddRequiredNamespaces(requiredNamespaces);
             testMethod.AddRequiredNamespace("System.Linq");
 
-            var entityVariable = dbSet.Entity.Name.ToLowerCaseFirst();
-            if (string.IsNullOrWhiteSpace(assert.ComparatorEntity) && !testMethod.Act.Route.Contains(entityVariable))
+            var entityVariable = dbSet?.Entity.Name.ToLowerCaseFirst();
+            if (string.IsNullOrWhiteSpace(assert.ComparatorEntity) && dbSet is not null && 
+                testMethod.Act.Route is not null && !testMethod.Act.Route.Contains(entityVariable)
+            )
                 testMethod.Arrage.RemoveEntity(dbSet.Entity.Name);
             return testMethod;
         }
 
         protected override ControllerTestMethodSectionAssertBase GetAssertSection(Endpoint endpoint, DbSet dbSet)
         {
-            var entityKey = GetEntityKey(dbSet.Entity);
+            var entityKey = GetEntityKey(dbSet?.Entity);
             var arrayModel = GetOutputModel(endpoint.Output) as Models.Metadata.Array;
             var responseModel = arrayModel.Type as TypeBase;
             return new ControllerTestMethodSectionAssertGetList(
                 true, endpoint.Output is Class output && output.Generics.Any(),
                 (responseModel as Class)?.Properties.Any(p => p.Name == entityKey) ?? false,
-                GetPropertyData(endpoint.Output), dbSet.Entity.Name, entityKey,
-                _compareService.GetComparatorNameOrDefault(dbSet.Entity.Name, responseModel?.Name)
+                GetPropertyData(endpoint.Output), dbSet?.Entity.Name, entityKey,
+                _compareService.GetComparatorNameOrDefault(dbSet?.Entity.Name, responseModel?.Name)
             );
         }
 
@@ -55,7 +57,7 @@ namespace TesTool.Core.Services.Endpoints
             var responseModel = arrayModel.Type as TypeBase;
             if (responseModel is not null)
             {
-                if (responseModel.Name.Contains(dbSet.Entity.Name))
+                if (dbSet is not null && responseModel.Name.Contains(dbSet.Entity.Name))
                     return type.Name.Replace("{ARTIFACT}", "Many");
                 return type.Name.Replace("{ARTIFACT}", $"{responseModel.Name}Many");
             }

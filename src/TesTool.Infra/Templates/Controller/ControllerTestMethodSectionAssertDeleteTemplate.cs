@@ -75,7 +75,7 @@ namespace TesTool.Infra.Templates.Controller
             #line 18 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertDeleteTemplate.tt"
 
     }
-    if (!string.IsNullOrWhiteSpace(EntityKey)) 
+    if (!string.IsNullOrWhiteSpace(EntityName) && !string.IsNullOrWhiteSpace(EntityKey)) 
     {
         var initialEntity = EntityName.ToLower().ElementAt(0);
         var entityVariable = EntityName.ToLowerCaseFirst();

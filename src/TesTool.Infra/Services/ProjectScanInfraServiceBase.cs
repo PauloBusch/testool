@@ -165,9 +165,7 @@ namespace TesTool.Infra.Services
                 var modelType = GetModelType(propertySymbol.Type);
                 _stackCalls.Pop();
 
-                var fromGeneric = @class.Generics.Any(generic => generic.Wrapper == modelType.Wrapper &&
-                    generic is TypeBase g && modelType is TypeBase t && g == t
-                );
+                var fromGeneric = generics.Any(g => g.GetFullMetadataName() == propertySymbol.Type.GetFullMetadataName());
                 var property = new Property(propertySymbol.Name, fromGeneric, modelType);
                 @class.AddProperty(property);
             }

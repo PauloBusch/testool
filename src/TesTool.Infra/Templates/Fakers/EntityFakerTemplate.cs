@@ -100,8 +100,8 @@ namespace TesTool.Infra.Templates.Fakers
             
             #line 23 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\EntityFakerTemplate.tt"
  foreach (var property in Properties) { 
-              var isFirst = useProperties.First() == property;
-              var isLast = useProperties.Last() == property;
+              var isFirst = useProperties.FirstOrDefault() == property;
+              var isLast = useProperties.LastOrDefault() == property;
               var rowStringBuilder = new StringBuilder();
               if (!isFirst) rowStringBuilder.Append(tab + tab + tab + tab);
               if (property.Unsafe) rowStringBuilder.Append("// ");
