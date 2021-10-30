@@ -2,12 +2,13 @@
 <#@ assembly name="System.Core" #>
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
+using System.Linq;
+using Xunit;
 
 namespace <#=ExtensionNamespace#>
 {
-    public static class AssertExtensions
+    public static class AssertExtensions : Assert
     {
         public static void AreEqualObjects(
             object source, object target,

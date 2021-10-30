@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,11 +11,39 @@ namespace TesTool.Infra.Services
 {
     public class TestCodeInfraService : TestScanInfraService, ITestCodeInfraService
     {
+        private readonly ICmdInfraService _cmdInfraService;
+        private readonly IWebApiScanInfraService _webApiScanInfraService;
+        private readonly ISolutionInfraService _solutionInfraService;
+
         public TestCodeInfraService(
-            ILoggerInfraService loggerInfraService, 
+            ICmdInfraService cmdInfraService,
+            ILoggerInfraService loggerInfraService,
+            IWebApiScanInfraService webApiScanInfraService,
+            ISolutionInfraService solutionInfraService,
             IEnvironmentInfraService environmentInfraService
-        ) : base(loggerInfraService, environmentInfraService) { }
-        
+        ) : base(loggerInfraService, environmentInfraService) 
+        {
+            _cmdInfraService = cmdInfraService;
+            _webApiScanInfraService = webApiScanInfraService;
+            _solutionInfraService = solutionInfraService;
+        }
+
+        public async Task CreateTestProjectAsync(string name, string output)
+        {
+            var fullOutput = Path.Combine(output, name);
+            var solutionPathFile = _solutionInfraService.GetSolutionFilePath();
+            var webApiProjectPathFile = _webApiScanInfraService.GetProjectPathFile();
+            var commands = new List<string> { 
+                @$"dotnet new xunit --name ""{name}"" --output ""{fullOutput}"" --no-restore",
+                @$"dotnet sln ""{solutionPathFile}"" add ""{fullOutput}""",
+                @$"dotnet add ""{name}"" reference ""{webApiProjectPathFile}""",
+                @$"dotnet add ""{fullOutput}"" package Microsoft.AspNetCore.TestHost",
+                @$"dotnet add ""{fullOutput}"" package bogus",
+                @$"dotnet restore ""{fullOutput}"""
+            };
+            await _cmdInfraService.ExecuteCommandsAsync(commands);
+        }
+
         public async Task<string> MergeClassCodeAsync(string className, string sourceCode)
         {
             var classes = await GetClassesAsync();

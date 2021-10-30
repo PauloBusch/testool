@@ -8,7 +8,7 @@ namespace TesTool.Core.Services.Factories
     public class FactoryModelService : FactoryServiceBase, IFactoryModelService
     {
         public FactoryModelService(
-            ISolutionService solutionService,
+            ISolutionInfraService solutionService,
             ITestScanInfraService testScanInfraService, 
             IWebApiScanInfraService webApiScanInfraService
         ) : base(

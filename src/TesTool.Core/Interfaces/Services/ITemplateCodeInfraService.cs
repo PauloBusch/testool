@@ -1,4 +1,5 @@
-﻿using TesTool.Core.Models.Templates.Comparator;
+﻿using TesTool.Core.Models.Templates.Common;
+using TesTool.Core.Models.Templates.Comparator;
 using TesTool.Core.Models.Templates.Controller;
 using TesTool.Core.Models.Templates.Controller.Asserts;
 using TesTool.Core.Models.Templates.Factories;
@@ -8,6 +9,8 @@ namespace TesTool.Core.Interfaces.Services
 {
     public interface ITemplateCodeInfraService
     {
+        string BuildFixture(Fixture model);
+
         string BuildControllerTest(ControllerTest model);
         string BuildControllerTestMethod(ControllerTestMethod model);
 

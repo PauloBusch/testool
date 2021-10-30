@@ -32,15 +32,15 @@ namespace TesTool.Core.Commands.Configure
                 
                 if (projectFiles.Count() > 1) 
                     throw new ValidationException(
-                        "Exist many projects in current directory. " +
-                        "Please input project file name."
+                        "Existem vários projtos no diretório. " +
+                        "Por favor especifique um arquivo de projeto."
                     );
                 
                 ProjectPath = projectFiles.Single();
             } else if (File.Exists(ProjectPath))
             {
                 if (Path.GetExtension(ProjectPath) != ".csproj")
-                    throw new ValidationException("This file is not a project.");
+                    throw new ValidationException("O arquivo de projeto deve ter a extensão *.csproj.");
 
                 ProjectPath = ProjectPath.Replace("/", @"\");
             } else throw new ProjectNotFoundException(ProjectTypeEnumerator.WEB_API);

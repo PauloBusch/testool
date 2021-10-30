@@ -13,7 +13,7 @@ namespace TesTool.Core.Services.Fakers
         private readonly IWebApiScanInfraService _webApiScanInfraService;
 
         public FakeEntityService(
-            ISolutionService solutionService,
+            ISolutionInfraService solutionService,
             IWebApiScanInfraService webApiScanInfraService,
             ISettingInfraService settingInfraService,
             ITestScanInfraService testScanInfraService,

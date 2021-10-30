@@ -7,7 +7,7 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace TesTool.Infra.Templates.Controller
+namespace TesTool.Infra.Templates.Controllers
 {
     using TesTool.Core.Extensions;
     using System;
@@ -16,7 +16,7 @@ namespace TesTool.Infra.Templates.Controller
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertPutTemplate.tt"
+    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertPutTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
     public partial class ControllerTestMethodSectionAssertPutTemplate : ControllerTestMethodSectionAssertPutTemplateBase
     {
@@ -28,7 +28,7 @@ namespace TesTool.Infra.Templates.Controller
         {
             this.Write("    response.EnsureSuccessStatusCode();\r\n");
             
-            #line 5 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertPutTemplate.tt"
+            #line 5 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertPutTemplate.tt"
  
     if (HaveOutput) 
     {
@@ -41,21 +41,21 @@ namespace TesTool.Infra.Templates.Controller
             #line hidden
             this.Write("    var ");
             
-            #line 12 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertPutTemplate.tt"
+            #line 12 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertPutTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(responseVariable));
             
             #line default
             #line hidden
             this.Write(" = result?.");
             
-            #line 12 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertPutTemplate.tt"
+            #line 12 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertPutTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(PropertyData));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 13 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertPutTemplate.tt"
+            #line 13 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertPutTemplate.tt"
 
         }
 
@@ -64,14 +64,14 @@ namespace TesTool.Infra.Templates.Controller
             #line hidden
             this.Write("    Assert.NotEqual(default, ");
             
-            #line 16 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertPutTemplate.tt"
+            #line 16 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertPutTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(responseVariable));
             
             #line default
             #line hidden
             this.Write(");\r\n");
             
-            #line 17 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertPutTemplate.tt"
+            #line 17 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertPutTemplate.tt"
 
         if (!string.IsNullOrWhiteSpace(ComparatorModel))
         {
@@ -81,28 +81,28 @@ namespace TesTool.Infra.Templates.Controller
             #line hidden
             this.Write("    CompareFactory.");
             
-            #line 21 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertPutTemplate.tt"
+            #line 21 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertPutTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ComparatorModel));
             
             #line default
             #line hidden
             this.Write("().Equals(");
             
-            #line 21 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertPutTemplate.tt"
+            #line 21 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertPutTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(RequestModel.ToLowerCaseFirst()));
             
             #line default
             #line hidden
             this.Write("Request, ");
             
-            #line 21 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertPutTemplate.tt"
+            #line 21 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertPutTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(responseVariable));
             
             #line default
             #line hidden
             this.Write(");");
             
-            #line 21 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertPutTemplate.tt"
+            #line 21 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertPutTemplate.tt"
 
         }
     }
@@ -115,35 +115,35 @@ namespace TesTool.Infra.Templates.Controller
             #line hidden
             this.Write("      \r\n    await DbContext.Entry(");
             
-            #line 28 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertPutTemplate.tt"
+            #line 28 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertPutTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(entityVariable));
             
             #line default
             #line hidden
             this.Write(").ReloadAsync();\r\n    CompareFactory.");
             
-            #line 29 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertPutTemplate.tt"
+            #line 29 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertPutTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ComparatorEntity));
             
             #line default
             #line hidden
             this.Write("().Equals(");
             
-            #line 29 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertPutTemplate.tt"
+            #line 29 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertPutTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(RequestModel.ToLowerCaseFirst()));
             
             #line default
             #line hidden
             this.Write("Request, ");
             
-            #line 29 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertPutTemplate.tt"
+            #line 29 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertPutTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(entityVariable));
             
             #line default
             #line hidden
             this.Write(");");
             
-            #line 29 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertPutTemplate.tt"
+            #line 29 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertPutTemplate.tt"
 
     }
 
@@ -153,7 +153,7 @@ namespace TesTool.Infra.Templates.Controller
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 32 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionAssertPutTemplate.tt"
+        #line 32 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertPutTemplate.tt"
         
     public bool HaveOutput { get; set; }
     public bool ResponseIsGeneric { get; set; }

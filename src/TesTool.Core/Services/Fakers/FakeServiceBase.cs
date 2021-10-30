@@ -12,13 +12,13 @@ namespace TesTool.Core.Services.Fakers
 {
     public abstract class FakeServiceBase
     {
-        protected readonly ISolutionService _solutionService;
+        protected readonly ISolutionInfraService _solutionService;
         protected readonly ITestScanInfraService _testScanInfraService;
         protected readonly IExpressionInfraService _expressionInfraService;
         protected readonly IConventionInfraService _conventionInfraService;
 
         public FakeServiceBase(
-            ISolutionService solutionService,
+            ISolutionInfraService solutionService,
             ITestScanInfraService testScanInfraService,
             IExpressionInfraService expressionInfraService,
             IConventionInfraService conventionInfraService

@@ -21,7 +21,7 @@ namespace TesTool.Core.Commands.Generate
         public bool Static { get; set; }
 
         private readonly IControllerService _controllerService;
-        private readonly ISolutionService _solutionService;
+        private readonly ISolutionInfraService _solutionService;
         private readonly ICommandHandler _commandHandler;
         private readonly ITestScanInfraService _testScanInfraService;
         private readonly ITemplateCodeInfraService _templateCodeInfraService;
@@ -31,7 +31,7 @@ namespace TesTool.Core.Commands.Generate
 
         public GenerateControllerCommand(
             IControllerService controllerService,
-            ISolutionService solutionService,
+            ISolutionInfraService solutionService,
             ICommandHandler commandHandler,
             ISettingInfraService settingInfraService,
             ITestScanInfraService testScanInfraService,
@@ -82,7 +82,7 @@ namespace TesTool.Core.Commands.Generate
             var dbSet = await _controllerService.GetDbSetClassAsync(dbContextName, entityName);
             var templateModel = await _controllerService.GetControllerTestAsync(controllerClass, dbSet);
             var commands = await _controllerService.GetRequiredCommandsAsync(templateModel, Static);
-            await _commandHandler.HandleManyAsync(commands);
+            await _commandHandler.HandleManyAsync(commands, true);
 
             var sourceCode = _templateCodeInfraService.BuildControllerTest(templateModel);
             await _fileSystemInfraService.SaveFileAsync(filePath, sourceCode);

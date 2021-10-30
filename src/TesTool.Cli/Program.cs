@@ -1,11 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using TesTool.Core.Exceptions;
 using TesTool.Core.Interfaces.Services;
-using TesTool.Core.Services.Handlers;
 
 namespace TesTool.Cli
 {
@@ -23,7 +21,7 @@ namespace TesTool.Cli
                 using var serviceProvider = new ServiceCollection()
                     .AddServices()
                     .BuildServiceProvider();
-
+                
                 var argumentsCoreService = serviceProvider.GetService<ICommandFactoryService>();
                 var commandHandler = serviceProvider.GetService<ICommandHandler>();
                 var command = argumentsCoreService.CreateCommand(args);
@@ -31,6 +29,7 @@ namespace TesTool.Cli
 
                 var console = serviceProvider.GetService<ILoggerInfraService>();
                 var jsonOptions = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+                
 
                 //var webApiScanInfraService = serviceProvider.GetService<IWebApiScanInfraService>() as WebApiScanInfraService;
                 //webApiScanInfraService.TestBuild().Wait();

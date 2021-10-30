@@ -7,17 +7,19 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace TesTool.Infra.Templates.Extensions
+namespace TesTool.Infra.Templates.Controllers
 {
+    using System.Linq;
+    using TesTool.Core.Extensions;
     using System;
     
     /// <summary>
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Extensions\AssertExtensionsTemplate.tt"
+    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertDeleteTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public partial class AssertExtensionsTemplate : AssertExtensionsTemplateBase
+    public partial class ControllerTestMethodSectionAssertDeleteTemplate : ControllerTestMethodSectionAssertDeleteTemplateBase
     {
 #line hidden
         /// <summary>
@@ -25,70 +27,139 @@ namespace TesTool.Infra.Templates.Extensions
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("using System;\r\nusing System.Collections.Generic;\r\nusing System.Linq;\r\nusing Syste" +
-                    "m.Text.RegularExpressions;\r\n\r\nnamespace ");
+            this.Write("    response.EnsureSuccessStatusCode();\r\n");
             
-            #line 8 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Extensions\AssertExtensionsTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(ExtensionNamespace));
+            #line 6 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+ 
+    if (HaveOutput) 
+    {
+        var responseVariable = ResponseIsGeneric ? "modelResponse" : "result";
+        if (ResponseIsGeneric)
+        {
+
             
             #line default
             #line hidden
-            this.Write("\r\n{\r\n    public static class AssertExtensions\r\n    {\r\n        public static void " +
-                    "AreEqualObjects(\r\n            object source, object target,\r\n            IEnumer" +
-                    "able<string> ignore = null\r\n        )\r\n        {\r\n            if (source is null" +
-                    ") throw new ArgumentNullException(nameof(source));\r\n            if (target is nu" +
-                    "ll) throw new ArgumentNullException(nameof(target));\r\n            var sourceType" +
-                    " = source.GetType();\r\n            var targetType = target.GetType();\r\n          " +
-                    "  var sourcePropertyNames = sourceType.GetProperties().Select(p => p.Name).ToLis" +
-                    "t();\r\n            var targetPropertyNames = targetType.GetProperties().Select(p " +
-                    "=> p.Name).ToList();\r\n            var mergedProperties = sourcePropertyNames.Con" +
-                    "cat(targetPropertyNames);\r\n            var comparedPropertiesCount = 0;\r\n       " +
-                    "     foreach (var propertyName in sourcePropertyNames)\r\n            {\r\n         " +
-                    "       if (ignore != null && ignore.Contains(propertyName)) continue;\r\n\r\n       " +
-                    "         var sourceProperty = sourceType.GetProperty(propertyName);\r\n           " +
-                    "     var targetProperty = targetType.GetProperty(propertyName);\r\n               " +
-                    " if (sourceProperty == null || targetProperty == null) continue;\r\n\r\n            " +
-                    "    var type = Nullable.GetUnderlyingType(sourceProperty.PropertyType) ?? source" +
-                    "Property.PropertyType;\r\n                if (!IsSimpleType(type)) continue;\r\n\r\n  " +
-                    "              if (sourceProperty.PropertyType != targetProperty.PropertyType) co" +
-                    "ntinue;\r\n                var expectedValue = sourceProperty.GetValue(source, nul" +
-                    "l);\r\n                var actualValue = targetProperty.GetValue(target, null);\r\n " +
-                    "               if (!AreEqualProperty(type, expectedValue, actualValue))\r\n       " +
-                    "             throw new Exception(\r\n                        $\"The property {prope" +
-                    "rtyName} value are not equal for object type {targetType.Name}\\n\" +\r\n           " +
-                    "             $\"Expected value: {(expectedValue is null ? \"null\" : $\"\\\"{expectedV" +
-                    "alue}\\\"\")}\\n\" +\r\n                        $\"Actual value: \\\"{(actualValue is null" +
-                    " ? \"null\" : $\"\\\"{actualValue}\\\"\")}\\\"\"\r\n                    );\r\n                c" +
-                    "omparedPropertiesCount++;\r\n            }\r\n\r\n            if (comparedPropertiesCo" +
-                    "unt == decimal.Zero)\r\n                throw new Exception($\"No properties were c" +
-                    "ompared for object type {targetType.Name}\");\r\n        }\r\n\r\n        private stati" +
-                    "c bool AreEqualProperty(Type type, object source, object target)\r\n        {\r\n   " +
-                    "         if (source == null && target == null) return true;\r\n            if (sou" +
-                    "rce == null || target == null) return false;\r\n\r\n            const int precision " +
-                    "= 2;\r\n            var sourceValue = source;\r\n            var targetValue = targe" +
-                    "t;\r\n            if (new [] { typeof(decimal), typeof(Decimal) }.Contains(type))\r" +
-                    "\n            {\r\n                sourceValue = decimal.Round((decimal)sourceValue" +
-                    ", precision, MidpointRounding.ToZero);\r\n                targetValue = decimal.Ro" +
-                    "und((decimal)targetValue, precision, MidpointRounding.ToZero);\r\n            }\r\n\r" +
-                    "\n            if (new [] { typeof(string), typeof(String) }.Contains(type))\r\n    " +
-                    "        {\r\n                sourceValue = Regex.Unescape(sourceValue.ToString());" +
-                    "\r\n                targetValue = Regex.Unescape(targetValue.ToString());\r\n       " +
-                    "     }\r\n\r\n            if (!sourceValue.Equals(targetValue)) return false;\r\n     " +
-                    "       if (!targetValue.Equals(sourceValue)) return false;\r\n            return t" +
-                    "rue;\r\n        }\r\n\r\n        public static bool IsSimpleType(Type type)\r\n        {" +
-                    "\r\n            var realType = Nullable.GetUnderlyingType(type) ?? type;\r\n        " +
-                    "    if (realType.IsPrimitive || realType.IsEnum) return true;\r\n\r\n            var" +
-                    " sampleTypes = new[] {\r\n                typeof(string),\r\n                typeof(" +
-                    "decimal),\r\n                typeof(DateTime),\r\n                typeof(DateTimeOff" +
-                    "set),\r\n                typeof(TimeSpan),\r\n                typeof(Guid)\r\n        " +
-                    "    };\r\n            return sampleTypes.Contains(realType);\r\n        }\r\n    }\r\n}\r" +
-                    "\n");
+            this.Write("    var ");
+            
+            #line 13 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(responseVariable));
+            
+            #line default
+            #line hidden
+            this.Write(" = result?.");
+            
+            #line 13 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(PropertyData));
+            
+            #line default
+            #line hidden
+            this.Write(";\r\n");
+            
+            #line 14 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+
+        }
+
+            
+            #line default
+            #line hidden
+            this.Write("    Assert.NotEqual(default, ");
+            
+            #line 17 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(responseVariable));
+            
+            #line default
+            #line hidden
+            this.Write(");\r\n");
+            
+            #line 18 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+
+    }
+    if (!string.IsNullOrWhiteSpace(EntityName) && !string.IsNullOrWhiteSpace(EntityKey)) 
+    {
+        var initialEntity = EntityName.ToLower().ElementAt(0);
+        var entityVariable = EntityName.ToLowerCaseFirst();
+        var existEntityVariable = $"exist{EntityName}";
+
+            
+            #line default
+            #line hidden
+            this.Write("    var ");
+            
+            #line 26 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(existEntityVariable));
+            
+            #line default
+            #line hidden
+            this.Write(" = await DbContext.");
+            
+            #line 26 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(EntityDbSet));
+            
+            #line default
+            #line hidden
+            this.Write(".AnyAsync(");
+            
+            #line 26 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(initialEntity));
+            
+            #line default
+            #line hidden
+            this.Write(" => ");
+            
+            #line 26 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(initialEntity));
+            
+            #line default
+            #line hidden
+            this.Write(".");
+            
+            #line 26 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(EntityKey));
+            
+            #line default
+            #line hidden
+            this.Write(" == ");
+            
+            #line 26 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(entityVariable));
+            
+            #line default
+            #line hidden
+            this.Write(".");
+            
+            #line 26 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(EntityKey));
+            
+            #line default
+            #line hidden
+            this.Write(");\r\n    Assert.False(");
+            
+            #line 27 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(existEntityVariable));
+            
+            #line default
+            #line hidden
+            this.Write(");");
+            
+            #line 27 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+
+    }
+
+            
+            #line default
+            #line hidden
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 94 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Extensions\AssertExtensionsTemplate.tt"
-
-    public string ExtensionNamespace { get; set; }
+        #line 30 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertDeleteTemplate.tt"
+        
+    public bool HaveOutput { get; set; }
+    public bool ResponseIsGeneric { get; set; }
+    public string EntityKey { get; set; }
+    public string EntityDbSet { get; set; }
+    public string PropertyData { get; set; }
+    public string EntityName { get; set; }
 
         
         #line default
@@ -102,7 +173,7 @@ namespace TesTool.Infra.Templates.Extensions
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public class AssertExtensionsTemplateBase
+    public class ControllerTestMethodSectionAssertDeleteTemplateBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

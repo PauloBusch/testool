@@ -2,7 +2,7 @@
   "profiles": {
     "TesTool.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "g controller LoanAmountLimitController"
+      "commandLineArgs": "g project \"C:\\Projetos\\Cip\\Loan.Api\""
     }
   }
 }

@@ -19,7 +19,7 @@ namespace TesTool.Core.Services
     public class ControllerService : IControllerService
     {
         private readonly IServiceResolver _serviceResolver;
-        private readonly ISolutionService _solutionService;
+        private readonly ISolutionInfraService _solutionService;
         private readonly IFakeModelService _fakeModelService;
         private readonly IFakeEntityService _fakeEntityService;
         private readonly ITestScanInfraService _testScanInfraService;
@@ -33,7 +33,7 @@ namespace TesTool.Core.Services
 
         public ControllerService(
             IServiceResolver serviceResolver,
-            ISolutionService solutionService,
+            ISolutionInfraService solutionService,
             IFakeModelService fakeModelService,
             IFakeEntityService fakeEntityService,
             ITestScanInfraService testScanInfraService,

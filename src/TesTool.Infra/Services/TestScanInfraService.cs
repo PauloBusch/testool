@@ -48,7 +48,7 @@ namespace TesTool.Infra.Services
         }
 
         private static string _cacheProjectPath;
-        protected override string GetProjectPathFile()
+        public override string GetProjectPathFile()
         {
             if (!string.IsNullOrWhiteSpace(_cacheProjectPath)) return _cacheProjectPath;
             
@@ -60,9 +60,14 @@ namespace TesTool.Infra.Services
                 if (projectDirectoryInfo.Exists)
                 {
                     var projectFiles = Directory.GetFiles(projectDirectoryInfo.FullName, "*.csproj");
-                    if (projectFiles.Any()) {
-                        _cacheProjectPath = projectFiles.First();
-                        return _cacheProjectPath;
+                    foreach (var projectPathFile in projectFiles)
+                    {
+                        var packages = GetProjectPackages(projectPathFile);
+                        if (packages.Any(p => p.Include == "Microsoft.NET.Test.Sdk"))
+                        {
+                            _cacheProjectPath = projectPathFile;
+                            return _cacheProjectPath;
+                        }
                     }
                 }
                 

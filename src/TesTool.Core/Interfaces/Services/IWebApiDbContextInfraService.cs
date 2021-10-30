@@ -10,5 +10,6 @@ namespace TesTool.Core.Interfaces.Services
         Task<bool> IsDbContextClassAsync(string className);
         Task<bool> IsDbSetClassAsync(string dbContext, string className);
         Task<IEnumerable<DbSet>> GetDbSetsAsync(string dbContext);
+        Task<IEnumerable<Class>> GetDbContextClassesAsync();
     }
 }

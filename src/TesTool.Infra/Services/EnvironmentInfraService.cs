@@ -7,6 +7,6 @@ namespace TesTool.Infra.Services
         // TODO: Uncomment code
         //public string GetWorkingDirectory() => Environment.CurrentDirectory;
         //public string GetWorkingDirectory() => @"C:\Projetos\Cip\Tests\Loan.IntegrationTests\Fakers";
-        public string GetWorkingDirectory() => @"C:\Projetos\Cip\Tests\Loan.IntegrationTests";
+        public string GetWorkingDirectory() => @"C:\Users\paulo_tjj0fgx\Desktop\TesTool";
     }
 }

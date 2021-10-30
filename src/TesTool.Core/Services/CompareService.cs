@@ -9,11 +9,11 @@ namespace TesTool.Core.Services
 {
     public class CompareService : ICompareService
     {
-        private readonly ISolutionService _solutionService;
+        private readonly ISolutionInfraService _solutionService;
         private readonly ITestScanInfraService _testScanInfraService;
 
         public CompareService(
-            ISolutionService solutionService, 
+            ISolutionInfraService solutionService, 
             ITestScanInfraService testScanInfraService
         )
         {

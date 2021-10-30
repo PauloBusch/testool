@@ -10,7 +10,7 @@ namespace TesTool.Core.Services.Factories
     public class FactoryEntityService : FactoryServiceBase, IFactoryEntityService
     {
         public FactoryEntityService(
-            ISolutionService solutionService, 
+            ISolutionInfraService solutionService, 
             ITestScanInfraService testScanInfraService, 
             IWebApiScanInfraService webApiScanInfraService
         ) : base(

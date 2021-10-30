@@ -49,5 +49,16 @@ namespace TesTool.Infra.Services
                 .Select(p => new DbSet(p.Type.Type as Class, p.Name))
                 .ToArray();
         }
+
+        public async Task<IEnumerable<Class>> GetDbContextClassesAsync()
+        {
+            var project = await GetProjectAsync();
+            if (project is null) return default;
+
+            var projects = new[] { project }.Concat(GetProjectReferences(project)).ToArray();
+            var classes = await GetClassesAsync(projects);
+            return classes.Where(c => c.TypeSymbol.ImplementsClass("DbContext", "Microsoft.EntityFrameworkCore"))
+                .Select(c => GetModelType(c.TypeSymbol) as Class);
+        }
     }
 }

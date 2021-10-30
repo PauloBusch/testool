@@ -29,6 +29,7 @@ namespace TesTool.Cli
                 .AddSingleton<IConventionInfraService, ConventionInfraService>()
                 .AddSingleton<IExpressionInfraService, ExpressionInfraService>()
                 .AddSingleton<ISerializerInfraService, SerializerInfraService>()
+                .AddSingleton<ICmdInfraService, CmdInfraService>()
 
                 .AddSingleton<IWebApiScanInfraService, WebApiScanInfraService>()
                 .AddSingleton<IWebApiDbContextInfraService, WebApiDbContextInfraService>()
@@ -39,6 +40,7 @@ namespace TesTool.Cli
                 .AddSingleton<IFakeEntityService, FakeEntityService>()
                 .AddSingleton<ICompareService, CompareService>()
                 .AddSingleton<IControllerService, ControllerService>()
+                .AddSingleton<IFixtureService, FixtureService>()
 
                 .AddSingleton<IGetOneEndpointTestService, GetOneEndpointTestService>()
                 .AddSingleton<IGetListEndpointTestService, GetListEndpointTestService>()
@@ -53,7 +55,7 @@ namespace TesTool.Cli
                 .AddSingleton<ICommandHandler, CommandHandler>()
                 .AddSingleton<ICommandExplorerService, CommandExplorerService>()
                 .AddSingleton<ICommandFactoryService, CommandFactoryService>()
-                .AddSingleton<ISolutionService, SolutionService>();
+                .AddSingleton<ISolutionInfraService, SolutionInfraService>();
 
             var commandTypes = AppDomain.CurrentDomain
                 .GetAssemblies()

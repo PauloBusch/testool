@@ -7,19 +7,18 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace TesTool.Infra.Templates.Controller
+namespace TesTool.Infra.Templates.Controllers
 {
     using TesTool.Core.Extensions;
-    using TesTool.Core.Models.Templates.Faker;
     using System;
     
     /// <summary>
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionArrageTemplate.tt"
+    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertGetOneTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public partial class ControllerTestMethodSectionArrageTemplate : ControllerTestMethodSectionArrageTemplateBase
+    public partial class ControllerTestMethodSectionAssertGetOneTemplate : ControllerTestMethodSectionAssertGetOneTemplateBase
     {
 #line hidden
         /// <summary>
@@ -27,65 +26,87 @@ namespace TesTool.Infra.Templates.Controller
         /// </summary>
         public virtual string TransformText()
         {
+            this.Write("    response.EnsureSuccessStatusCode();\r\n");
             
-            #line 5 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionArrageTemplate.tt"
+            #line 5 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertGetOneTemplate.tt"
  
-    foreach (var entity in Entities) 
-    { 
+    if (HaveOutput) 
+    {
+        var responseVariable = ResponseIsGeneric ? "modelResponse" : "result";
+        if (ResponseIsGeneric)
+        {
 
             
             #line default
             #line hidden
             this.Write("    var ");
             
-            #line 9 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionArrageTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(entity.ToLowerCaseFirst()));
+            #line 12 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertGetOneTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(responseVariable));
             
             #line default
             #line hidden
-            this.Write(" = EntityFactory.");
+            this.Write(" = result?.");
             
-            #line 9 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionArrageTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(entity));
+            #line 12 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertGetOneTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(PropertyData));
             
             #line default
             #line hidden
-            this.Write("().Save();\r\n");
+            this.Write(";\r\n");
             
-            #line 10 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionArrageTemplate.tt"
- 
-    } 
+            #line 13 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertGetOneTemplate.tt"
+
+        }
 
             
             #line default
             #line hidden
+            this.Write("    Assert.NotEqual(default, ");
             
-            #line 13 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionArrageTemplate.tt"
- 
-    foreach (var model in Models) 
-    { 
+            #line 16 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertGetOneTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(responseVariable));
+            
+            #line default
+            #line hidden
+            this.Write(");\r\n");
+            
+            #line 17 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertGetOneTemplate.tt"
+
+    }
+    if (!string.IsNullOrWhiteSpace(ComparatorEntity)) 
+    {
+        var entityVariable = EntityName.ToLowerCaseFirst();
+        var responseVariable = ResponseIsGeneric ? "modelResponse" : "result";
 
             
             #line default
             #line hidden
-            this.Write("    var ");
+            this.Write("    CompareFactory.");
             
-            #line 17 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionArrageTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(model.ToLowerCaseFirst()));
-            
-            #line default
-            #line hidden
-            this.Write("Request = ModelFactory.");
-            
-            #line 17 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionArrageTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(model));
+            #line 24 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertGetOneTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(ComparatorEntity));
             
             #line default
             #line hidden
-            this.Write("().Generate();\r\n");
+            this.Write("().Equals(");
             
-            #line 18 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionArrageTemplate.tt"
- 
+            #line 24 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertGetOneTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(entityVariable));
+            
+            #line default
+            #line hidden
+            this.Write(", ");
+            
+            #line 24 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertGetOneTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(responseVariable));
+            
+            #line default
+            #line hidden
+            this.Write(");");
+            
+            #line 24 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertGetOneTemplate.tt"
+
     }
 
             
@@ -94,11 +115,13 @@ namespace TesTool.Infra.Templates.Controller
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 21 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestMethodSectionArrageTemplate.tt"
-
-    public string[] Models { get; set; }
-    public string[] Entities { get; set; }
-    public bool IsEmpty { get; set; }
+        #line 27 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controllers\ControllerTestMethodSectionAssertGetOneTemplate.tt"
+        
+    public bool HaveOutput { get; set; }
+    public bool ResponseIsGeneric { get; set; }
+    public string PropertyData { get; set; }
+    public string EntityName { get; set; }
+    public string ComparatorEntity { get; set; }
 
         
         #line default
@@ -112,7 +135,7 @@ namespace TesTool.Infra.Templates.Controller
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public class ControllerTestMethodSectionArrageTemplateBase
+    public class ControllerTestMethodSectionAssertGetOneTemplateBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

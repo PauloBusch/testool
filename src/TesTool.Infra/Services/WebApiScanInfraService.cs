@@ -13,7 +13,7 @@ namespace TesTool.Infra.Services
 {
     public class WebApiScanInfraService : ProjectScanInfraServiceBase, IWebApiScanInfraService
     {
-        private readonly ISettingInfraService _settingInfraService;
+        protected readonly ISettingInfraService _settingInfraService;
 
         public WebApiScanInfraService(
             ILoggerInfraService loggerInfraService,
@@ -164,7 +164,7 @@ namespace TesTool.Infra.Services
             endpoint.Output = GetModelType(returnType);
         }
 
-        protected override string GetProjectPathFile()
+        public override string GetProjectPathFile()
             => _settingInfraService.GetStringAsync(SettingEnumerator.PROJECT_DIRECTORY).Result;
     }
 }

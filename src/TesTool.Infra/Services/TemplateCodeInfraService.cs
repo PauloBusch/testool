@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using TesTool.Core.Interfaces.Services;
+using TesTool.Core.Models.Templates.Common;
 using TesTool.Core.Models.Templates.Comparator;
 using TesTool.Core.Models.Templates.Controller;
 using TesTool.Core.Models.Templates.Controller.Asserts;
 using TesTool.Core.Models.Templates.Factories;
 using TesTool.Core.Models.Templates.Faker;
+using TesTool.Infra.Templates.Common;
+using TesTool.Infra.Templates.Common.Extensions;
 using TesTool.Infra.Templates.Comparators;
-using TesTool.Infra.Templates.Controller;
-using TesTool.Infra.Templates.Extensions;
+using TesTool.Infra.Templates.Controllers;
 using TesTool.Infra.Templates.Factories;
 using TesTool.Infra.Templates.Fakers;
 using TesTool.Infra.Templates.Helpers;
@@ -18,11 +19,23 @@ namespace TesTool.Infra.Services
 {
     public class TemplateCodeInfraService : ITemplateCodeInfraService
     {
-        private readonly ISolutionService _solutionService;
+        private readonly ISolutionInfraService _solutionService;
 
-        public TemplateCodeInfraService(ISolutionService solutionService)
+        public TemplateCodeInfraService(ISolutionInfraService solutionService)
         {
             _solutionService = solutionService;
+        }
+
+        public string BuildFixture(Fixture model)
+        {
+            var template = new FixtureTemplate
+            {
+                DbContext = model.DbContext,
+                ProjectName = model.ProjectName,
+                FixtureNamespace = model.FixtureNamespace,
+                Namespaces = PrepareNamespaces(model.Namespaces, model.FixtureNamespace)
+            };
+            return TrimRows(template.TransformText());
         }
 
         public string BuildControllerTest(ControllerTest model)

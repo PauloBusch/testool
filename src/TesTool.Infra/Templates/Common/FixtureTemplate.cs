@@ -7,19 +7,19 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace TesTool.Infra.Templates.Controller
+namespace TesTool.Infra.Templates.Common
 {
-    using TesTool.Core.Models.Templates.Controller;
-    using TesTool.Core.Interfaces.Services;
+    using System.Text;
+    using TesTool.Core.Models.Templates.Comparator;
     using System;
     
     /// <summary>
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestTemplate.tt"
+    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public partial class ControllerTestTemplate : ControllerTestTemplateBase
+    public partial class FixtureTemplate : FixtureTemplateBase
     {
 #line hidden
         /// <summary>
@@ -27,8 +27,10 @@ namespace TesTool.Infra.Templates.Controller
         /// </summary>
         public virtual string TransformText()
         {
+            this.Write("using Xunit;\r\nusing System;\r\nusing System.Net.Http;\r\nusing Microsoft.AspNetCore.T" +
+                    "estHost;\r\nusing Microsoft.Extensions.Configuration;\r\n");
             
-            #line 5 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestTemplate.tt"
+            #line 10 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
  
     foreach (var @namespace in Namespaces) 
     {
@@ -38,32 +40,14 @@ namespace TesTool.Infra.Templates.Controller
             #line hidden
             this.Write("using ");
             
-            #line 9 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestTemplate.tt"
+            #line 14 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@namespace));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 10 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestTemplate.tt"
- 
-    } 
-
-            
-            #line default
-            #line hidden
-            
-            #line 13 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestTemplate.tt"
- 
-    if (Methods.Length > 0) 
-    { 
-
-            
-            #line default
-            #line hidden
-            this.Write("using System.Threading.Tasks;\r\nusing Xunit;\r\n");
-            
-            #line 19 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestTemplate.tt"
+            #line 15 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
  
     } 
 
@@ -72,80 +56,45 @@ namespace TesTool.Infra.Templates.Controller
             #line hidden
             this.Write("\r\nnamespace ");
             
-            #line 23 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
+            #line 19 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(FixtureNamespace));
             
             #line default
             #line hidden
             this.Write("\r\n{\r\n    public class ");
             
-            #line 25 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
+            #line 21 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(ProjectName));
             
             #line default
             #line hidden
-            this.Write(" : TestBase\r\n    {\r\n        public ");
+            this.Write("Fixture : ICollectionFixture<");
             
-            #line 27 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
-            
-            #line default
-            #line hidden
-            this.Write("(");
-            
-            #line 27 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(FixtureName));
+            #line 21 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(ProjectName));
             
             #line default
             #line hidden
-            this.Write(" fixture) : base(fixture, \"");
+            this.Write("Fixture>, IAsyncLifetime\r\n    {\r\n        public Request Request { get; private se" +
+                    "t; }\r\n        public HttpClient Client { get; private set; }\r\n        public Tes" +
+                    "tServer Server { get; private set; }\r\n        public ");
             
-            #line 27 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(BaseRoute));
-            
-            #line default
-            #line hidden
-            this.Write("\") { }\r\n");
-            
-            #line 28 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestTemplate.tt"
-
-    PushIndent("        ");
-    foreach (var method in Methods)
-    {
-
+            #line 26 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(DbContext));
             
             #line default
             #line hidden
-            this.Write("\r\n");
-            
-            #line 34 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(TemplataService.BuildControllerTestMethod(method)));
-            
-            #line default
-            #line hidden
-            this.Write("\r\n");
-            
-            #line 35 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestTemplate.tt"
-
-    }
-    ClearIndent();
-
-            
-            #line default
-            #line hidden
-            this.Write("    }\r\n}\r\n");
+            this.Write(" DbContext { get; private set; }\r\n\r\n        public readonly IConfiguration Config" +
+                    "uration;\r\n        public readonly IServiceProvider Services;\r\n    }\r\n}\r\n");
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 41 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Controller\ControllerTestTemplate.tt"
+        #line 32 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
 
-    public string Name { get; set; }
-    public string BaseRoute { get; set; }
-    public string Namespace { get; set; }
-    public string FixtureName { get; set; }
+    public string DbContext { get; set; }
+    public string ProjectName { get; set; }
+    public string FixtureNamespace { get; set; }
     public string[] Namespaces { get; set; }
-    public ControllerTestMethod[] Methods { get; set; }
-    public ITemplateCodeInfraService TemplataService { get; set; }
 
         
         #line default
@@ -159,7 +108,7 @@ namespace TesTool.Infra.Templates.Controller
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public class ControllerTestTemplateBase
+    public class FixtureTemplateBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

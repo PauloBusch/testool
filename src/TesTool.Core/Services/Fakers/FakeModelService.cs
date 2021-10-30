@@ -9,7 +9,7 @@ namespace TesTool.Core.Services.Fakers
     public class FakeModelService : FakeServiceBase, IFakeModelService
     {
         public FakeModelService(
-            ISolutionService solutionService,
+            ISolutionInfraService solutionService,
             ITestScanInfraService testScanInfraService,
             IExpressionInfraService expressionInfraService,
             IConventionInfraService conventionInfraService

@@ -25,9 +25,6 @@ namespace TesTool.Core.Commands.Generate
 
         public async Task ExecuteAsync(ICommandContext context)
         {
-            if (!string.IsNullOrWhiteSpace(Output) && !await _fileSystemInfraService.FileExistAsync(Output))
-                throw new DirectoryNotFoundException("Diretório de saída inválido.");
-
             await GenerateAsync();
         }
     }

@@ -8,7 +8,7 @@ namespace TesTool.Core.Services.Factories
     public class FactoryCompareService : FactoryServiceBase, IFactoryCompareService
     {
         public FactoryCompareService(
-            ISolutionService solutionService,
+            ISolutionInfraService solutionService,
             ITestScanInfraService testScanInfraService,
             IWebApiScanInfraService webApiScanInfraService
         ) : base(

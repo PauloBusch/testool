@@ -24,7 +24,7 @@ namespace TesTool.Core.Commands.Generate
         public bool Static { get; set; }
 
         private readonly ICompareService _compareService;
-        private readonly ISolutionService _solutionService;
+        private readonly ISolutionInfraService _solutionService;
         private readonly IFactoryCompareService _factoryCompareService;
         private readonly ITestScanInfraService _testScanInfraService;
         private readonly ITestCodeInfraService _testCodeInfraService;
@@ -33,7 +33,7 @@ namespace TesTool.Core.Commands.Generate
 
         public GenerateCompareCommand(
             ICompareService compareService,
-            ISolutionService solutionService,
+            ISolutionInfraService solutionService,
             IFactoryCompareService factoryCompareService,
             ITestScanInfraService testScanInfraService,
             ITestCodeInfraService testCodeInfraService,

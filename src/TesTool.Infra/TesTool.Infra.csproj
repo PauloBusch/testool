@@ -22,23 +22,27 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Templates\Controller\ControllerTestMethodSectionAssertDeleteTemplate.tt">
+    <None Update="Templates\Common\FixtureTemplate.tt">
+      <LastGenOutput>FixtureTemplate.cs</LastGenOutput>
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+    </None>
+    <None Update="Templates\Controllers\ControllerTestMethodSectionAssertDeleteTemplate.tt">
       <LastGenOutput>ControllerTestMethodSectionAssertDeleteTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
-    <None Update="Templates\Controller\ControllerTestMethodSectionAssertGetListTemplate.tt">
+    <None Update="Templates\Controllers\ControllerTestMethodSectionAssertGetListTemplate.tt">
       <LastGenOutput>ControllerTestMethodSectionAssertGetListTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
-    <None Update="Templates\Controller\ControllerTestMethodSectionAssertGetOneTemplate.tt">
+    <None Update="Templates\Controllers\ControllerTestMethodSectionAssertGetOneTemplate.tt">
       <LastGenOutput>ControllerTestMethodSectionAssertGetOneTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
-    <None Update="Templates\Controller\ControllerTestMethodSectionAssertPutTemplate.tt">
+    <None Update="Templates\Controllers\ControllerTestMethodSectionAssertPutTemplate.tt">
       <LastGenOutput>ControllerTestMethodSectionAssertPutTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
-    <None Update="Templates\Extensions\AssertExtensionsTemplate.tt">
+    <None Update="Templates\Common\Extensions\AssertExtensionsTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>AssertExtensionsTemplate.cs</LastGenOutput>
     </None>
@@ -86,23 +90,23 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>ModelFakerFactoryTemplate.cs</LastGenOutput>
     </None>
-    <None Update="Templates\Controller\ControllerTestMethodSectionActTemplate.tt">
+    <None Update="Templates\Controllers\ControllerTestMethodSectionActTemplate.tt">
       <LastGenOutput>ControllerTestMethodSectionActTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
-    <None Update="Templates\Controller\ControllerTestMethodSectionAssertPostTemplate.tt">
+    <None Update="Templates\Controllers\ControllerTestMethodSectionAssertPostTemplate.tt">
       <LastGenOutput>ControllerTestMethodSectionAssertPostTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
-    <None Update="Templates\Controller\ControllerTestMethodSectionArrageTemplate.tt">
+    <None Update="Templates\Controllers\ControllerTestMethodSectionArrageTemplate.tt">
       <LastGenOutput>ControllerTestMethodSectionArrageTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
-    <None Update="Templates\Controller\ControllerTestMethodTemplate.tt">
+    <None Update="Templates\Controllers\ControllerTestMethodTemplate.tt">
       <LastGenOutput>ControllerTestMethodTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
-    <None Update="Templates\Controller\ControllerTestTemplate.tt">
+    <None Update="Templates\Controllers\ControllerTestTemplate.tt">
       <LastGenOutput>ControllerTestTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
@@ -113,6 +117,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Templates\Common\FixtureTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FixtureTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Update="Templates\Comparators\ComparatorDynamicTemplate.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -123,52 +132,52 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ComparatorStaticTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Update="Templates\Controller\ControllerTestMethodSectionActTemplate.cs">
+    <Compile Update="Templates\Controllers\ControllerTestMethodSectionActTemplate.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ControllerTestMethodSectionActTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Update="Templates\Controller\ControllerTestMethodSectionArrageTemplate.cs">
+    <Compile Update="Templates\Controllers\ControllerTestMethodSectionArrageTemplate.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ControllerTestMethodSectionArrageTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Update="Templates\Controller\ControllerTestMethodSectionAssertDeleteTemplate.cs">
+    <Compile Update="Templates\Controllers\ControllerTestMethodSectionAssertDeleteTemplate.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ControllerTestMethodSectionAssertDeleteTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Update="Templates\Controller\ControllerTestMethodSectionAssertGetListTemplate.cs">
+    <Compile Update="Templates\Controllers\ControllerTestMethodSectionAssertGetListTemplate.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ControllerTestMethodSectionAssertGetListTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Update="Templates\Controller\ControllerTestMethodSectionAssertGetOneTemplate.cs">
+    <Compile Update="Templates\Controllers\ControllerTestMethodSectionAssertGetOneTemplate.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ControllerTestMethodSectionAssertGetOneTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Update="Templates\Controller\ControllerTestMethodSectionAssertPostTemplate.cs">
+    <Compile Update="Templates\Controllers\ControllerTestMethodSectionAssertPostTemplate.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ControllerTestMethodSectionAssertPostTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Update="Templates\Controller\ControllerTestMethodSectionAssertPutTemplate.cs">
+    <Compile Update="Templates\Controllers\ControllerTestMethodSectionAssertPutTemplate.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ControllerTestMethodSectionAssertPutTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Update="Templates\Controller\ControllerTestMethodTemplate.cs">
+    <Compile Update="Templates\Controllers\ControllerTestMethodTemplate.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ControllerTestMethodTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Update="Templates\Controller\ControllerTestTemplate.cs">
+    <Compile Update="Templates\Controllers\ControllerTestTemplate.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ControllerTestTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Update="Templates\Extensions\AssertExtensionsTemplate.cs">
+    <Compile Update="Templates\Common\Extensions\AssertExtensionsTemplate.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>AssertExtensionsTemplate.tt</DependentUpon>

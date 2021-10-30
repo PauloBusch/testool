@@ -7,7 +7,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using System.Xml.XPath;
 using TesTool.Core.Interfaces.Services;
 using TesTool.Core.Models.Enumerators;
 using TesTool.Core.Models.Metadata;
@@ -30,7 +33,7 @@ namespace TesTool.Infra.Services
             _loggerInfraService = loggerInfraService;
         }
 
-        protected abstract string GetProjectPathFile();
+        public abstract string GetProjectPathFile();
 
         public async Task<bool> ProjectExistAsync()
         {
@@ -227,6 +230,23 @@ namespace TesTool.Infra.Services
             var compilation = await project.GetCompilationAsync();
             _cacheCompilation.Add(project.Id, compilation);
             return compilation;
+        }
+
+        protected IEnumerable<PackageReference> GetProjectPackages(string projectPathFile)
+        {
+            var csprojXml = File.ReadAllText(projectPathFile);
+            return XDocument.Parse(csprojXml).XPathSelectElements("//PackageReference")
+                .Select(pr => new PackageReference
+                {
+                    Include = pr.Attribute("Include").Value,
+                    Version = new Version(pr.Attribute("Version").Value)
+                })
+                .ToArray();
+        }
+
+        public string GetName()
+        {
+            return GetProjectAsync().Result?.Name;
         }
 
         public string GetNamespace() => GetProjectAsync().Result?.AssemblyName;

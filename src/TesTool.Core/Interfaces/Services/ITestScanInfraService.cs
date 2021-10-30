@@ -5,6 +5,7 @@ namespace TesTool.Core.Interfaces.Services
 {
     public interface ITestScanInfraService
     {
+        string GetName();
         string GetNamespace();
         string GetDirectoryBase();
         Task<bool> ProjectExistAsync();
