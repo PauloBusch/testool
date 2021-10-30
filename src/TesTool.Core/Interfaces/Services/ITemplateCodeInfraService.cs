@@ -42,5 +42,6 @@ namespace TesTool.Core.Interfaces.Services
         string BuildHttpRequest(string @namespace);
         string BuildProjectExplorer(string @namespace);
         string BuildConfigurationLoader(string @namespace);
+        string BuildTestBase(TestBase model);
     }
 }

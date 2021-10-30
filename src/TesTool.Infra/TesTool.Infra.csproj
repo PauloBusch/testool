@@ -22,6 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Templates\Common\Abstract\TestBaseTemplate.tt">
+      <LastGenOutput>TestBaseTemplate.cs</LastGenOutput>
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+    </None>
     <None Update="Templates\Common\FixtureTemplate.tt">
       <LastGenOutput>FixtureTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
@@ -50,7 +54,7 @@
       <LastGenOutput>ControllerTestMethodSectionAssertPutTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
-    <None Update="Templates\Common\Extensions\AssertExtensionsTemplate.tt">
+    <None Update="Templates\Common\Utils\AssertExtensionsTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>AssertExtensionsTemplate.cs</LastGenOutput>
     </None>
@@ -125,10 +129,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Templates\Common\Abstract\TestBaseTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>TestBaseTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Update="Templates\Common\FixtureTemplate.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>FixtureTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Templates\Common\Utils\AssertExtensionsTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AssertExtensionsTemplate.tt</DependentUpon>
     </Compile>
     <Compile Update="Templates\Common\Utils\ConfigurationLoaderTemplate.cs">
       <DesignTime>True</DesignTime>
@@ -200,11 +214,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ControllerTestTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Update="Templates\Common\Extensions\AssertExtensionsTemplate.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>AssertExtensionsTemplate.tt</DependentUpon>
-    </Compile>
     <Compile Update="Templates\Factories\ComparatorFactoryMethodTemplate.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -250,10 +259,6 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Templates\Common\Abstract\" />
   </ItemGroup>
 
 </Project>

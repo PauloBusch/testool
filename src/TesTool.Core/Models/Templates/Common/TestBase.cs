@@ -3,29 +3,30 @@ using TesTool.Core.Models.Metadata;
 
 namespace TesTool.Core.Models.Templates.Common
 {
-    public class Fixture
+    public class TestBase
     {
         private List<string> _namespaces;
 
-        public Fixture(
-            Class dbContextClass,
+        public TestBase(
+            string name,
+            string @namespace,
             string fixtureName,
-            string projectName,
-            string fixtureNamespace
+            Class dbContextClass
         )
         {
-            ProjectName = projectName;
-            FixtureName = fixtureName;
-            DbContext = dbContextClass.Name;
-            FixtureNamespace = fixtureNamespace;
             _namespaces = new List<string>();
+
+            Name = name;
+            Namespace = @namespace;
+            DbContext = dbContextClass.Name;
+            FixtureName = fixtureName;
             AddNamespace(dbContextClass.Namespace);
         }
 
-        public string DbContext { get; private set; }
-        public string ProjectName { get; private set; }
+        public string Name { get; private set; }
+        public string Namespace { get; private set; }
         public string FixtureName { get; private set; }
-        public string FixtureNamespace { get; private set; }
+        public string DbContext { get; private set; }
         public IReadOnlyCollection<string> Namespaces => _namespaces.AsReadOnly();
 
         public void AddNamespace(string @namespace) => _namespaces.Add(@namespace);

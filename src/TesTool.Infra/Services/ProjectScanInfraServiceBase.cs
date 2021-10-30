@@ -244,6 +244,20 @@ namespace TesTool.Infra.Services
                 .ToArray();
         }
 
+        public void ClearCache()
+        {
+            var projectPathFile = GetProjectPathFile();
+            if (string.IsNullOrWhiteSpace(projectPathFile)) return;
+
+            var projectName = Path.GetFileNameWithoutExtension(projectPathFile);
+            var existingProject = _cacheProjects.FirstOrDefault(p => p.Name == projectName);
+            if (existingProject is null) return;
+
+            _cacheProjects.Remove(existingProject); 
+            _cacheCompilation.Remove(existingProject.Id);
+            _cacheProjectContext.RemoveAll(c => c.Id == existingProject.Id);
+        }
+
         public string GetName()
         {
             return GetProjectAsync().Result?.Name;

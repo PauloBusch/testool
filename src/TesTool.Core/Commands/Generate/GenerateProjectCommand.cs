@@ -1,10 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using TesTool.Core.Attributes;
 using TesTool.Core.Commands.Configure;
+using TesTool.Core.Commands.Generate.Factory;
 using TesTool.Core.Enumerations;
 using TesTool.Core.Exceptions;
+using TesTool.Core.Interfaces;
 using TesTool.Core.Interfaces.Services;
 using TesTool.Core.Interfaces.Services.Common;
 using TesTool.Core.Models.Metadata;
@@ -26,9 +30,12 @@ namespace TesTool.Core.Commands.Generate
         private readonly ICommandHandler _commandHandler;
         private readonly IFixtureService _fixtureService;
         private readonly IServiceResolver _serviceResolver;
+        private readonly ITestScanInfraService _testScanInfraService;
         private readonly ICommonRequestService _commonRequestService;
         private readonly ICommonProjectExplorerService _commonProjectExplorerService;
         private readonly ICommonConfigurationLoaderService _commonConfigurationLoaderService;
+        private readonly ICommonAssertExtensionsService _commonAssertExtensionsService;
+        private readonly ICommonTestBaseService _commonTestBaseService;
         private readonly ISolutionInfraService _solutionInfraService;
         private readonly ITestCodeInfraService _testCodeInfraService;
         private readonly IWebApiScanInfraService _webApiScanInfraService;
@@ -43,8 +50,11 @@ namespace TesTool.Core.Commands.Generate
             IServiceResolver serviceResolver,
             ISettingInfraService settingInfraService,
             ICommonRequestService commonRequestService,
+            ITestScanInfraService testScanInfraService,
             ICommonProjectExplorerService commonProjectExplorerService,
             ICommonConfigurationLoaderService commonConfigurationLoaderService,
+            ICommonAssertExtensionsService commonAssertExtensionsService,
+            ICommonTestBaseService commonTestBaseService,
             ISolutionInfraService solutionInfraService,
             ITestCodeInfraService testCodeInfraService,
             IFileSystemInfraService fileSystemInfraService,
@@ -58,11 +68,14 @@ namespace TesTool.Core.Commands.Generate
             _fixtureService = fixtureService;
             _serviceResolver = serviceResolver;
             _settingInfraService = settingInfraService;
+            _testScanInfraService = testScanInfraService;
             _solutionInfraService = solutionInfraService;
             _testCodeInfraService = testCodeInfraService;
             _commonRequestService = commonRequestService;
             _commonProjectExplorerService = commonProjectExplorerService;
             _commonConfigurationLoaderService = commonConfigurationLoaderService;
+            _commonAssertExtensionsService = commonAssertExtensionsService;
+            _commonTestBaseService = commonTestBaseService;
             _webApiDbContextInfraService = webApiDbContextInfraService;
             _webApiScanInfraService = webApiScanInfraService;
             _environmentInfraService = environmentInfraService;
@@ -71,9 +84,8 @@ namespace TesTool.Core.Commands.Generate
 
         protected override async Task GenerateAsync()
         {
-            var configureCommand = _serviceResolver.ResolveService<ConfigureWebApiProjectCommand>();
-            configureCommand.ProjectPath = ProjectPath;
-            await _commandHandler.HandleAsync(configureCommand, true);
+            var beforeCommands = GetBeforeCommands();
+            await _commandHandler.HandleManyAsync(beforeCommands, true);
 
             if (!await _webApiScanInfraService.ProjectExistAsync())
                 throw new ProjectNotFoundException(ProjectTypeEnumerator.WEB_API);
@@ -83,7 +95,35 @@ namespace TesTool.Core.Commands.Generate
             await SaveRequestClassAsync();
             await SaveProjectExplorerClassAsync();
             await SaveConfigurationLoaderClassAsync();
-            await SaveFixtureClassAsync(await GetDbContextAsync());
+            await SaveAssertExtensionsClassAsync();
+
+            var dbContextClass = await GetDbContextAsync();
+            await SaveFixtureClassAsync(dbContextClass);
+            await SaveTestBaseClassAsync(dbContextClass);
+
+            _testScanInfraService.ClearCache();
+            var afterCommands = GetAfterCommands(dbContextClass);
+            await _commandHandler.HandleManyAsync(afterCommands, true);
+        }
+
+        private IEnumerable<ICommand> GetBeforeCommands()
+        {
+            var configureCommand = _serviceResolver.ResolveService<ConfigureWebApiProjectCommand>();
+            configureCommand.ProjectPath = ProjectPath;
+
+            return new ICommand[] { configureCommand };
+        }
+
+        private IEnumerable<ICommand> GetAfterCommands(Class dbContextClass)
+        {
+            var generateFactoryEntityCommand = _serviceResolver.ResolveService<GenerateFactoryEntityCommand>();
+            generateFactoryEntityCommand.DbContext = dbContextClass.Name;
+
+            return new ICommand[] {
+                _serviceResolver.ResolveService<GenerateFactoryCompareCommand>(),
+                _serviceResolver.ResolveService<GenerateFactoryModelCommand>(),
+                generateFactoryEntityCommand
+            };
         }
 
         private async Task SaveRequestClassAsync()
@@ -119,15 +159,37 @@ namespace TesTool.Core.Commands.Generate
             await _fileSystemInfraService.SaveFileAsync(configurationLoaderPathFile, configurationLoaderSourceCode);
         }
 
+        private async Task SaveAssertExtensionsClassAsync()
+        {
+            var assertExtensionsPathFile = _commonAssertExtensionsService.GetPathFile();
+            var assertExtensionsNamespace = _commonAssertExtensionsService.GetNamespace();
+            var assertExtensionsSourceCode = _templateCodeInfraService.BuildAssertExtensions(assertExtensionsNamespace);
+            if (await _fileSystemInfraService.FileExistAsync(assertExtensionsPathFile))
+                throw new DuplicatedSourceFileException(assertExtensionsSourceCode);
+
+            await _fileSystemInfraService.SaveFileAsync(assertExtensionsPathFile, assertExtensionsSourceCode);
+        }
+
         private async Task SaveFixtureClassAsync(Class dbContextClass)
         {
-            var fullPath = _fixtureService.GetFixturePathFile();
+            var fixturePathFile = _fixtureService.GetFixturePathFile();
             var fixtureModel = _fixtureService.GetFixtureModel(dbContextClass);
             var fixtureSourceCode = _templateCodeInfraService.BuildFixture(fixtureModel);
-            if (await _fileSystemInfraService.FileExistAsync(fullPath))
+            if (await _fileSystemInfraService.FileExistAsync(fixturePathFile))
                 throw new DuplicatedSourceFileException(fixtureSourceCode);
 
-            await _fileSystemInfraService.SaveFileAsync(fullPath, fixtureSourceCode);
+            await _fileSystemInfraService.SaveFileAsync(fixturePathFile, fixtureSourceCode);
+        }
+
+        private async Task SaveTestBaseClassAsync(Class dbContextClass)
+        {
+            var testBasePathFile = _commonTestBaseService.GetPathFile();
+            var testBaseModel = _commonTestBaseService.GetTestBaseModel(dbContextClass);
+            var testBaseSourceCode = _templateCodeInfraService.BuildTestBase(testBaseModel);
+            if (await _fileSystemInfraService.FileExistAsync(testBasePathFile))
+                throw new DuplicatedSourceFileException(testBaseSourceCode);
+
+            await _fileSystemInfraService.SaveFileAsync(testBasePathFile, testBaseSourceCode);
         }
 
         private async Task<Class> GetDbContextAsync()

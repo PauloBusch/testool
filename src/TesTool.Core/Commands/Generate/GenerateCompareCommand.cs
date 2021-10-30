@@ -4,6 +4,7 @@ using TesTool.Core.Attributes;
 using TesTool.Core.Enumerations;
 using TesTool.Core.Exceptions;
 using TesTool.Core.Interfaces.Services;
+using TesTool.Core.Interfaces.Services.Common;
 using TesTool.Core.Interfaces.Services.Factories;
 using TesTool.Core.Models.Metadata;
 using TesTool.Core.Models.Templates.Comparator;
@@ -24,11 +25,11 @@ namespace TesTool.Core.Commands.Generate
         public bool Static { get; set; }
 
         private readonly ICompareService _compareService;
-        private readonly ISolutionInfraService _solutionService;
         private readonly IFactoryCompareService _factoryCompareService;
         private readonly ITestScanInfraService _testScanInfraService;
         private readonly ITestCodeInfraService _testCodeInfraService;
         private readonly ITemplateCodeInfraService _templateCodeInfraService;
+        private readonly ICommonAssertExtensionsService _commonAssertExtensionsService;
         private readonly IWebApiScanInfraService _webApiScanInfraService;
 
         public GenerateCompareCommand(
@@ -38,16 +39,17 @@ namespace TesTool.Core.Commands.Generate
             ITestScanInfraService testScanInfraService,
             ITestCodeInfraService testCodeInfraService,
             ITemplateCodeInfraService templateCodeInfraService,
+            ICommonAssertExtensionsService commonAssertExtensionsService,
             IWebApiScanInfraService webApiScanInfraService,
             IFileSystemInfraService fileSystemInfraService
         ) : base(fileSystemInfraService)
         {
             _compareService = compareService;
-            _solutionService = solutionService;
             _factoryCompareService = factoryCompareService;
             _testScanInfraService = testScanInfraService;
             _testCodeInfraService = testCodeInfraService;
             _templateCodeInfraService = templateCodeInfraService;
+            _commonAssertExtensionsService = commonAssertExtensionsService;
             _webApiScanInfraService = webApiScanInfraService;
         }
 
@@ -83,11 +85,11 @@ namespace TesTool.Core.Commands.Generate
             } else
             {
                 var templateModel = await _compareService.GetCompareDynamicAsync(sourceModel, targetModel);
-                var extensionClassName = "AssertExtensions";
-                var extensionClass = await _testScanInfraService.GetClassAsync(extensionClassName);
-                if (extensionClass is null) throw new ClassNotFoundException(extensionClassName);
+                var extensionClassName = HelpClassEnumerator.ASSERT_EXTENSIONS.Name;
+                if (!await _testScanInfraService.ClassExistAsync(extensionClassName)) 
+                    throw new ClassNotFoundException(extensionClassName);
 
-                templateModel.AddNamespace(extensionClass.Namespace);
+                templateModel.AddNamespace(_commonAssertExtensionsService.GetNamespace());
                 sourceCode = _templateCodeInfraService.BuildCompareDynamic(templateModel);
             }
             

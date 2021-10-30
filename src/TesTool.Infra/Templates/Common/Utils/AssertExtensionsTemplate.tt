@@ -6,9 +6,9 @@ using System.Text.RegularExpressions;
 using System.Linq;
 using Xunit;
 
-namespace <#=ExtensionNamespace#>
+namespace <#=Namespace#>
 {
-    public static class AssertExtensions : Assert
+    public class AssertExtensions : Assert
     {
         public static void AreEqualObjects(
             object source, object target,
@@ -93,5 +93,5 @@ namespace <#=ExtensionNamespace#>
     }
 }
 <#+
-    public string ExtensionNamespace { get; set; }
+    public string Namespace { get; set; }
 #>

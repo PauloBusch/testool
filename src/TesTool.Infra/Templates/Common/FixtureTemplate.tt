@@ -1,7 +1,5 @@
 ﻿<#@ template language="C#" #>
 <#@ assembly name="System.Core" #>
-<#@ import namespace="System.Text" #>
-<#@ import namespace="TesTool.Core.Models.Templates.Comparator" #>
 using Xunit;
 using System;
 using System.Net.Http;

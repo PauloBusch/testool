@@ -1,0 +1,44 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<# 
+    foreach (var @namespace in Namespaces) 
+    {
+#>
+using <#=@namespace#>;
+<# 
+    } 
+#>
+using System;
+using Xunit;
+
+namespace <#= Namespace #>
+{
+    public class <#= Name #> : IClassFixture<<#= FixtureName #>>
+    {
+        public readonly Uri Uri;
+        public readonly Request Request;
+        public readonly <#= DbContext #> DbContext;
+
+        public readonly ModelFakerFactory ModelFactory;
+        public readonly EntityFakerFactory EntityFactory;
+        public readonly CompareFactory CompareFactory;
+
+        public <#= Name #>(<#= FixtureName #> fixture, string url)
+        {
+            Request = fixture.Request;
+            DbContext = fixture.DbContext;
+            Uri = new Uri($"{fixture.Client.BaseAddress}/{url}");
+
+            ModelFactory = new ModelFakerFactory();
+            EntityFactory = new EntityFakerFactory(this);
+            CompareFactory = new CompareFactory();
+        }
+    }
+}
+<#+
+    public string Name { get; set; }
+    public string Namespace { get; set; }
+    public string FixtureName { get; set; }
+    public string DbContext { get; set; }
+    public string[] Namespaces { get; set; }
+#>

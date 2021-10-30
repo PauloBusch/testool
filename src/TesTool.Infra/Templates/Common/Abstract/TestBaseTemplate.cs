@@ -7,7 +7,7 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace TesTool.Infra.Templates.Common.Extensions
+namespace TesTool.Infra.Templates.Common.Abstract
 {
     using System;
     
@@ -15,9 +15,9 @@ namespace TesTool.Infra.Templates.Common.Extensions
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Extensions\AssertExtensionsTemplate.tt"
+    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public partial class AssertExtensionsTemplate : AssertExtensionsTemplateBase
+    public partial class TestBaseTemplate : TestBaseTemplateBase
     {
 #line hidden
         /// <summary>
@@ -25,70 +25,99 @@ namespace TesTool.Infra.Templates.Common.Extensions
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("using System;\r\nusing System.Collections.Generic;\r\nusing System.Text.RegularExpres" +
-                    "sions;\r\nusing System.Linq;\r\nusing Xunit;\r\n\r\nnamespace ");
             
-            #line 9 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Extensions\AssertExtensionsTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(ExtensionNamespace));
+            #line 3 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
+ 
+    foreach (var @namespace in Namespaces) 
+    {
+
             
             #line default
             #line hidden
-            this.Write("\r\n{\r\n    public static class AssertExtensions : Assert\r\n    {\r\n        public sta" +
-                    "tic void AreEqualObjects(\r\n            object source, object target,\r\n          " +
-                    "  IEnumerable<string> ignore = null\r\n        )\r\n        {\r\n            if (sourc" +
-                    "e is null) throw new ArgumentNullException(nameof(source));\r\n            if (tar" +
-                    "get is null) throw new ArgumentNullException(nameof(target));\r\n            var s" +
-                    "ourceType = source.GetType();\r\n            var targetType = target.GetType();\r\n " +
-                    "           var sourcePropertyNames = sourceType.GetProperties().Select(p => p.Na" +
-                    "me).ToList();\r\n            var targetPropertyNames = targetType.GetProperties()." +
-                    "Select(p => p.Name).ToList();\r\n            var mergedProperties = sourceProperty" +
-                    "Names.Concat(targetPropertyNames);\r\n            var comparedPropertiesCount = 0;" +
-                    "\r\n            foreach (var propertyName in sourcePropertyNames)\r\n            {\r\n" +
-                    "                if (ignore != null && ignore.Contains(propertyName)) continue;\r\n" +
-                    "\r\n                var sourceProperty = sourceType.GetProperty(propertyName);\r\n  " +
-                    "              var targetProperty = targetType.GetProperty(propertyName);\r\n      " +
-                    "          if (sourceProperty == null || targetProperty == null) continue;\r\n\r\n   " +
-                    "             var type = Nullable.GetUnderlyingType(sourceProperty.PropertyType) " +
-                    "?? sourceProperty.PropertyType;\r\n                if (!IsSimpleType(type)) contin" +
-                    "ue;\r\n\r\n                if (sourceProperty.PropertyType != targetProperty.Propert" +
-                    "yType) continue;\r\n                var expectedValue = sourceProperty.GetValue(so" +
-                    "urce, null);\r\n                var actualValue = targetProperty.GetValue(target, " +
-                    "null);\r\n                if (!AreEqualProperty(type, expectedValue, actualValue))" +
-                    "\r\n                    throw new Exception(\r\n                        $\"The proper" +
-                    "ty {propertyName} value are not equal for object type {targetType.Name}\\n\" +\r\n  " +
-                    "                      $\"Expected value: {(expectedValue is null ? \"null\" : $\"\\\"{" +
-                    "expectedValue}\\\"\")}\\n\" +\r\n                        $\"Actual value: \\\"{(actualValu" +
-                    "e is null ? \"null\" : $\"\\\"{actualValue}\\\"\")}\\\"\"\r\n                    );\r\n        " +
-                    "        comparedPropertiesCount++;\r\n            }\r\n\r\n            if (comparedPro" +
-                    "pertiesCount == decimal.Zero)\r\n                throw new Exception($\"No properti" +
-                    "es were compared for object type {targetType.Name}\");\r\n        }\r\n\r\n        priv" +
-                    "ate static bool AreEqualProperty(Type type, object source, object target)\r\n     " +
-                    "   {\r\n            if (source == null && target == null) return true;\r\n          " +
-                    "  if (source == null || target == null) return false;\r\n\r\n            const int p" +
-                    "recision = 2;\r\n            var sourceValue = source;\r\n            var targetValu" +
-                    "e = target;\r\n            if (new [] { typeof(decimal), typeof(Decimal) }.Contain" +
-                    "s(type))\r\n            {\r\n                sourceValue = decimal.Round((decimal)so" +
-                    "urceValue, precision, MidpointRounding.ToZero);\r\n                targetValue = d" +
-                    "ecimal.Round((decimal)targetValue, precision, MidpointRounding.ToZero);\r\n       " +
-                    "     }\r\n\r\n            if (new [] { typeof(string), typeof(String) }.Contains(typ" +
-                    "e))\r\n            {\r\n                sourceValue = Regex.Unescape(sourceValue.ToS" +
-                    "tring());\r\n                targetValue = Regex.Unescape(targetValue.ToString());" +
-                    "\r\n            }\r\n\r\n            if (!sourceValue.Equals(targetValue)) return fals" +
-                    "e;\r\n            if (!targetValue.Equals(sourceValue)) return false;\r\n           " +
-                    " return true;\r\n        }\r\n\r\n        public static bool IsSimpleType(Type type)\r\n" +
-                    "        {\r\n            var realType = Nullable.GetUnderlyingType(type) ?? type;\r" +
-                    "\n            if (realType.IsPrimitive || realType.IsEnum) return true;\r\n\r\n      " +
-                    "      var sampleTypes = new[] {\r\n                typeof(string),\r\n              " +
-                    "  typeof(decimal),\r\n                typeof(DateTime),\r\n                typeof(Da" +
-                    "teTimeOffset),\r\n                typeof(TimeSpan),\r\n                typeof(Guid)\r" +
-                    "\n            };\r\n            return sampleTypes.Contains(realType);\r\n        }\r\n" +
-                    "    }\r\n}\r\n");
+            this.Write("using ");
+            
+            #line 7 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(@namespace));
+            
+            #line default
+            #line hidden
+            this.Write(";\r\n");
+            
+            #line 8 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
+ 
+    } 
+
+            
+            #line default
+            #line hidden
+            this.Write("using System;\r\nusing Xunit;\r\n\r\nnamespace ");
+            
+            #line 14 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n{\r\n    public class ");
+            
+            #line 16 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
+            
+            #line default
+            #line hidden
+            this.Write(" : IClassFixture<");
+            
+            #line 16 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(FixtureName));
+            
+            #line default
+            #line hidden
+            this.Write(">\r\n    {\r\n        public readonly Uri Uri;\r\n        public readonly Request Reque" +
+                    "st;\r\n        public readonly ");
+            
+            #line 20 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(DbContext));
+            
+            #line default
+            #line hidden
+            this.Write(" DbContext;\r\n\r\n        public readonly ModelFakerFactory ModelFactory;\r\n        p" +
+                    "ublic readonly EntityFakerFactory EntityFactory;\r\n        public readonly Compar" +
+                    "eFactory CompareFactory;\r\n\r\n        public ");
+            
+            #line 26 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Name));
+            
+            #line default
+            #line hidden
+            this.Write("(");
+            
+            #line 26 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(FixtureName));
+            
+            #line default
+            #line hidden
+            this.Write(@" fixture, string url)
+        {
+            Request = fixture.Request;
+            DbContext = fixture.DbContext;
+            Uri = new Uri($""{fixture.Client.BaseAddress}/{url}"");
+
+            ModelFactory = new ModelFakerFactory();
+            EntityFactory = new EntityFakerFactory(this);
+            CompareFactory = new CompareFactory();
+        }
+    }
+}
+");
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 95 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Extensions\AssertExtensionsTemplate.tt"
+        #line 38 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
 
-    public string ExtensionNamespace { get; set; }
+    public string Name { get; set; }
+    public string Namespace { get; set; }
+    public string FixtureName { get; set; }
+    public string DbContext { get; set; }
+    public string[] Namespaces { get; set; }
 
         
         #line default
@@ -102,7 +131,7 @@ namespace TesTool.Infra.Templates.Common.Extensions
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public class AssertExtensionsTemplateBase
+    public class TestBaseTemplateBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

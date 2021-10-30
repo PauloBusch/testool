@@ -46,6 +46,8 @@ namespace TesTool.Cli
                 .AddSingleton<ICommonRequestService, CommonRequestService>()
                 .AddSingleton<ICommonProjectExplorerService, CommonProjectExplorerService>()
                 .AddSingleton<ICommonConfigurationLoaderService, CommonConfigurationLoaderService>()
+                .AddSingleton<ICommonAssertExtensionsService, CommonAssertExtensionsService>()
+                .AddSingleton<ICommonTestBaseService, CommonTestBaseService>()
 
                 .AddSingleton<IGetOneEndpointTestService, GetOneEndpointTestService>()
                 .AddSingleton<IGetListEndpointTestService, GetListEndpointTestService>()

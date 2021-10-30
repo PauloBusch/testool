@@ -8,7 +8,7 @@ using TesTool.Core.Models.Templates.Controller.Asserts;
 using TesTool.Core.Models.Templates.Factories;
 using TesTool.Core.Models.Templates.Faker;
 using TesTool.Infra.Templates.Common;
-using TesTool.Infra.Templates.Common.Extensions;
+using TesTool.Infra.Templates.Common.Abstract;
 using TesTool.Infra.Templates.Common.Utils;
 using TesTool.Infra.Templates.Comparators;
 using TesTool.Infra.Templates.Controllers;
@@ -298,7 +298,7 @@ namespace TesTool.Infra.Services
 
         public string BuildAssertExtensions(string @namespace)
         {
-            var template = new AssertExtensionsTemplate { ExtensionNamespace = @namespace };
+            var template = new AssertExtensionsTemplate { Namespace = @namespace };
             return TrimRows(template.TransformText());
         }
 
@@ -317,6 +317,18 @@ namespace TesTool.Infra.Services
         public string BuildConfigurationLoader(string @namespace)
         {
             var template = new ConfigurationLoaderTemplate { Namespace = @namespace };
+            return TrimRows(template.TransformText());
+        }
+
+        public string BuildTestBase(TestBase model)
+        {
+            var template = new TestBaseTemplate { 
+                Name = model.Name,
+                Namespace = model.Namespace,
+                DbContext = model.DbContext,
+                FixtureName = model.FixtureName,
+                Namespaces = PrepareNamespaces(model.Namespaces, model.Namespace)
+            };
             return TrimRows(template.TransformText());
         }
 

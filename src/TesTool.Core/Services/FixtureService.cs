@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using TesTool.Core.Enumerations;
 using TesTool.Core.Interfaces.Services;
 using TesTool.Core.Interfaces.Services.Common;
 using TesTool.Core.Models.Metadata;
@@ -40,6 +41,7 @@ namespace TesTool.Core.Services
         {
             var fixtureModel = new Fixture(
                 dbContextClass,
+                GetFixtureName(),
                 _webApiScanInfraService.GetName(),
                 $"{_webApiScanInfraService.GetNamespace()}.IntegrationTests"
             );
@@ -47,6 +49,13 @@ namespace TesTool.Core.Services
             fixtureModel.AddNamespace(_commonProjectExplorerService.GetNamespace());
             fixtureModel.AddNamespace(_commonConfigurationLoaderService.GetNamespace());
             return fixtureModel;
+        }
+
+        public string GetFixtureName()
+        {
+            var projectName = _webApiScanInfraService.GetName();
+            var normalizedProjectName = Regex.Replace(projectName, @"\W", string.Empty);
+            return HelpClassEnumerator.FIXTURE.Name.Replace("{PROJECT_NAME}", normalizedProjectName);
         }
     }
 }
