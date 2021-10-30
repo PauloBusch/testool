@@ -9,11 +9,11 @@ using TesTool.Core.Models.Templates.Factories;
 using TesTool.Core.Models.Templates.Faker;
 using TesTool.Infra.Templates.Common;
 using TesTool.Infra.Templates.Common.Extensions;
+using TesTool.Infra.Templates.Common.Utils;
 using TesTool.Infra.Templates.Comparators;
 using TesTool.Infra.Templates.Controllers;
 using TesTool.Infra.Templates.Factories;
 using TesTool.Infra.Templates.Fakers;
-using TesTool.Infra.Templates.Helpers;
 
 namespace TesTool.Infra.Services
 {
@@ -32,6 +32,7 @@ namespace TesTool.Infra.Services
             {
                 DbContext = model.DbContext,
                 ProjectName = model.ProjectName,
+                FixtureName = model.FixtureName,
                 FixtureNamespace = model.FixtureNamespace,
                 Namespaces = PrepareNamespaces(model.Namespaces, model.FixtureNamespace)
             };
@@ -304,6 +305,18 @@ namespace TesTool.Infra.Services
         public string BuildHttpRequest(string @namespace)
         {
             var template = new HttpRequestTemplate { Namespace = @namespace };
+            return TrimRows(template.TransformText());
+        }
+
+        public string BuildProjectExplorer(string @namespace)
+        {
+            var template = new ProjectExplorerTemplate { Namespace = @namespace };
+            return TrimRows(template.TransformText());
+        }
+
+        public string BuildConfigurationLoader(string @namespace)
+        {
+            var template = new ConfigurationLoaderTemplate { Namespace = @namespace };
             return TrimRows(template.TransformText());
         }
 

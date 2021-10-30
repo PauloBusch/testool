@@ -52,9 +52,9 @@ namespace TesTool.IntegrationTests.Services
 
         [Theory]
         [InlineData(@"c c C:\Projetos\Tests\convention.json", typeof(ConfigureConventionCommand))]
-        [InlineData(@"c p C:\Projetos\Api", typeof(ConfigureProjectCommand))]
+        [InlineData(@"c p C:\Projetos\Api", typeof(ConfigureWebApiProjectCommand))]
         [InlineData(@"configure convention C:\Projetos\Tests\convention.json", typeof(ConfigureConventionCommand))]
-        [InlineData(@"configure project C:\Projetos\Api", typeof(ConfigureProjectCommand))]
+        [InlineData(@"configure project C:\Projetos\Api", typeof(ConfigureWebApiProjectCommand))]
         public void ShouldReturnCommandInstance(string rawArguments, Type type)
         {
             var arguments = rawArguments.Split(" ");

@@ -10,14 +10,14 @@ using TesTool.Core.Interfaces.Services;
 namespace TesTool.Core.Commands.Configure
 {
     [Command("project", HelpText = "Definir globalmente um projeto de trabalho.")]
-    public class ConfigureProjectCommand : ConfigureCommandBase
+    public class ConfigureWebApiProjectCommand : ConfigureCommandBase
     {
         [Parameter(HelpText = "Diretório do projeto.")]
         public string ProjectPath { get; set; }
         
         private readonly ISettingInfraService _settingsService;
 
-        public ConfigureProjectCommand(ISettingInfraService settingsService) : base() 
+        public ConfigureWebApiProjectCommand(ISettingInfraService settingsService) : base() 
         {
             _settingsService = settingsService;
         }
@@ -45,7 +45,7 @@ namespace TesTool.Core.Commands.Configure
                 ProjectPath = ProjectPath.Replace("/", @"\");
             } else throw new ProjectNotFoundException(ProjectTypeEnumerator.WEB_API);
 
-            await _settingsService.SetStringAsync(SettingEnumerator.PROJECT_DIRECTORY, ProjectPath);
+            await _settingsService.SetStringAsync(SettingEnumerator.PROJECT_WEB_API_DIRECTORY, ProjectPath);
         }
     }
 }

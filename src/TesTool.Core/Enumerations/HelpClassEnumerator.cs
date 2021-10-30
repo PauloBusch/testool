@@ -8,6 +8,8 @@ namespace TesTool.Core.Enumerations
         public static readonly HelpClass REQUEST = new("Request");
         public static readonly HelpClass TEST_BASE = new("TestBase");
         public static readonly HelpClass ENTITY_FAKER_BASE = new("EntityFakerBase");
+        public static readonly HelpClass PROJECT_EXPLORER = new("ProjectExplorer");
+        public static readonly HelpClass CONFIGURATION_LOADER = new("ConfigurationLoader");
 
         public static readonly HelpClass MODEL_FAKER_FACTORY = new("ModelFakerFactory");
         public static readonly HelpClass ENTITY_FAKER_FACTORY = new("EntityFakerFactory");

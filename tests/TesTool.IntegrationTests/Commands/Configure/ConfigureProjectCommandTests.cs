@@ -30,11 +30,11 @@ namespace TesTool.IntegrationTests.Commands.Configure
         {
             var arguments = rawCommand.Split(" ");
             var expectedPath = arguments.Last();
-            var command = _factory.CreateCommand(arguments) as ConfigureProjectCommand;
+            var command = _factory.CreateCommand(arguments) as ConfigureWebApiProjectCommand;
 
             await command.ExecuteAsync(new CommandContext(false));
 
-            Assert.NotEqual(expectedPath, await _settingsService.GetStringAsync(SettingEnumerator.PROJECT_DIRECTORY));
+            Assert.NotEqual(expectedPath, await _settingsService.GetStringAsync(SettingEnumerator.PROJECT_WEB_API_DIRECTORY));
             _loggerServiceMock.Verify(l => l.LogError(It.IsAny<string>()), Times.Once);
         }
 
@@ -44,11 +44,11 @@ namespace TesTool.IntegrationTests.Commands.Configure
         [InlineData(@"configure project Assets")]
         public async Task ShouldAcceptConfigureProjectAsync(string rawCommand)
         {
-            var command = _factory.CreateCommand(rawCommand.Split(" ")) as ConfigureProjectCommand;
+            var command = _factory.CreateCommand(rawCommand.Split(" ")) as ConfigureWebApiProjectCommand;
 
             await command.ExecuteAsync(new CommandContext(false));
 
-            Assert.Equal(@"Assets\sample.csproj", await _settingsService.GetStringAsync(SettingEnumerator.PROJECT_DIRECTORY));
+            Assert.Equal(@"Assets\sample.csproj", await _settingsService.GetStringAsync(SettingEnumerator.PROJECT_WEB_API_DIRECTORY));
             _loggerServiceMock.Verify(l => l.LogError(It.IsAny<string>()), Times.Never);
         }
     }

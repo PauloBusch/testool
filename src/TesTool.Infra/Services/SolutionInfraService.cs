@@ -64,7 +64,7 @@ namespace TesTool.Infra.Services
         {
             if (!string.IsNullOrWhiteSpace(_cacheSolutionFilePath)) return _cacheSolutionFilePath;
 
-            var webApiProjectPathFile = _settingInfraService.GetStringAsync(SettingEnumerator.PROJECT_DIRECTORY).Result;
+            var webApiProjectPathFile = _settingInfraService.GetStringAsync(SettingEnumerator.PROJECT_WEB_API_DIRECTORY).Result;
             var applicationBasePath = string.IsNullOrWhiteSpace(webApiProjectPathFile) || !Directory.Exists(Path.GetDirectoryName(webApiProjectPathFile))
                 ? _environmentInfraService.GetWorkingDirectory() : Path.GetDirectoryName(webApiProjectPathFile);
             var directoryInfo = new DirectoryInfo(applicationBasePath);

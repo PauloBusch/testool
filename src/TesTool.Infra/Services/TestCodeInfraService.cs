@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using TesTool.Core.Enumerations;
+using TesTool.Core.Exceptions;
 using TesTool.Core.Interfaces.Services;
 
 namespace TesTool.Infra.Services
@@ -18,10 +20,11 @@ namespace TesTool.Infra.Services
         public TestCodeInfraService(
             ICmdInfraService cmdInfraService,
             ILoggerInfraService loggerInfraService,
+            ISettingInfraService settingInfraService,
             IWebApiScanInfraService webApiScanInfraService,
             ISolutionInfraService solutionInfraService,
             IEnvironmentInfraService environmentInfraService
-        ) : base(loggerInfraService, environmentInfraService) 
+        ) : base(loggerInfraService, settingInfraService, environmentInfraService) 
         {
             _cmdInfraService = cmdInfraService;
             _webApiScanInfraService = webApiScanInfraService;
@@ -31,17 +34,24 @@ namespace TesTool.Infra.Services
         public async Task CreateTestProjectAsync(string name, string output)
         {
             var fullOutput = Path.Combine(output, name);
+            var testProjectPathFile = @$"{fullOutput}\{name}.csproj";
+            if (File.Exists(testProjectPathFile))
+                throw new DuplicatedSourceFileException(Path.GetFileName(testProjectPathFile));
+
             var solutionPathFile = _solutionInfraService.GetSolutionFilePath();
             var webApiProjectPathFile = _webApiScanInfraService.GetProjectPathFile();
             var commands = new List<string> { 
                 @$"dotnet new xunit --name ""{name}"" --output ""{fullOutput}"" --no-restore",
-                @$"dotnet sln ""{solutionPathFile}"" add ""{fullOutput}""",
+                // TODO: Uncomment
+                //@$"dotnet sln ""{solutionPathFile}"" add ""{fullOutput}""",
                 @$"dotnet add ""{name}"" reference ""{webApiProjectPathFile}""",
                 @$"dotnet add ""{fullOutput}"" package Microsoft.AspNetCore.TestHost",
                 @$"dotnet add ""{fullOutput}"" package bogus",
-                @$"dotnet restore ""{fullOutput}"""
+                @$"dotnet restore ""{fullOutput}""",
+                @$"del /f ""{fullOutput}\*.cs"""
             };
             await _cmdInfraService.ExecuteCommandsAsync(commands);
+            await _settingInfraService.SetStringAsync(SettingEnumerator.PROJECT_INTEGRATION_TEST_DIRECTORY, testProjectPathFile);
         }
 
         public async Task<string> MergeClassCodeAsync(string className, string sourceCode)

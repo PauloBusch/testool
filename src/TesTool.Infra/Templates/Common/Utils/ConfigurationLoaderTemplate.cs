@@ -7,19 +7,17 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace TesTool.Infra.Templates.Common
+namespace TesTool.Infra.Templates.Common.Utils
 {
-    using System.Text;
-    using TesTool.Core.Models.Templates.Comparator;
     using System;
     
     /// <summary>
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
+    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Utils\ConfigurationLoaderTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public partial class FixtureTemplate : FixtureTemplateBase
+    public partial class ConfigurationLoaderTemplate : ConfigurationLoaderTemplateBase
     {
 #line hidden
         /// <summary>
@@ -27,136 +25,25 @@ namespace TesTool.Infra.Templates.Common
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write(@"using Xunit;
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Hosting;
-using System.Net.Http.Headers;
-");
+            this.Write("using Microsoft.Extensions.Configuration;\r\nusing System;\r\n\r\nnamespace ");
             
-            #line 15 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
- 
-    foreach (var @namespace in Namespaces) 
+            #line 6 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Utils\ConfigurationLoaderTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
+            
+            #line default
+            #line hidden
+            this.Write(@"
+{
+    public static class ConfigurationLoader
     {
-
-            
-            #line default
-            #line hidden
-            this.Write("using ");
-            
-            #line 19 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(@namespace));
-            
-            #line default
-            #line hidden
-            this.Write(";\r\n");
-            
-            #line 20 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
- 
-    } 
-
-            
-            #line default
-            #line hidden
-            this.Write("\r\nnamespace ");
-            
-            #line 24 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(FixtureNamespace));
-            
-            #line default
-            #line hidden
-            this.Write("\r\n{\r\n    public class ");
-            
-            #line 26 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(FixtureName));
-            
-            #line default
-            #line hidden
-            this.Write(" : ICollectionFixture<");
-            
-            #line 26 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(FixtureName));
-            
-            #line default
-            #line hidden
-            this.Write(">, IAsyncLifetime\r\n    {\r\n        public Request Request { get; private set; }\r\n " +
-                    "       public HttpClient Client { get; private set; }\r\n        public TestServer" +
-                    " Server { get; private set; }\r\n        public ");
-            
-            #line 31 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(DbContext));
-            
-            #line default
-            #line hidden
-            this.Write(" DbContext { get; private set; }\r\n\r\n        public readonly IConfiguration Config" +
-                    "uration;\r\n        public readonly IServiceProvider Services;\r\n\r\n        public ");
-            
-            #line 36 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(FixtureName));
-            
-            #line default
-            #line hidden
-            this.Write("()\r\n        {\r\n            var projectName = \"");
-            
-            #line 38 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(ProjectName));
-            
-            #line default
-            #line hidden
-            this.Write(@""";
-            Configuration = ConfigurationLoader.GetConfiguration(projectName, ""Test"");
-
-            var webHostBuilder = new WebHostBuilder()
-                .UseContentRoot(ProjectExplorer.GetDirectory(projectName))
-                .ConfigureTestServices(ConfigureTestServices)
-                .UseConfiguration(Configuration)
-                .UseEnvironment(""Test"")
-                .UseStartup(typeof(Startup));
-
-            Server = new TestServer(webHostBuilder);
-            Services = Server.Services;
-            DbContext = Services.GetRequiredService<");
-            
-            #line 50 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(DbContext));
-            
-            #line default
-            #line hidden
-            this.Write(@">();
-            Client = Server.CreateClient();
-            Client.BaseAddress = new Uri($""https://localhost:8000"");
-            Client.DefaultRequestHeaders.Accept.Clear();
-            Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(""application/json""));
-            Request = new Request(Client);
-        }
-
-        public async Task InitializeAsync()
+        public static IConfiguration GetConfiguration(string projectName, string environment = default)
         {
-            try
-            {
-                await DbContext.Database.EnsureCreatedAsync();
-                await DbContext.Database.MigrateAsync();
-            }
-            catch (Exception)
-            {
-                await DbContext.Database.EnsureDeletedAsync();
-                throw;
-            }
-        }
-
-        private void ConfigureTestServices(IServiceCollection services) { }
-
-        public async Task DisposeAsync()
-        {
-            await DbContext.Database.EnsureDeletedAsync();
-            await DbContext.DisposeAsync();
-            Client.Dispose();
-            Server.Dispose();
+            if (string.IsNullOrWhiteSpace(environment))
+                environment = Environment.GetEnvironmentVariable(""ASPNETCORE_ENVIRONMENT"") ?? ""Development"";
+            return new ConfigurationBuilder()
+                .SetBasePath(ProjectExplorer.GetDirectory(projectName))
+                .AddJsonFile($""appsettings.{environment}.json"", false)
+                .Build();
         }
     }
 }
@@ -164,13 +51,9 @@ using System.Net.Http.Headers;
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 83 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
+        #line 21 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Utils\ConfigurationLoaderTemplate.tt"
 
-    public string DbContext { get; set; }
-    public string ProjectName { get; set; }
-    public string FixtureName { get; set; }
-    public string FixtureNamespace { get; set; }
-    public string[] Namespaces { get; set; }
+    public string Namespace { get; set; }
 
         
         #line default
@@ -184,7 +67,7 @@ using System.Net.Http.Headers;
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public class FixtureTemplateBase
+    public class ConfigurationLoaderTemplateBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

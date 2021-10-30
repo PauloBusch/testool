@@ -3,10 +3,12 @@ using System;
 using System.Linq;
 using TesTool.Core.Interfaces;
 using TesTool.Core.Interfaces.Services;
+using TesTool.Core.Interfaces.Services.Common;
 using TesTool.Core.Interfaces.Services.Endpoints;
 using TesTool.Core.Interfaces.Services.Factories;
 using TesTool.Core.Interfaces.Services.Fakers;
 using TesTool.Core.Services;
+using TesTool.Core.Services.Common;
 using TesTool.Core.Services.Endpoints;
 using TesTool.Core.Services.Factories;
 using TesTool.Core.Services.Fakers;
@@ -41,6 +43,9 @@ namespace TesTool.Cli
                 .AddSingleton<ICompareService, CompareService>()
                 .AddSingleton<IControllerService, ControllerService>()
                 .AddSingleton<IFixtureService, FixtureService>()
+                .AddSingleton<ICommonRequestService, CommonRequestService>()
+                .AddSingleton<ICommonProjectExplorerService, CommonProjectExplorerService>()
+                .AddSingleton<ICommonConfigurationLoaderService, CommonConfigurationLoaderService>()
 
                 .AddSingleton<IGetOneEndpointTestService, GetOneEndpointTestService>()
                 .AddSingleton<IGetListEndpointTestService, GetListEndpointTestService>()

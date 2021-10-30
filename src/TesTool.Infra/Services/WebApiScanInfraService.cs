@@ -165,6 +165,6 @@ namespace TesTool.Infra.Services
         }
 
         public override string GetProjectPathFile()
-            => _settingInfraService.GetStringAsync(SettingEnumerator.PROJECT_DIRECTORY).Result;
+            => _settingInfraService.GetStringAsync(SettingEnumerator.PROJECT_WEB_API_DIRECTORY).Result;
     }
 }

@@ -16,14 +16,20 @@ namespace TesTool.Infra.Services
 
         public async Task ExecuteCommandsAsync(IEnumerable<string> commands)
         {
-            var process = new Process();
-            var startInfo = new ProcessStartInfo();
-            startInfo.WorkingDirectory = _environmentInfraService.GetWorkingDirectory();
-            // TODO: uncomment
-            //startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = $"/C {string.Join(" && ", commands)}";
-            process.StartInfo = startInfo;
+            var startInfo = new ProcessStartInfo { 
+                WorkingDirectory = _environmentInfraService.GetWorkingDirectory(),
+                WindowStyle = ProcessWindowStyle.Hidden,
+                FileName = "cmd.exe",
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                Arguments = $"/C {string.Join(" && ", commands)}"
+            };
+            var process = new Process { 
+                EnableRaisingEvents = true,
+                StartInfo = startInfo
+            };
             process.Start();
             await process.WaitForExitAsync();
         }

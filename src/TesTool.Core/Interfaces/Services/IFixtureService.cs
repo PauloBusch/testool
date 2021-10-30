@@ -5,7 +5,7 @@ namespace TesTool.Core.Interfaces.Services
 {
     public interface IFixtureService
     {
-        string GetFixtureFullPath();
+        string GetFixturePathFile();
         Fixture GetFixtureModel(Class dbContextClass);
     }
 }

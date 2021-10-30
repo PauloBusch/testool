@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using TesTool.Core.Interfaces.Services;
+using TesTool.Core.Interfaces.Services.Common;
 using TesTool.Core.Models.Metadata;
 using TesTool.Core.Models.Templates.Common;
 
@@ -7,25 +8,28 @@ namespace TesTool.Core.Services
 {
     public class FixtureService : IFixtureService
     {
-        private readonly ISolutionInfraService _solutionService;
-        private readonly IWebApiScanInfraService _webApiScanInfraService;
-        private readonly IWebApiDbContextInfraService _webApiDbContextInfraService;
+        private readonly ICommonRequestService _commonRequestService;
         private readonly ITestScanInfraService _testScanInfraService;
+        private readonly IWebApiScanInfraService _webApiScanInfraService;
+        private readonly ICommonProjectExplorerService _commonProjectExplorerService;
+        private readonly ICommonConfigurationLoaderService _commonConfigurationLoaderService;
 
         public FixtureService(
-            ISolutionInfraService solutionService,
-            IWebApiScanInfraService webApiScanInfraService, 
-            IWebApiDbContextInfraService webApiDbContextInfraService, 
+            ICommonRequestService commonRequestService,
+            IWebApiScanInfraService webApiScanInfraService,
+            ICommonProjectExplorerService commonProjectExplorerService,
+            ICommonConfigurationLoaderService commonConfigurationLoaderService,
             ITestScanInfraService testScanInfraService
         )
         {
-            _solutionService = solutionService;
+            _commonRequestService = commonRequestService;
             _webApiScanInfraService = webApiScanInfraService;
-            _webApiDbContextInfraService = webApiDbContextInfraService;
+            _commonProjectExplorerService = commonProjectExplorerService;
+            _commonConfigurationLoaderService = commonConfigurationLoaderService;
             _testScanInfraService = testScanInfraService;
         }
 
-        public string GetFixtureFullPath()
+        public string GetFixturePathFile()
         {
             var projectName = _webApiScanInfraService.GetName();
             var fixtureName = $"{Regex.Replace(projectName, @"\W", string.Empty)}Fixture";
@@ -39,7 +43,9 @@ namespace TesTool.Core.Services
                 _webApiScanInfraService.GetName(),
                 $"{_webApiScanInfraService.GetNamespace()}.IntegrationTests"
             );
-
+            fixtureModel.AddNamespace(_commonRequestService.GetNamespace());
+            fixtureModel.AddNamespace(_commonProjectExplorerService.GetNamespace());
+            fixtureModel.AddNamespace(_commonConfigurationLoaderService.GetNamespace());
             return fixtureModel;
         }
     }

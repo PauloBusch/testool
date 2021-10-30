@@ -43,7 +43,7 @@ namespace <#=Namespace#>
 
         public async Task<HttpResponseMessage> PostAsync(Uri uri, dynamic data, dynamic query = null)
         {
-            var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.Default, "application/json");
+            var content = new StringContent(JsonSerializer.Serialize(data), Encoding.Default, "application/json");
             return await Client.PostAsync(new Uri($"{uri}?{GetUrlString(query)}"), content);
         }
 
@@ -57,7 +57,7 @@ namespace <#=Namespace#>
 
         public async Task<HttpResponseMessage> PutAsync(Uri uri, dynamic data, dynamic query = null)
         {
-            var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.Default, "application/json");
+            var content = new StringContent(JsonSerializer.Serialize(data), Encoding.Default, "application/json");
             return await Client.PutAsync(new Uri($"{uri}?{GetUrlString(query)}"), content);
         }
 
@@ -71,7 +71,7 @@ namespace <#=Namespace#>
 
         public async Task<HttpResponseMessage> PatchAsync(Uri uri, dynamic data = null, dynamic query = null)
         {
-            var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.Default, "application/json");
+            var content = new StringContent(JsonSerializer.Serialize(data), Encoding.Default, "application/json");
 
             return await Client.PatchAsync(new Uri($"{uri}?{GetUrlString(query)}"), content);
         }

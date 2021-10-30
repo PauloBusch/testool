@@ -26,6 +26,14 @@
       <LastGenOutput>FixtureTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
+    <None Update="Templates\Common\Utils\ProjectExplorerTemplate.tt">
+      <LastGenOutput>ProjectExplorerTemplate.cs</LastGenOutput>
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+    </None>
+    <None Update="Templates\Common\Utils\ConfigurationLoaderTemplate.tt">
+      <LastGenOutput>ConfigurationLoaderTemplate.cs</LastGenOutput>
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+    </None>
     <None Update="Templates\Controllers\ControllerTestMethodSectionAssertDeleteTemplate.tt">
       <LastGenOutput>ControllerTestMethodSectionAssertDeleteTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
@@ -78,7 +86,7 @@
       <LastGenOutput>ComparatorFactoryMethodTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
-    <None Update="Templates\Helpers\HttpRequestTemplate.tt">
+    <None Update="Templates\Common\Utils\HttpRequestTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>HttpRequestTemplate.cs</LastGenOutput>
     </None>
@@ -121,6 +129,21 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>FixtureTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Templates\Common\Utils\ConfigurationLoaderTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ConfigurationLoaderTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Templates\Common\Utils\HttpRequestTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>HttpRequestTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Templates\Common\Utils\ProjectExplorerTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ProjectExplorerTemplate.tt</DependentUpon>
     </Compile>
     <Compile Update="Templates\Comparators\ComparatorDynamicTemplate.cs">
       <DesignTime>True</DesignTime>
@@ -222,16 +245,15 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ModelFakerTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Update="Templates\Helpers\HttpRequestTemplate.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>HttpRequestTemplate.tt</DependentUpon>
-    </Compile>
     <Compile Update="Templates\ModelFakerFactoryMethodTemplate - Copy - Copy.cs">
       <DependentUpon>ModelFakerFactoryMethodTemplate.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Templates\Common\Abstract\" />
   </ItemGroup>
 
 </Project>

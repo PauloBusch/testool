@@ -7,19 +7,17 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace TesTool.Infra.Templates.Common
+namespace TesTool.Infra.Templates.Common.Utils
 {
-    using System.Text;
-    using TesTool.Core.Models.Templates.Comparator;
     using System;
     
     /// <summary>
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
+    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Utils\HttpRequestTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public partial class FixtureTemplate : FixtureTemplateBase
+    public partial class HttpRequestTemplate : HttpRequestTemplateBase
     {
 #line hidden
         /// <summary>
@@ -27,150 +25,104 @@ namespace TesTool.Infra.Templates.Common
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write(@"using Xunit;
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Hosting;
-using System.Net.Http.Headers;
-");
+            this.Write("using System;\r\nusing System.Collections.Generic;\r\nusing System.IO;\r\nusing System." +
+                    "Net;\r\nusing System.Net.Http;\r\nusing System.Text;\r\nusing System.Text.Json;\r\nusing" +
+                    " System.Threading.Tasks;\r\nusing System.Web;\r\n\r\nnamespace ");
             
-            #line 15 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
- 
-    foreach (var @namespace in Namespaces) 
-    {
-
+            #line 13 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Utils\HttpRequestTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
             #line hidden
-            this.Write("using ");
-            
-            #line 19 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(@namespace));
-            
-            #line default
-            #line hidden
-            this.Write(";\r\n");
-            
-            #line 20 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
- 
-    } 
-
-            
-            #line default
-            #line hidden
-            this.Write("\r\nnamespace ");
-            
-            #line 24 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(FixtureNamespace));
-            
-            #line default
-            #line hidden
-            this.Write("\r\n{\r\n    public class ");
-            
-            #line 26 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(FixtureName));
-            
-            #line default
-            #line hidden
-            this.Write(" : ICollectionFixture<");
-            
-            #line 26 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(FixtureName));
-            
-            #line default
-            #line hidden
-            this.Write(">, IAsyncLifetime\r\n    {\r\n        public Request Request { get; private set; }\r\n " +
-                    "       public HttpClient Client { get; private set; }\r\n        public TestServer" +
-                    " Server { get; private set; }\r\n        public ");
-            
-            #line 31 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(DbContext));
-            
-            #line default
-            #line hidden
-            this.Write(" DbContext { get; private set; }\r\n\r\n        public readonly IConfiguration Config" +
-                    "uration;\r\n        public readonly IServiceProvider Services;\r\n\r\n        public ");
-            
-            #line 36 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(FixtureName));
-            
-            #line default
-            #line hidden
-            this.Write("()\r\n        {\r\n            var projectName = \"");
-            
-            #line 38 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(ProjectName));
-            
-            #line default
-            #line hidden
-            this.Write(@""";
-            Configuration = ConfigurationLoader.GetConfiguration(projectName, ""Test"");
-
-            var webHostBuilder = new WebHostBuilder()
-                .UseContentRoot(ProjectExplorer.GetDirectory(projectName))
-                .ConfigureTestServices(ConfigureTestServices)
-                .UseConfiguration(Configuration)
-                .UseEnvironment(""Test"")
-                .UseStartup(typeof(Startup));
-
-            Server = new TestServer(webHostBuilder);
-            Services = Server.Services;
-            DbContext = Services.GetRequiredService<");
-            
-            #line 50 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(DbContext));
-            
-            #line default
-            #line hidden
-            this.Write(@">();
-            Client = Server.CreateClient();
-            Client.BaseAddress = new Uri($""https://localhost:8000"");
-            Client.DefaultRequestHeaders.Accept.Clear();
-            Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(""application/json""));
-            Request = new Request(Client);
-        }
-
-        public async Task InitializeAsync()
-        {
-            try
-            {
-                await DbContext.Database.EnsureCreatedAsync();
-                await DbContext.Database.MigrateAsync();
-            }
-            catch (Exception)
-            {
-                await DbContext.Database.EnsureDeletedAsync();
-                throw;
-            }
-        }
-
-        private void ConfigureTestServices(IServiceCollection services) { }
-
-        public async Task DisposeAsync()
-        {
-            await DbContext.Database.EnsureDeletedAsync();
-            await DbContext.DisposeAsync();
-            Client.Dispose();
-            Server.Dispose();
-        }
-    }
-}
-");
+            this.Write("\r\n{\r\n    public class Request\r\n    {\r\n        public readonly HttpClient Client;\r" +
+                    "\n\r\n        public Request(HttpClient client) => Client = client;\r\n\r\n        publ" +
+                    "ic async Task<HttpResponseMessage> GetAsync(Uri uri, dynamic query = null)\r\n    " +
+                    "    {\r\n            var request = new HttpRequestMessage\r\n            {\r\n        " +
+                    "        RequestUri = new Uri($\"{uri}?{GetUrlString(query)}\"),\r\n                M" +
+                    "ethod = HttpMethod.Get\r\n            };\r\n\r\n            return await Client.SendAs" +
+                    "ync(request);\r\n        }\r\n\r\n        public async Task<(HttpResponseMessage respo" +
+                    "nse, TResult result)> GetAsync<TResult>(Uri uri, dynamic query = null) where TRe" +
+                    "sult : class\r\n        {\r\n            var request = new HttpRequestMessage\r\n     " +
+                    "       {\r\n                RequestUri = new Uri($\"{uri}?{GetUrlString(query)}\"),\r" +
+                    "\n                Method = HttpMethod.Get\r\n            };\r\n\r\n            var resp" +
+                    "onse = await Client.SendAsync(request);\r\n            return await GetResultAsync" +
+                    "<TResult>(response);\r\n        }\r\n\r\n        public async Task<HttpResponseMessage" +
+                    "> PostAsync(Uri uri, dynamic data, dynamic query = null)\r\n        {\r\n           " +
+                    " var content = new StringContent(JsonSerializer.Serialize(data), Encoding.Defaul" +
+                    "t, \"application/json\");\r\n            return await Client.PostAsync(new Uri($\"{ur" +
+                    "i}?{GetUrlString(query)}\"), content);\r\n        }\r\n\r\n        public async Task<(H" +
+                    "ttpResponseMessage response, TResult result)> PostAsync<TResult>(Uri uri, dynami" +
+                    "c data, dynamic query = null) where TResult : class\r\n        {\r\n            var " +
+                    "content = new StringContent(JsonSerializer.Serialize(data), Encoding.Default, \"a" +
+                    "pplication/json\");\r\n\r\n            var response = await Client.PostAsync(new Uri(" +
+                    "$\"{uri}?{GetUrlString(query)}\"), content);\r\n            return await GetResultAs" +
+                    "ync<TResult>(response);\r\n        }\r\n\r\n        public async Task<HttpResponseMess" +
+                    "age> PutAsync(Uri uri, dynamic data, dynamic query = null)\r\n        {\r\n         " +
+                    "   var content = new StringContent(JsonSerializer.Serialize(data), Encoding.Defa" +
+                    "ult, \"application/json\");\r\n            return await Client.PutAsync(new Uri($\"{u" +
+                    "ri}?{GetUrlString(query)}\"), content);\r\n        }\r\n\r\n        public async Task<(" +
+                    "HttpResponseMessage response, TResult result)> PutAsync<TResult>(Uri uri, dynami" +
+                    "c data, dynamic query = null) where TResult : class\r\n        {\r\n            var " +
+                    "content = new StringContent(JsonSerializer.Serialize(data), Encoding.Default, \"a" +
+                    "pplication/json\");\r\n\r\n            var response = await Client.PutAsync(new Uri($" +
+                    "\"{uri}?{GetUrlString(query)}\"), content);\r\n            return await GetResultAsy" +
+                    "nc<TResult>(response);\r\n        }\r\n\r\n        public async Task<HttpResponseMessa" +
+                    "ge> PatchAsync(Uri uri, dynamic data = null, dynamic query = null)\r\n        {\r\n " +
+                    "           var content = new StringContent(JsonSerializer.Serialize(data), Encod" +
+                    "ing.Default, \"application/json\");\r\n\r\n            return await Client.PatchAsync(" +
+                    "new Uri($\"{uri}?{GetUrlString(query)}\"), content);\r\n        }\r\n\r\n        public " +
+                    "async Task<(HttpResponseMessage response, TResult result)> PatchAsync<TResult>(U" +
+                    "ri uri, dynamic data = null, dynamic query = null) where TResult : class\r\n      " +
+                    "  {\r\n            var content = new StringContent(JsonSerializer.Serialize(data)," +
+                    " Encoding.Default, \"application/json\");\r\n\r\n            var response = await Clie" +
+                    "nt.PatchAsync(new Uri($\"{uri}?{GetUrlString(query)}\"), content);\r\n            re" +
+                    "turn await GetResultAsync<TResult>(response);\r\n        }\r\n\r\n        public async" +
+                    " Task<HttpResponseMessage> DeleteAsync(Uri uri, dynamic query = null)\r\n        {" +
+                    "\r\n            return await Client.DeleteAsync(new Uri($\"{uri}?{GetUrlString(quer" +
+                    "y)}\"));\r\n        }\r\n\r\n        public async Task<(HttpResponseMessage response, T" +
+                    "Result result)> DeleteAsync<TResult>(Uri uri, dynamic query = null) where TResul" +
+                    "t : class\r\n        {\r\n            var response = await Client.DeleteAsync(new Ur" +
+                    "i($\"{uri}?{GetUrlString(query)}\"));\r\n            return await GetResultAsync<TRe" +
+                    "sult>(response);\r\n        }\r\n\r\n        public async Task<(HttpResponseMessage re" +
+                    "sponse, FileInfo file)> DownloadFile(Uri uri, dynamic query = null)\r\n        {\r\n" +
+                    "            var request = new HttpRequestMessage\r\n            {\r\n               " +
+                    " RequestUri = new Uri($\"{uri}?{GetUrlString(query)}\"),\r\n                Method =" +
+                    " HttpMethod.Get\r\n            };\r\n\r\n            var response = await Client.SendA" +
+                    "sync(request);\r\n            try\r\n            {\r\n                if (response.Sta" +
+                    "tusCode != HttpStatusCode.OK) return (response, null);\r\n                var file" +
+                    "Name = $\"{Guid.NewGuid()}{Path.GetExtension(response.Content.Headers.ContentDisp" +
+                    "osition?.FileNameStar)}\";\r\n                var filePath = Path.Combine(Path.GetT" +
+                    "empPath(), fileName);\r\n                using var contentStream = await response." +
+                    "Content.ReadAsStreamAsync();\r\n                using var fileStream = new FileStr" +
+                    "eam(filePath, FileMode.Create);\r\n                await contentStream.CopyToAsync" +
+                    "(fileStream);\r\n\r\n                return (response, new FileInfo(filePath));\r\n   " +
+                    "         }\r\n            catch (Exception e)\r\n            {\r\n                thro" +
+                    "w new Exception($\"Could not download file\", e);\r\n            }\r\n        }\r\n\r\n   " +
+                    "     #region Private Methods\r\n\r\n        private async Task<(HttpResponseMessage " +
+                    "response, TResult result)> GetResultAsync<TResult>(HttpResponseMessage response)" +
+                    " where TResult : class\r\n        {\r\n            var json = await response.Content" +
+                    ".ReadAsStringAsync();\r\n            try\r\n            {\r\n                var resul" +
+                    "t = JsonSerializer.Deserialize<TResult>(json);\r\n                return (response" +
+                    ", result);\r\n            }\r\n            catch (Exception e)\r\n            {\r\n     " +
+                    "           throw new Exception($\"Could not deserialize object. Current JSON: {js" +
+                    "on}\", e);\r\n            }\r\n        }\r\n\r\n        private string GetUrlString(objec" +
+                    "t data = null)\r\n        {\r\n            if (data == null) return string.Empty;\r\n\r" +
+                    "\n            var parameters = new List<string>();\r\n            var properties = " +
+                    "data.GetType().GetProperties();\r\n            foreach (var property in properties" +
+                    ")\r\n            {\r\n                var value = property.GetValue(data);\r\n        " +
+                    "        if (value == null) continue;\r\n\r\n                var type = Nullable.GetU" +
+                    "nderlyingType(property.PropertyType) ?? property.PropertyType;\r\n                " +
+                    "var valueJson = JsonSerializer.Serialize(value);\r\n                parameters.Add" +
+                    "($\"{HttpUtility.UrlEncode(property.Name)}={HttpUtility.UrlEncode(valueJson)}\");\r" +
+                    "\n\r\n                throw new InvalidOperationException($\"Not configured conversi" +
+                    "on from type {property.PropertyType.Name}\");\r\n            }\r\n\r\n            retur" +
+                    "n string.Join(\"&\", parameters);\r\n        }\r\n\r\n        #endregion\r\n    }\r\n}\r\n");
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 83 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\FixtureTemplate.tt"
+        #line 164 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Utils\HttpRequestTemplate.tt"
 
-    public string DbContext { get; set; }
-    public string ProjectName { get; set; }
-    public string FixtureName { get; set; }
-    public string FixtureNamespace { get; set; }
-    public string[] Namespaces { get; set; }
+    public string Namespace { get; set; }
 
         
         #line default
@@ -184,7 +136,7 @@ using System.Net.Http.Headers;
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public class FixtureTemplateBase
+    public class HttpRequestTemplateBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

@@ -40,5 +40,7 @@ namespace TesTool.Core.Interfaces.Services
 
         string BuildAssertExtensions(string @namespace);
         string BuildHttpRequest(string @namespace);
+        string BuildProjectExplorer(string @namespace);
+        string BuildConfigurationLoader(string @namespace);
     }
 }
