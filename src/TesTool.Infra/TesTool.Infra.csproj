@@ -22,6 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Templates\Common\Abstract\EntityFakerBaseTemplate.tt">
+      <LastGenOutput>EntityFakerBaseTemplate.cs</LastGenOutput>
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+    </None>
     <None Update="Templates\Common\Abstract\TestBaseTemplate.tt">
       <LastGenOutput>TestBaseTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
@@ -129,6 +133,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Templates\Common\Abstract\EntityFakerBaseTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>EntityFakerBaseTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Update="Templates\Common\Abstract\TestBaseTemplate.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

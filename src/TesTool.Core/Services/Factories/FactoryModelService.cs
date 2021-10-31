@@ -27,7 +27,7 @@ namespace TesTool.Core.Services.Factories
 
         public string GetNamespace()
         {
-            return _solutionService.GetTestNamespace("Fakers");
+            return _solutionService.GetTestProjectNamespace("Fakers");
         }
     }
 }

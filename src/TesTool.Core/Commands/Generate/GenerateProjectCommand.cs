@@ -30,11 +30,13 @@ namespace TesTool.Core.Commands.Generate
         private readonly ICommandHandler _commandHandler;
         private readonly IFixtureService _fixtureService;
         private readonly IServiceResolver _serviceResolver;
+        private readonly IFileSystemInfraService _fileSystemInfraService;
         private readonly ITestScanInfraService _testScanInfraService;
         private readonly ICommonRequestService _commonRequestService;
         private readonly ICommonProjectExplorerService _commonProjectExplorerService;
         private readonly ICommonConfigurationLoaderService _commonConfigurationLoaderService;
         private readonly ICommonAssertExtensionsService _commonAssertExtensionsService;
+        private readonly ICommonEntityFakerBaseService _commonEntityFakerBaseService;
         private readonly ICommonTestBaseService _commonTestBaseService;
         private readonly ISolutionInfraService _solutionInfraService;
         private readonly ITestCodeInfraService _testCodeInfraService;
@@ -54,6 +56,7 @@ namespace TesTool.Core.Commands.Generate
             ICommonProjectExplorerService commonProjectExplorerService,
             ICommonConfigurationLoaderService commonConfigurationLoaderService,
             ICommonAssertExtensionsService commonAssertExtensionsService,
+            ICommonEntityFakerBaseService commonEntityFakerBaseService,
             ICommonTestBaseService commonTestBaseService,
             ISolutionInfraService solutionInfraService,
             ITestCodeInfraService testCodeInfraService,
@@ -62,11 +65,12 @@ namespace TesTool.Core.Commands.Generate
             IWebApiScanInfraService webApiScanInfraService,
             IEnvironmentInfraService environmentInfraService,
             ITemplateCodeInfraService templateCodeInfraService
-        ) : base(fileSystemInfraService)
+        ) : base()
         {
             _commandHandler = commandHandler;
             _fixtureService = fixtureService;
             _serviceResolver = serviceResolver;
+            _fileSystemInfraService = fileSystemInfraService;
             _settingInfraService = settingInfraService;
             _testScanInfraService = testScanInfraService;
             _solutionInfraService = solutionInfraService;
@@ -75,6 +79,7 @@ namespace TesTool.Core.Commands.Generate
             _commonProjectExplorerService = commonProjectExplorerService;
             _commonConfigurationLoaderService = commonConfigurationLoaderService;
             _commonAssertExtensionsService = commonAssertExtensionsService;
+            _commonEntityFakerBaseService = commonEntityFakerBaseService;
             _commonTestBaseService = commonTestBaseService;
             _webApiDbContextInfraService = webApiDbContextInfraService;
             _webApiScanInfraService = webApiScanInfraService;
@@ -82,15 +87,14 @@ namespace TesTool.Core.Commands.Generate
             _templateCodeInfraService = templateCodeInfraService;
         }
 
-        protected override async Task GenerateAsync()
+        public override async Task ExecuteAsync(ICommandContext context)
         {
-            var beforeCommands = GetBeforeCommands();
-            await _commandHandler.HandleManyAsync(beforeCommands, true);
+            await _commandHandler.HandleManyAsync(GetBeforeCommands(), true);
 
             if (!await _webApiScanInfraService.ProjectExistAsync())
                 throw new ProjectNotFoundException(ProjectTypeEnumerator.WEB_API);
 
-            await _testCodeInfraService.CreateTestProjectAsync(_solutionInfraService.GetTestName(), GetOutputDirectory());
+            await _testCodeInfraService.CreateTestProjectAsync(_solutionInfraService.GetTestProjectName(), GetOutputDirectory());
 
             await SaveRequestClassAsync();
             await SaveProjectExplorerClassAsync();
@@ -100,10 +104,13 @@ namespace TesTool.Core.Commands.Generate
             var dbContextClass = await GetDbContextAsync();
             await SaveFixtureClassAsync(dbContextClass);
             await SaveTestBaseClassAsync(dbContextClass);
+            await SaveEntityFakerBaseClassAsync(dbContextClass);
 
             _testScanInfraService.ClearCache();
-            var afterCommands = GetAfterCommands(dbContextClass);
-            await _commandHandler.HandleManyAsync(afterCommands, true);
+            await _commandHandler.HandleManyAsync(GetAfterCommands(dbContextClass), true);
+
+            _testScanInfraService.ClearCache();
+            await _commandHandler.HandleManyAsync(GetTestCommands(), true);
         }
 
         private IEnumerable<ICommand> GetBeforeCommands()
@@ -124,6 +131,16 @@ namespace TesTool.Core.Commands.Generate
                 _serviceResolver.ResolveService<GenerateFactoryModelCommand>(),
                 generateFactoryEntityCommand
             };
+        }
+
+        private IEnumerable<ICommand> GetTestCommands()
+        {
+            return _webApiScanInfraService.GetControllersAsync().Result.Select(controller => {
+                var generateControllerCommand = _serviceResolver.ResolveService<GenerateControllerCommand>();
+                generateControllerCommand.Controller = controller.Name;
+                generateControllerCommand.Static = Static;
+                return generateControllerCommand;
+            });
         }
 
         private async Task SaveRequestClassAsync()
@@ -190,6 +207,17 @@ namespace TesTool.Core.Commands.Generate
                 throw new DuplicatedSourceFileException(testBaseSourceCode);
 
             await _fileSystemInfraService.SaveFileAsync(testBasePathFile, testBaseSourceCode);
+        }
+
+        private async Task SaveEntityFakerBaseClassAsync(Class dbContextClass)
+        {
+            var entityFakerBasePathFile = _commonEntityFakerBaseService.GetPathFile();
+            var entityFakerBaseModel = _commonEntityFakerBaseService.GetEntityFakerBaseModel(dbContextClass);
+            var entityFakerBaseSourceCode = _templateCodeInfraService.BuildEntityFakerBase(entityFakerBaseModel);
+            if (await _fileSystemInfraService.FileExistAsync(entityFakerBasePathFile))
+                throw new DuplicatedSourceFileException(entityFakerBaseSourceCode);
+
+            await _fileSystemInfraService.SaveFileAsync(entityFakerBasePathFile, entityFakerBaseSourceCode);
         }
 
         private async Task<Class> GetDbContextAsync()

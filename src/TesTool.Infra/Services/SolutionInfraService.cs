@@ -33,15 +33,7 @@ namespace TesTool.Infra.Services
             return Regex.Replace(solutionName, @"\W", string.Empty);
         }
 
-        public string GetTestFixtureClassName()
-        {
-            var fixtureName = _settingInfraService.GetStringAsync(SettingEnumerator.FIXTURE_NAME).Result;
-            if (string.IsNullOrWhiteSpace(fixtureName))
-                return HelpClassEnumerator.FIXTURE.Name.Replace("{PROJECT_NAME}", GetSolutionName());
-            return fixtureName;
-        }
-
-        public string GetTestName()
+        public string GetTestProjectName()
         {
             var integrationTestName = _testScanInfraService.GetName();
             return string.IsNullOrWhiteSpace(integrationTestName)
@@ -49,7 +41,7 @@ namespace TesTool.Infra.Services
                 : integrationTestName;
         }
 
-        public string GetTestNamespace(string sufix = null)
+        public string GetTestProjectNamespace(string sufix = null)
         {
             var integrationTestNamespace = _testScanInfraService.GetNamespace();
             var @namespace = string.IsNullOrWhiteSpace(integrationTestNamespace)

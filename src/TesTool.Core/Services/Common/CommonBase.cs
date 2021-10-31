@@ -32,7 +32,7 @@ namespace TesTool.Core.Services.Common
 
         public string GetNamespace()
         {
-            return _solutionInfraService.GetTestNamespace(_namespace);
+            return _solutionInfraService.GetTestProjectNamespace(_namespace);
         }
     }
 }

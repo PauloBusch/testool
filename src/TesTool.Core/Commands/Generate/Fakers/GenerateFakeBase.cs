@@ -18,6 +18,7 @@ namespace TesTool.Core.Commands.Generate.Fakers
         public bool Static { get; set; }
 
         protected readonly IWebApiScanInfraService _webApiScanInfraService;
+        protected readonly IFileSystemInfraService _fileSystemInfraService;
         protected readonly ITestScanInfraService _testScanInfraService;
         protected readonly ITemplateCodeInfraService _templateCodeInfraService;
 
@@ -26,9 +27,10 @@ namespace TesTool.Core.Commands.Generate.Fakers
             IWebApiScanInfraService webApiScanInfraService,
             ITestScanInfraService testScanInfraService,
             ITemplateCodeInfraService templateCodeInfraService
-        ) : base(fileSystemInfraService)
+        ) : base()
         {
             _webApiScanInfraService = webApiScanInfraService;
+            _fileSystemInfraService = fileSystemInfraService;
             _testScanInfraService = testScanInfraService;
             _templateCodeInfraService = templateCodeInfraService;
         }
@@ -39,31 +41,37 @@ namespace TesTool.Core.Commands.Generate.Fakers
         protected abstract Task<string> BuildSourceCodeAsync(Class @class, string fakerName);
         protected abstract Task AppendFactoryMethodAsync(Class @class, string fakerName, string factoryName);
 
-        protected async override Task GenerateAsync()
+        public async override Task ExecuteAsync(ICommandContext context)
         {
-            if (!await _webApiScanInfraService.ProjectExistAsync())
-                throw new ProjectNotFoundException(ProjectTypeEnumerator.WEB_API);
-            if (!await _testScanInfraService.ProjectExistAsync())
-                throw new ProjectNotFoundException(ProjectTypeEnumerator.INTEGRATION_TESTS);
+            if (!context.ExecutionCascade)
+            {
+                if (!await _webApiScanInfraService.ProjectExistAsync())
+                    throw new ProjectNotFoundException(ProjectTypeEnumerator.WEB_API);
+                if (!await _testScanInfraService.ProjectExistAsync())
+                    throw new ProjectNotFoundException(ProjectTypeEnumerator.INTEGRATION_TESTS);
 
-            var factoryName = GetFactoryName();
-            if (!await _testScanInfraService.ClassExistAsync(factoryName))
-                throw new ClassNotFoundException(factoryName);
+                var factoryNameValidate = GetFactoryName();
+                if (!await _testScanInfraService.ClassExistAsync(factoryNameValidate))
+                    throw new ClassNotFoundException(factoryNameValidate);
+            }
 
             Class @class = await _webApiScanInfraService.GetModelAsync(ClassName) as Class;
             if (@class is null) throw new ModelNotFoundException(ClassName);
 
             var fakerName = GetFakerName(ClassName);
-            if (await _testScanInfraService.ClassExistAsync(fakerName))
-                throw new DuplicatedClassException(fakerName);
-
             var filePath = GetFakerFilePath();
-            var fakerSourceCode = await BuildSourceCodeAsync(@class, fakerName);
-            if (await _fileSystemInfraService.FileExistAsync(filePath))
-                throw new DuplicatedSourceFileException(fakerName);
+            if (!context.ExecutionCascade)
+            {
+                if (await _testScanInfraService.ClassExistAsync(fakerName))
+                    throw new DuplicatedClassException(fakerName);
 
+                if (await _fileSystemInfraService.FileExistAsync(filePath))
+                    throw new DuplicatedSourceFileException(fakerName);
+            }
+
+            var fakerSourceCode = await BuildSourceCodeAsync(@class, fakerName);
             await _fileSystemInfraService.SaveFileAsync(filePath, fakerSourceCode);
-            await AppendFactoryMethodAsync(@class, fakerName, factoryName);
+            await AppendFactoryMethodAsync(@class, fakerName, GetFactoryName());
         }
 
         protected string GetFakerFilePath()

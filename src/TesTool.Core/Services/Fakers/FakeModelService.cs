@@ -31,7 +31,7 @@ namespace TesTool.Core.Services.Fakers
 
         public string GetNamespace()
         {
-            return _solutionService.GetTestNamespace("Fakers.Models");
+            return _solutionService.GetTestProjectNamespace("Fakers.Models");
         }
 
         protected override T MapProperty<T>(string name, string expression, bool @unsafe)

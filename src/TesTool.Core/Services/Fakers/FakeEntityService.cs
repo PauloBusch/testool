@@ -44,7 +44,7 @@ namespace TesTool.Core.Services.Fakers
 
         public string GetNamespace()
         {
-            return _solutionService.GetTestNamespace("Fakers.Entities");
+            return _solutionService.GetTestProjectNamespace("Fakers.Entities");
         }
 
         protected override T MapProperty<T>(string name, string expression, bool @unsafe)

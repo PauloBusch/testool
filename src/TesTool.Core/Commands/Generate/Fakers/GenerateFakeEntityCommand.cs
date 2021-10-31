@@ -38,12 +38,12 @@ namespace TesTool.Core.Commands.Generate.Fakers
             _testCodeInfraService = testCodeInfraService;
         }
 
-        protected override async Task GenerateAsync()
+        public override async Task ExecuteAsync(ICommandContext context)
         {
-            if (!await _testScanInfraService.ClassExistAsync(HelpClassEnumerator.ENTITY_FAKER_BASE.Name))
+            if (!context.ExecutionCascade && !await _testScanInfraService.ClassExistAsync(HelpClassEnumerator.ENTITY_FAKER_BASE.Name))
                 throw new ClassNotFoundException(HelpClassEnumerator.ENTITY_FAKER_BASE.Name);
 
-            await base.GenerateAsync();
+            await base.ExecuteAsync(context);
         }
 
         protected override string GetFactoryName()

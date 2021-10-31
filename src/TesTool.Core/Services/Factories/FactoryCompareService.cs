@@ -30,7 +30,7 @@ namespace TesTool.Core.Services.Factories
 
         public string GetNamespace()
         {
-            return _solutionService.GetTestNamespace("Assertions");
+            return _solutionService.GetTestProjectNamespace("Assertions");
         }
     }
 }

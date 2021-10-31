@@ -43,7 +43,7 @@ namespace TesTool.Core.Services
                 dbContextClass,
                 GetFixtureName(),
                 _webApiScanInfraService.GetName(),
-                $"{_webApiScanInfraService.GetNamespace()}.IntegrationTests"
+                GetFixtureNamespace()
             );
             fixtureModel.AddNamespace(_commonRequestService.GetNamespace());
             fixtureModel.AddNamespace(_commonProjectExplorerService.GetNamespace());
@@ -56,6 +56,11 @@ namespace TesTool.Core.Services
             var projectName = _webApiScanInfraService.GetName();
             var normalizedProjectName = Regex.Replace(projectName, @"\W", string.Empty);
             return HelpClassEnumerator.FIXTURE.Name.Replace("{PROJECT_NAME}", normalizedProjectName);
+        }
+
+        public string GetFixtureNamespace()
+        {
+            return $"{_webApiScanInfraService.GetNamespace()}.IntegrationTests";
         }
     }
 }

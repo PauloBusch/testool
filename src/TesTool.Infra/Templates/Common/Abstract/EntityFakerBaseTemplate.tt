@@ -1,0 +1,44 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<# 
+    foreach (var @namespace in Namespaces) 
+    {
+#>
+using <#=@namespace#>;
+<# 
+    } 
+#>
+using Microsoft.EntityFrameworkCore;
+using System;
+using Bogus;
+
+namespace <#= Namespace #>
+{
+    public class <#= Name #><TEntity> : Faker<TEntity> where TEntity : class
+    {
+        private readonly <#= DbContext #> _context;
+
+        public <#= Name #>(<#= DbContext #> context)
+        {
+            _context = context;
+
+            CustomInstantiator(f => Activator.CreateInstance(typeof(TEntity), nonPublic: true) as TEntity);
+        }
+
+        public TEntity Save()
+        {
+            var entity = Generate();
+
+            _context.Add(entity);
+            _context.Entry(entity).State = EntityState.Added;
+            _context.SaveChanges();
+            return entity;
+        }
+    }
+}
+<#+
+    public string Name { get; set; }
+    public string Namespace { get; set; }
+    public string DbContext { get; set; }
+    public string[] Namespaces { get; set; }
+#>

@@ -108,7 +108,7 @@ namespace TesTool.Core.Services
 
         public string GetNamespace()
         {
-            return _solutionService.GetTestNamespace("Assertions.Comparators");
+            return _solutionService.GetTestProjectNamespace("Assertions.Comparators");
         }
 
         public string GetDirectoryBase()

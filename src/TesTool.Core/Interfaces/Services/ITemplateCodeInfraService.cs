@@ -9,8 +9,6 @@ namespace TesTool.Core.Interfaces.Services
 {
     public interface ITemplateCodeInfraService
     {
-        string BuildFixture(Fixture model);
-
         string BuildControllerTest(ControllerTest model);
         string BuildControllerTestMethod(ControllerTestMethod model);
 
@@ -38,10 +36,12 @@ namespace TesTool.Core.Interfaces.Services
         string BuildComparatorFactory(ComparatorFactory model);
         string BuildComparatorFactoryMethod(ComparatorFactoryMethod model);
 
+        string BuildFixture(Fixture model);
         string BuildAssertExtensions(string @namespace);
         string BuildHttpRequest(string @namespace);
         string BuildProjectExplorer(string @namespace);
         string BuildConfigurationLoader(string @namespace);
+        string BuildEntityFakerBase(EntityFakerBase model);
         string BuildTestBase(TestBase model);
     }
 }

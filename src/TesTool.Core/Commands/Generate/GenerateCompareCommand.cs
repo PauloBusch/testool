@@ -7,7 +7,6 @@ using TesTool.Core.Interfaces.Services;
 using TesTool.Core.Interfaces.Services.Common;
 using TesTool.Core.Interfaces.Services.Factories;
 using TesTool.Core.Models.Metadata;
-using TesTool.Core.Models.Templates.Comparator;
 using TesTool.Core.Models.Templates.Factories;
 
 namespace TesTool.Core.Commands.Generate
@@ -25,6 +24,7 @@ namespace TesTool.Core.Commands.Generate
         public bool Static { get; set; }
 
         private readonly ICompareService _compareService;
+        private readonly IFileSystemInfraService _fileSystemInfraService;
         private readonly IFactoryCompareService _factoryCompareService;
         private readonly ITestScanInfraService _testScanInfraService;
         private readonly ITestCodeInfraService _testCodeInfraService;
@@ -34,7 +34,6 @@ namespace TesTool.Core.Commands.Generate
 
         public GenerateCompareCommand(
             ICompareService compareService,
-            ISolutionInfraService solutionService,
             IFactoryCompareService factoryCompareService,
             ITestScanInfraService testScanInfraService,
             ITestCodeInfraService testCodeInfraService,
@@ -42,30 +41,34 @@ namespace TesTool.Core.Commands.Generate
             ICommonAssertExtensionsService commonAssertExtensionsService,
             IWebApiScanInfraService webApiScanInfraService,
             IFileSystemInfraService fileSystemInfraService
-        ) : base(fileSystemInfraService)
+        ) : base()
         {
             _compareService = compareService;
             _factoryCompareService = factoryCompareService;
             _testScanInfraService = testScanInfraService;
             _testCodeInfraService = testCodeInfraService;
             _templateCodeInfraService = templateCodeInfraService;
+            _fileSystemInfraService = fileSystemInfraService;
             _commonAssertExtensionsService = commonAssertExtensionsService;
             _webApiScanInfraService = webApiScanInfraService;
         }
 
-        protected override async Task GenerateAsync()
+        public override async Task ExecuteAsync(ICommandContext context)
         {
-            if (!await _webApiScanInfraService.ProjectExistAsync())
-                throw new ProjectNotFoundException(ProjectTypeEnumerator.WEB_API);
-            if (!await _testScanInfraService.ProjectExistAsync())
-                throw new ProjectNotFoundException(ProjectTypeEnumerator.INTEGRATION_TESTS);
+            if (!context.ExecutionCascade)
+            {
+                if (!await _webApiScanInfraService.ProjectExistAsync())
+                    throw new ProjectNotFoundException(ProjectTypeEnumerator.WEB_API);
+                if (!await _testScanInfraService.ProjectExistAsync())
+                    throw new ProjectNotFoundException(ProjectTypeEnumerator.INTEGRATION_TESTS);
 
-            var factoryName = _factoryCompareService.GetFactoryName();
-            if (!await _testScanInfraService.ClassExistAsync(factoryName))
-                throw new ClassNotFoundException(factoryName);
+                var factoryName = _factoryCompareService.GetFactoryName();
+                if (!await _testScanInfraService.ClassExistAsync(factoryName))
+                    throw new ClassNotFoundException(factoryName);
 
-            var comparatorClass = await _compareService.GetComparatorClassAsync(SourceClassName, TargetClassName);
-            if (comparatorClass is not null) throw new DuplicatedClassException(comparatorClass.Name);
+                var comparatorClass = await _compareService.GetComparatorClassAsync(SourceClassName, TargetClassName);
+                if (comparatorClass is not null) throw new DuplicatedClassException(comparatorClass.Name);
+            }
 
             Class sourceModel = await _webApiScanInfraService.GetModelAsync(SourceClassName) as Class;
             Class targetModel = await _webApiScanInfraService.GetModelAsync(TargetClassName) as Class;
@@ -74,7 +77,7 @@ namespace TesTool.Core.Commands.Generate
 
             var comparatorName = GetComparatorName();
             var filePath = GetComparatorFilePath();
-            if (await _fileSystemInfraService.FileExistAsync(filePath))
+            if (!context.ExecutionCascade && await _fileSystemInfraService.FileExistAsync(filePath))
                 throw new DuplicatedSourceFileException(comparatorName);
 
             string sourceCode;

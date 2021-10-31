@@ -20,6 +20,7 @@ namespace TesTool.Core.Services
     {
         private readonly IServiceResolver _serviceResolver;
         private readonly ISolutionInfraService _solutionService;
+        private readonly IFixtureService _fixtureService;
         private readonly IFakeModelService _fakeModelService;
         private readonly IFakeEntityService _fakeEntityService;
         private readonly ITestScanInfraService _testScanInfraService;
@@ -32,6 +33,7 @@ namespace TesTool.Core.Services
         private readonly IDeleteEndpointTestService _deleteEndpointTestService;
 
         public ControllerService(
+            IFixtureService fixtureService,
             IServiceResolver serviceResolver,
             ISolutionInfraService solutionService,
             IFakeModelService fakeModelService,
@@ -45,6 +47,7 @@ namespace TesTool.Core.Services
             IDeleteEndpointTestService deleteEndpointTestService
         )
         {
+            _fixtureService = fixtureService;
             _serviceResolver = serviceResolver;
             _solutionService = solutionService;
             _fakeModelService = fakeModelService;
@@ -67,7 +70,7 @@ namespace TesTool.Core.Services
 
         public async Task<ControllerTest> GetControllerTestAsync(Controller controller, DbSet dbSet)
         {
-            var fixtureName = _solutionService.GetTestFixtureClassName();
+            var fixtureName = _fixtureService.GetFixtureName();
             var fixtureClass = await _testScanInfraService.GetClassAsync(fixtureName);
             var testBaseClass = await _testScanInfraService.GetClassAsync(HelpClassEnumerator.TEST_BASE.Name);
             var templateModel = new ControllerTest(
@@ -175,7 +178,7 @@ namespace TesTool.Core.Services
 
         public string GetNamespace()
         {
-            return _solutionService.GetTestNamespace("Controllers");
+            return _solutionService.GetTestProjectNamespace("Controllers");
         }
 
         public string GetDirectoryBase()

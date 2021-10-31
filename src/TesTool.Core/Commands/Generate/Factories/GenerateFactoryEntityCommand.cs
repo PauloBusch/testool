@@ -38,9 +38,9 @@ namespace TesTool.Core.Commands.Generate.Factory
             _webApiScanInfraService = webApiScanInfraService;
         }
 
-        protected override async Task GenerateAsync()
+        public override async Task ExecuteAsync(ICommandContext context)
         {
-            if (!await _testScanInfraService.ClassExistAsync(HelpClassEnumerator.TEST_BASE.Name))
+            if (!context.ExecutionCascade && !await _testScanInfraService.ClassExistAsync(HelpClassEnumerator.TEST_BASE.Name))
                 throw new ClassNotFoundException(HelpClassEnumerator.TEST_BASE.Name);
             if (!await _webApiScanInfraService.ProjectExistAsync())
                 throw new ProjectNotFoundException(ProjectTypeEnumerator.WEB_API);
@@ -49,7 +49,7 @@ namespace TesTool.Core.Commands.Generate.Factory
             if (!await _webApiDbContextInfraService.IsDbContextClassAsync(DbContext))
                 throw new ValidationException("DbContext informado não é uma classe de contexto de banco de dados do Entity Framework.");
 
-            await base.GenerateAsync();
+            await base.ExecuteAsync(context);
             await _settingInfraService.SetStringAsync(SettingEnumerator.DB_CONTEXT_NAME, DbContext);
         }
 

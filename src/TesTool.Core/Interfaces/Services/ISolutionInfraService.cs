@@ -4,9 +4,8 @@
     {
         string GetSolutionName();
         string GetSolutionFilePath();
-        string GetTestFixtureClassName();
 
-        string GetTestName();
-        string GetTestNamespace(string sufix = default);
+        string GetTestProjectName();
+        string GetTestProjectNamespace(string sufix = default);
     }
 }

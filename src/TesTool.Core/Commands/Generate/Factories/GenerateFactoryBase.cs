@@ -4,7 +4,6 @@ using TesTool.Core.Attributes;
 using TesTool.Core.Enumerations;
 using TesTool.Core.Exceptions;
 using TesTool.Core.Interfaces.Services;
-using TesTool.Core.Models.Configuration;
 using TesTool.Core.Models.Enumerators;
 
 namespace TesTool.Core.Commands.Generate.Factory
@@ -14,6 +13,7 @@ namespace TesTool.Core.Commands.Generate.Factory
     {        
         private readonly HelpClass _testClass;
 
+        protected readonly IFileSystemInfraService _fileSystemInfraService;
         protected readonly ITemplateCodeInfraService _templateCodeInfraService;
         protected readonly ITestScanInfraService _testScanInfraService;
 
@@ -22,9 +22,10 @@ namespace TesTool.Core.Commands.Generate.Factory
             ITestScanInfraService testScanInfraService,
             IFileSystemInfraService fileSystemInfraService,
             ITemplateCodeInfraService templateCodeInfraService
-        ) : base(fileSystemInfraService) 
+        ) : base() 
         {
             _testClass = testClass;
+            _fileSystemInfraService = fileSystemInfraService;
             _templateCodeInfraService = templateCodeInfraService;
             _testScanInfraService = testScanInfraService;
         }
@@ -32,18 +33,22 @@ namespace TesTool.Core.Commands.Generate.Factory
         protected abstract string BuildSourceCode(string factoryName);
         protected abstract string GetOutputDirectory();
 
-        protected override async Task GenerateAsync()
+        public override async Task ExecuteAsync(ICommandContext context)
         {
-            if (!await _testScanInfraService.ProjectExistAsync())
-                throw new ProjectNotFoundException(ProjectTypeEnumerator.INTEGRATION_TESTS);
+            if (!context.ExecutionCascade)
+            {
+                if (!await _testScanInfraService.ProjectExistAsync())
+                    throw new ProjectNotFoundException(ProjectTypeEnumerator.INTEGRATION_TESTS);
 
-            var factoryName = GetFactoryName();
-            if (await _testScanInfraService.ClassExistAsync(factoryName))
-                throw new DuplicatedClassException(factoryName);
+                var factoryNameValidate = GetFactoryName();
+                if (await _testScanInfraService.ClassExistAsync(factoryNameValidate))
+                    throw new DuplicatedClassException(factoryNameValidate);
+            }
 
             var filePath = GetFactoryFilePath();
+            var factoryName = GetFactoryName();
             var factorySourceCode = BuildSourceCode(factoryName);
-            if (await _fileSystemInfraService.FileExistAsync(filePath))
+            if (!context.ExecutionCascade && await _fileSystemInfraService.FileExistAsync(filePath))
                 throw new DuplicatedSourceFileException(factoryName);
 
             await _fileSystemInfraService.SaveFileAsync(filePath, factorySourceCode);

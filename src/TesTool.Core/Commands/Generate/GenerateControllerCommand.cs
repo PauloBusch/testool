@@ -21,61 +21,63 @@ namespace TesTool.Core.Commands.Generate
         public bool Static { get; set; }
 
         private readonly IControllerService _controllerService;
-        private readonly ISolutionInfraService _solutionService;
+        private readonly IFileSystemInfraService _fileSystemInfraService;
         private readonly ICommandHandler _commandHandler;
+        private readonly IFixtureService _fixtureService;
         private readonly ITestScanInfraService _testScanInfraService;
         private readonly ITemplateCodeInfraService _templateCodeInfraService;
         private readonly IWebApiScanInfraService _webApiScanInfraService;
-        private readonly IWebApiDbContextInfraService _webApiDbContextInfraService;
         private readonly ISettingInfraService _settingInfraService;
 
         public GenerateControllerCommand(
             IControllerService controllerService,
-            ISolutionInfraService solutionService,
             ICommandHandler commandHandler,
+            IFixtureService fixtureService,
             ISettingInfraService settingInfraService,
             ITestScanInfraService testScanInfraService,
-            IWebApiDbContextInfraService webApiDbContextInfraService,
             ITemplateCodeInfraService templateCodeInfraService,
             IWebApiScanInfraService webApiScanInfraService,
             IFileSystemInfraService fileSystemInfraService
-        ) : base(fileSystemInfraService) 
+        ) : base() 
         {
             _commandHandler = commandHandler;
-            _solutionService = solutionService;
+            _fixtureService = fixtureService;
             _controllerService = controllerService;
             _settingInfraService = settingInfraService;
             _testScanInfraService = testScanInfraService;
-            _webApiDbContextInfraService = webApiDbContextInfraService;
+            _fileSystemInfraService = fileSystemInfraService;
             _templateCodeInfraService = templateCodeInfraService;
             _webApiScanInfraService = webApiScanInfraService;
         }
 
-        protected override async Task GenerateAsync()
+        public override async Task ExecuteAsync(ICommandContext context)
         {
-            if (!await _webApiScanInfraService.ProjectExistAsync())
-                throw new ProjectNotFoundException(ProjectTypeEnumerator.WEB_API);
-            if (!await _testScanInfraService.ProjectExistAsync())
-                throw new ProjectNotFoundException(ProjectTypeEnumerator.INTEGRATION_TESTS);
+            if (!context.ExecutionCascade)
+            {
+                if (!await _webApiScanInfraService.ProjectExistAsync())
+                    throw new ProjectNotFoundException(ProjectTypeEnumerator.WEB_API);
+                if (!await _testScanInfraService.ProjectExistAsync())
+                    throw new ProjectNotFoundException(ProjectTypeEnumerator.INTEGRATION_TESTS);
+                if (!await _testScanInfraService.ClassExistAsync(HelpClassEnumerator.TEST_BASE.Name))
+                    throw new ClassNotFoundException(HelpClassEnumerator.TEST_BASE.Name);
+                if (!await _testScanInfraService.ClassExistAsync(HelpClassEnumerator.ENTITY_FAKER_FACTORY.Name))
+                    throw new ClassNotFoundException(HelpClassEnumerator.ENTITY_FAKER_FACTORY.Name);
+            }
             var controllerName = _controllerService.GetControllerName(Controller);
             var controllerClass = await _webApiScanInfraService.GetControllerAsync(controllerName);
             if (controllerClass is null) throw new ClassNotFoundException(controllerName);
-            if(!await _testScanInfraService.ClassExistAsync(HelpClassEnumerator.TEST_BASE.Name))
-                throw new ClassNotFoundException(HelpClassEnumerator.TEST_BASE.Name);
-            if (!await _testScanInfraService.ClassExistAsync(HelpClassEnumerator.ENTITY_FAKER_FACTORY.Name))
-                throw new ClassNotFoundException(HelpClassEnumerator.ENTITY_FAKER_FACTORY.Name);
             var dbContextName = await _settingInfraService.GetStringAsync(SettingEnumerator.DB_CONTEXT_NAME);
             if (string.IsNullOrWhiteSpace(dbContextName))
                 throw new ValidationException("Nenhuma classe de banco de dados configurada.");
             if (!await _webApiScanInfraService.ModelExistAsync(dbContextName)) 
                 throw new ClassNotFoundException(dbContextName);
-            var fixtureClassName = _solutionService.GetTestFixtureClassName();
-            if (!await _testScanInfraService.ClassExistAsync(fixtureClassName))
+            var fixtureClassName = _fixtureService.GetFixtureName();
+            if (!context.ExecutionCascade && !await _testScanInfraService.ClassExistAsync(fixtureClassName))
                 throw new ClassNotFoundException(fixtureClassName);
 
             var controllerTestName = _controllerService.GetControllerTestName(controllerName);
             var filePath = GetControllerTestFilePath(controllerTestName);
-            if (await _fileSystemInfraService.FileExistAsync(filePath))
+            if (!context.ExecutionCascade && await _fileSystemInfraService.FileExistAsync(filePath))
                 throw new DuplicatedSourceFileException(controllerTestName);
 
             var entityName = _controllerService.GetEntityName(controllerName, Entity);

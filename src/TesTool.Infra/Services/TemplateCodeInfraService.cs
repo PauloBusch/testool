@@ -320,6 +320,18 @@ namespace TesTool.Infra.Services
             return TrimRows(template.TransformText());
         }
 
+        public string BuildEntityFakerBase(EntityFakerBase model)
+        {
+            var template = new EntityFakerBaseTemplate
+            {
+                Name = model.Name,
+                Namespace = model.Namespace,
+                DbContext = model.DbContext,
+                Namespaces = PrepareNamespaces(model.Namespaces, model.Namespace)
+            };
+            return TrimRows(template.TransformText());
+        }
+
         public string BuildTestBase(TestBase model)
         {
             var template = new TestBaseTemplate { 
@@ -334,7 +346,7 @@ namespace TesTool.Infra.Services
 
         private string[] PrepareNamespaces(IEnumerable<string> namespaces, string currentNamespace)
         {
-            var baseTestNamespace = _solutionService.GetTestNamespace();
+            var baseTestNamespace = _solutionService.GetTestProjectNamespace();
             return namespaces
                 .Distinct()
                 .Where(n => n != currentNamespace)

@@ -11,21 +11,7 @@ namespace TesTool.Core.Commands.Generate
     {
         [Option(HelpText = "Diretório de saída.")]
         public string Output { get; set; }
-                
-        protected readonly IFileSystemInfraService _fileSystemInfraService;
 
-        protected GenerateCommandBase(
-            IFileSystemInfraService  fileSystemInfraService
-        )
-        {
-            _fileSystemInfraService = fileSystemInfraService;
-        }
-
-        protected abstract Task GenerateAsync();
-
-        public async Task ExecuteAsync(ICommandContext context)
-        {
-            await GenerateAsync();
-        }
+        public abstract Task ExecuteAsync(ICommandContext context);
     }
 }
