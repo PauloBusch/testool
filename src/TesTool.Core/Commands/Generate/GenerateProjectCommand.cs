@@ -89,6 +89,7 @@ namespace TesTool.Core.Commands.Generate
 
         public override async Task ExecuteAsync(ICommandContext context)
         {
+            _settingInfraService.CreateTemporarySetting();
             await _commandHandler.HandleManyAsync(GetBeforeCommands(), true);
 
             if (!await _webApiScanInfraService.ProjectExistAsync())
@@ -223,8 +224,7 @@ namespace TesTool.Core.Commands.Generate
         private async Task<Class> GetDbContextAsync()
         {
             var dbContextName = string.IsNullOrWhiteSpace(DbContext) 
-                ? await _settingInfraService.GetStringAsync(SettingEnumerator.DB_CONTEXT_NAME)
-                : DbContext;
+                ? _settingInfraService.DbContextName : DbContext;
             if (!string.IsNullOrWhiteSpace(dbContextName) && !await _webApiDbContextInfraService.IsDbContextClassAsync(dbContextName))
                 throw new ValidationException("DbContext informado não é uma classe de contexto de banco de dados do Entity Framework.");
                 

@@ -164,7 +164,6 @@ namespace TesTool.Infra.Services
             endpoint.Output = GetModelType(returnType);
         }
 
-        public override string GetProjectPathFile()
-            => _settingInfraService.GetStringAsync(SettingEnumerator.PROJECT_WEB_API_DIRECTORY).Result;
+        public override string GetProjectPathFile() => _settingInfraService.ProjectWebApiDirectory;
     }
 }

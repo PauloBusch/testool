@@ -20,7 +20,7 @@ namespace TesTool.Infra.Services
         public async Task<IEnumerable<Convention>> GetConfiguredConventionsAsync()
         {
             var defaultConventions = GetDefaultConventions();
-            var conventionPathFile = await _settingInfraService.GetStringAsync(SettingEnumerator.CONVENTION_PATH_FILE);
+            var conventionPathFile = _settingInfraService.ConventionPathFile;
             if (string.IsNullOrWhiteSpace(conventionPathFile) || !File.Exists(conventionPathFile)) return defaultConventions;
 
             var conventionJson = File.ReadAllText(conventionPathFile);

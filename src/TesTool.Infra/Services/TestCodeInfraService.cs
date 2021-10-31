@@ -19,12 +19,13 @@ namespace TesTool.Infra.Services
 
         public TestCodeInfraService(
             ICmdInfraService cmdInfraService,
+            IProjectInfraExplorer projectInfraExplorer,
             ILoggerInfraService loggerInfraService,
             ISettingInfraService settingInfraService,
             IWebApiScanInfraService webApiScanInfraService,
             ISolutionInfraService solutionInfraService,
             IEnvironmentInfraService environmentInfraService
-        ) : base(loggerInfraService, settingInfraService, environmentInfraService) 
+        ) : base(projectInfraExplorer, loggerInfraService, settingInfraService, environmentInfraService) 
         {
             _cmdInfraService = cmdInfraService;
             _webApiScanInfraService = webApiScanInfraService;
@@ -50,7 +51,7 @@ namespace TesTool.Infra.Services
                 @$"del /f ""{fullOutput}\*.cs"""
             };
             await _cmdInfraService.ExecuteCommandsAsync(commands);
-            await _settingInfraService.SetStringAsync(SettingEnumerator.PROJECT_INTEGRATION_TEST_DIRECTORY, testProjectPathFile);
+            _settingInfraService.ProjectIntegrationTestDirectory = testProjectPathFile;
         }
 
         public async Task<string> MergeClassCodeAsync(string className, string sourceCode)

@@ -2,7 +2,6 @@
 using System.IO;
 using System.Threading.Tasks;
 using TesTool.Core.Attributes;
-using TesTool.Core.Enumerations;
 using TesTool.Core.Exceptions;
 using TesTool.Core.Interfaces.Services;
 
@@ -53,7 +52,7 @@ namespace TesTool.Core.Commands.Configure
                 await _fileSystemInfraService.SaveFileAsync(ConfigurationPath, jsonConventions);
             }
 
-            await _settingsService.SetStringAsync(SettingEnumerator.CONVENTION_PATH_FILE, ConfigurationPath);
+            _settingsService.ConventionPathFile = ConfigurationPath;
         }
     }
 }

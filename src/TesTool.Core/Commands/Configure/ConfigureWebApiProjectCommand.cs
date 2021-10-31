@@ -45,7 +45,7 @@ namespace TesTool.Core.Commands.Configure
                 ProjectPath = ProjectPath.Replace("/", @"\");
             } else throw new ProjectNotFoundException(ProjectTypeEnumerator.WEB_API);
 
-            await _settingsService.SetStringAsync(SettingEnumerator.PROJECT_WEB_API_DIRECTORY, ProjectPath);
+            _settingsService.ProjectWebApiDirectory = ProjectPath;
         }
     }
 }

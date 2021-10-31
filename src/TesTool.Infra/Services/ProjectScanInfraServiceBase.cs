@@ -232,18 +232,6 @@ namespace TesTool.Infra.Services
             return compilation;
         }
 
-        protected IEnumerable<PackageReference> GetProjectPackages(string projectPathFile)
-        {
-            var csprojXml = File.ReadAllText(projectPathFile);
-            return XDocument.Parse(csprojXml).XPathSelectElements("//PackageReference")
-                .Select(pr => new PackageReference
-                {
-                    Include = pr.Attribute("Include").Value,
-                    Version = new Version(pr.Attribute("Version").Value)
-                })
-                .ToArray();
-        }
-
         public void ClearCache()
         {
             var projectPathFile = GetProjectPathFile();

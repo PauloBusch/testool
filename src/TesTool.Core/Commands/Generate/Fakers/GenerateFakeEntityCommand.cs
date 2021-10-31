@@ -59,8 +59,7 @@ namespace TesTool.Core.Commands.Generate.Fakers
 
         protected override async Task AppendFactoryMethodAsync(Class @class, string fakerName, string factoryName)
         {
-            var dbContext = await _settingInfraService.GetStringAsync(SettingEnumerator.DB_CONTEXT_NAME);
-            var factoryTemplateEntity = await _factoryEntityService.GetEntityFactoryAsync(factoryName, dbContext);
+            var factoryTemplateEntity = await _factoryEntityService.GetEntityFactoryAsync(factoryName, _settingInfraService.DbContextName);
             factoryTemplateEntity.AddNamespace(_fakeEntityService.GetNamespace());
             factoryTemplateEntity.AddMethod(new EntityFakerFactoryMethod(ClassName, fakerName));
 

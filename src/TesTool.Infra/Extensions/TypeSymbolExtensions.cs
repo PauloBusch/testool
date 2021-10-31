@@ -62,7 +62,9 @@ namespace TesTool.Infra.Extensions
 
         public static IEnumerable<ITypeSymbol> GetGeneritTypeArguments(this ITypeSymbol typeSymbol)
         {
-            return (typeSymbol as INamedTypeSymbol)?.TypeArguments;
+            var generics = (typeSymbol as INamedTypeSymbol)?.TypeArguments;
+            if (generics is not null) return generics;
+            return Array.Empty<ITypeSymbol>();
         }
 
         public static string GetName(this ITypeSymbol type)

@@ -2,11 +2,10 @@
 {
     public class Setting
     {
-        public Setting(string key)
-        {
-            Key = key;
-        }
-
-        public string Key { get; private set; }
+        public string ConventionPathFile { get; set; }
+        public string ProjectWebApiDirectory { get; set; }
+        public string ProjectIntegrationTestDirectory { get; set; }
+        public string DbContextName { get; set; }
+        public string FixtureName { get; set; }
     }
 }

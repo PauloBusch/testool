@@ -66,7 +66,7 @@ namespace TesTool.Core.Commands.Generate
             var controllerName = _controllerService.GetControllerName(Controller);
             var controllerClass = await _webApiScanInfraService.GetControllerAsync(controllerName);
             if (controllerClass is null) throw new ClassNotFoundException(controllerName);
-            var dbContextName = await _settingInfraService.GetStringAsync(SettingEnumerator.DB_CONTEXT_NAME);
+            var dbContextName = _settingInfraService.DbContextName;
             if (string.IsNullOrWhiteSpace(dbContextName))
                 throw new ValidationException("Nenhuma classe de banco de dados configurada.");
             if (!await _webApiScanInfraService.ModelExistAsync(dbContextName)) 

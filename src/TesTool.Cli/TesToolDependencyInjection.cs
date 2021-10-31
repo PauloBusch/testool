@@ -37,6 +37,7 @@ namespace TesTool.Cli
                 .AddSingleton<IWebApiDbContextInfraService, WebApiDbContextInfraService>()
                 .AddSingleton<ITestScanInfraService, TestScanInfraService>()
                 .AddSingleton<ITestCodeInfraService, TestCodeInfraService>()
+                .AddSingleton<IProjectInfraExplorer, ProjectInfraExplorer>()
 
                 .AddSingleton<IFakeModelService, FakeModelService>()
                 .AddSingleton<IFakeEntityService, FakeEntityService>()

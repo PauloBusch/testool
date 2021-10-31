@@ -10,15 +10,19 @@ namespace TesTool.Infra.Services
 {
     public class TestScanInfraService : ProjectScanInfraServiceBase, ITestScanInfraService
     {
+        private readonly IProjectInfraExplorer _projectExplorer;
+
         protected readonly ISettingInfraService _settingInfraService;
         protected readonly IEnvironmentInfraService _environmentInfraService;
 
         public TestScanInfraService(
+            IProjectInfraExplorer projectExplorer,
             ILoggerInfraService loggerInfraService,
             ISettingInfraService settingInfraService,
             IEnvironmentInfraService environmentInfraService
         ) : base(ProjectTypeEnumerator.INTEGRATION_TESTS, loggerInfraService) 
         { 
+            _projectExplorer = projectExplorer;
             _settingInfraService = settingInfraService;
             _environmentInfraService = environmentInfraService;
         }
@@ -55,39 +59,10 @@ namespace TesTool.Infra.Services
         {
             if (!string.IsNullOrWhiteSpace(_cacheProjectPath)) return _cacheProjectPath;
 
-            var settingProjectPathFile = _settingInfraService.GetStringAsync(SettingEnumerator.PROJECT_INTEGRATION_TEST_DIRECTORY).Result;
-            if (!string.IsNullOrWhiteSpace(settingProjectPathFile) && IsTestProjectFile(settingProjectPathFile)) return settingProjectPathFile;
+            var settingProjectPathFile = _settingInfraService.ProjectIntegrationTestDirectory;
+            if (!string.IsNullOrWhiteSpace(settingProjectPathFile) && _projectExplorer.IsTestProjectFile(settingProjectPathFile)) return settingProjectPathFile;
 
-            var applicationBasePath = _environmentInfraService.GetWorkingDirectory();
-            var directoryInfo = new DirectoryInfo(applicationBasePath);
-            do
-            {
-                var projectDirectoryInfo = new DirectoryInfo(directoryInfo.FullName);
-                if (projectDirectoryInfo.Exists)
-                {
-                    var projectFiles = Directory.GetFiles(projectDirectoryInfo.FullName, "*.csproj");
-                    foreach (var projectPathFile in projectFiles)
-                    {
-                        if (IsTestProjectFile(projectPathFile))
-                        {
-                            _cacheProjectPath = projectPathFile;
-                            return _cacheProjectPath;
-                        }
-                    }
-                }
-                
-                directoryInfo = directoryInfo.Parent;
-            }
-            while (directoryInfo.Parent != null);
-
-            return default;
-        }
-
-        private bool IsTestProjectFile(string projectPathFile)
-        {
-            if (!File.Exists(projectPathFile)) return false;
-            var packages = GetProjectPackages(projectPathFile);
-            return packages.Any(p => p.Include == "Microsoft.NET.Test.Sdk");
+            return _projectExplorer.GetCurrentProject(_projectExplorer.IsTestProjectFile);
         }
     }
 }

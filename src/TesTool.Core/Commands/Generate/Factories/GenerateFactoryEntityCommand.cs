@@ -50,7 +50,7 @@ namespace TesTool.Core.Commands.Generate.Factory
                 throw new ValidationException("DbContext informado não é uma classe de contexto de banco de dados do Entity Framework.");
 
             await base.ExecuteAsync(context);
-            await _settingInfraService.SetStringAsync(SettingEnumerator.DB_CONTEXT_NAME, DbContext);
+            _settingInfraService.DbContextName = DbContext;
         }
 
         protected override string BuildSourceCode(string factoryName)

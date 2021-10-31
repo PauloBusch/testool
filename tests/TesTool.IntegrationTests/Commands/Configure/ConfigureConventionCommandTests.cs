@@ -33,7 +33,7 @@ namespace TesTool.IntegrationTests.Commands.Configure
 
             await command.ExecuteAsync(new CommandContext(false));
 
-            Assert.NotEqual(expectedPath, await _settingsService.GetStringAsync(SettingEnumerator.CONVENTION_PATH_FILE));
+            Assert.NotEqual(expectedPath, _settingsService.ConventionPathFile);
             _loggerServiceMock.Verify(l => l.LogError(It.IsAny<string>()), Times.Once);
         }
 
@@ -48,7 +48,7 @@ namespace TesTool.IntegrationTests.Commands.Configure
 
             await command.ExecuteAsync(new CommandContext(false));
 
-            Assert.Equal(expectedPath, await _settingsService.GetStringAsync(SettingEnumerator.CONVENTION_PATH_FILE));
+            Assert.Equal(expectedPath, _settingsService.ConventionPathFile);
             _loggerServiceMock.Verify(l => l.LogError(It.IsAny<string>()), Times.Never);
         }
     }

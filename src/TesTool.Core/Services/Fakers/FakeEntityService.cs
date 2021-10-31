@@ -35,8 +35,7 @@ namespace TesTool.Core.Services.Fakers
 
         public async Task<EntityFaker> GetFakerEntityAsync(Class model, bool @static)
         {
-            var dbContext = await _settingInfraService.GetStringAsync(SettingEnumerator.DB_CONTEXT_NAME);
-            var dbContextClass = await _webApiScanInfraService.GetModelAsync(dbContext) as Class;
+            var dbContextClass = await _webApiScanInfraService.GetModelAsync(_settingInfraService.DbContextName) as Class;
             var entityFakerBase = await _testScanInfraService.GetClassAsync(HelpClassEnumerator.ENTITY_FAKER_BASE.Name);
             var templateModel = new EntityFaker(model.Name, GetNamespace(), entityFakerBase, dbContextClass);
             return await FillTemplateAsync<EntityFaker, EntityProperty>(templateModel, model, @static);
