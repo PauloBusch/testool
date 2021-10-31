@@ -5,15 +5,19 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="TesTool.Core.Models.Templates.Faker" #>
 <# 
-  var tab = "    ";
   var classFakerName = $"{Name}Faker";
   var expressionInitial = Name.ToLower().ElementAt(0);
   var useProperties = Properties.Where(p => !p.Unsafe).ToList();
 #>
+<# 
+    foreach (var @namespace in Namespaces) 
+    {
+#>
+using <#=@namespace#>;
+<# 
+    } 
+#>
 using Bogus;
-<# foreach (var @namespace in Namespaces) {
-  #>using <#=@namespace#>;
-<# } #>
 
 namespace <#=FakerNamespace#> 
 {
@@ -21,18 +25,25 @@ namespace <#=FakerNamespace#>
     {
         public <#=classFakerName#>()
         {
-            <# foreach (var property in Properties) { 
-              var isFirst = useProperties.FirstOrDefault() == property;
-              var isLast = useProperties.LastOrDefault() == property;
-              var rowStringBuilder = new StringBuilder();
-              if (!isFirst) rowStringBuilder.Append(tab + tab + tab + tab);
-              if (property.Unsafe) rowStringBuilder.Append("// ");
-              if (!isFirst) rowStringBuilder.Append(".");
-              rowStringBuilder.Append($"RuleFor({expressionInitial} => {expressionInitial}.{property.Name}, {property.Expression})");
-              if (isLast) rowStringBuilder.Append(";");
-              rowStringBuilder.Append("\n");
-              #><#=rowStringBuilder.ToString()#><#
-            } #>
+<# 
+    foreach (var property in Properties) 
+    { 
+        PushIndent("            ");
+
+        var isFirst = useProperties.FirstOrDefault() == property;
+        var isLast = useProperties.LastOrDefault() == property;
+        var rowStringBuilder = new StringBuilder();
+        if (!isFirst) rowStringBuilder.Append("    ");
+        if (property.Unsafe) rowStringBuilder.Append("// ");
+        if (!isFirst) rowStringBuilder.Append(".");
+        rowStringBuilder.Append($"RuleFor({expressionInitial} => {expressionInitial}.{property.Name}, {property.Expression})");
+        if (isLast) rowStringBuilder.Append(";");
+#>
+<#=rowStringBuilder.ToString()#>
+<#
+        ClearIndent();
+    } 
+#>
         } 
     }
 }

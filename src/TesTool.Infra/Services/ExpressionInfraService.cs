@@ -41,11 +41,18 @@ namespace TesTool.Infra.Services
                     .WithReferences(typeof(Faker).Assembly)
                     .WithImports("Bogus");
                 var result = await CSharpScript.EvaluateAsync<object>(codeRun, imports);
-                return JsonSerializer.Serialize(result);
+                return SerializeValue(result);
             } catch
             {
                 return expression;
             }
+        }
+
+        private static string SerializeValue(object result)
+        {
+            var stringValue = JsonSerializer.Serialize(result);
+            if (result is decimal) stringValue += "m";
+            return stringValue;
         }
     }
 }

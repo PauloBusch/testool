@@ -38,7 +38,7 @@ namespace TesTool.Core.Services
 
         public async Task<CompareStatic> GetCompareStaticAsync(Class source, Class target)
         {
-            var propertiesToAssert = source.Properties.Where(p => target.Properties.Any(p1 => p1.Name == p.Name && p1.Type.Wrapper == p.Type.Wrapper));
+            var propertiesToAssert = source.Properties.Where(p => target.Properties.Any(p1 => p1.Name == p.Name && p1.Type is not null && p1.Type.Wrapper == p.Type?.Wrapper));
             if (!propertiesToAssert.Any()) throw new ValidationException("None properties to assert Equals.");
 
             var sourceClassName = source.Name;
@@ -119,7 +119,7 @@ namespace TesTool.Core.Services
         public bool IsComparableClasses(Class source, Class target)
         {
             if (source is null || target is null) return false;
-            return source.Properties.Where(p => target.Properties.Any(p1 => p1.Name == p.Name && p1.Type.Wrapper == p.Type.Wrapper)).Any();
+            return source.Properties.Where(p => target.Properties.Any(p1 => p1.Name == p.Name && p1.Type is not null && p1.Type.Wrapper == p.Type?.Wrapper)).Any();
         }
     }
 }

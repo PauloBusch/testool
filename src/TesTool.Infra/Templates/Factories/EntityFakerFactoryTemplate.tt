@@ -15,15 +15,12 @@ namespace <#=FactoryNamespace#>
 {
     public class <#=Name#>
     {
-        private readonly <#=TestBase#> _test;
         private readonly <#=DbContext#> _context;
 
         public <#=Name#>(<#=TestBase#> test)
         {
             _context = test.DbContext;
-            _test = test;
         }
-
 <# 
     PushIndent("        ");
     foreach (var method in Methods) 

@@ -42,8 +42,7 @@ namespace TesTool.Infra.Services
             var webApiProjectPathFile = _webApiScanInfraService.GetProjectPathFile();
             var commands = new List<string> { 
                 @$"dotnet new xunit --name ""{name}"" --output ""{fullOutput}"" --no-restore",
-                // TODO: Uncomment
-                //@$"dotnet sln ""{solutionPathFile}"" add ""{fullOutput}""",
+                @$"dotnet sln ""{solutionPathFile}"" add ""{fullOutput}""",
                 @$"dotnet add ""{name}"" reference ""{webApiProjectPathFile}""",
                 @$"dotnet add ""{fullOutput}"" package Microsoft.AspNetCore.TestHost",
                 @$"dotnet add ""{fullOutput}"" package bogus",

@@ -32,7 +32,6 @@ namespace TesTool.Infra.Templates.Fakers
             
             #line 7 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
  
-  var tab = "    ";
   var classFakerName = $"{Name}Faker";
   var expressionInitial = Name.ToLower().ElementAt(0);
   var useProperties = Properties.Where(p => !p.Unsafe).ToList();
@@ -40,83 +39,92 @@ namespace TesTool.Infra.Templates.Fakers
             
             #line default
             #line hidden
-            this.Write("using Bogus;\r\n");
             
-            #line 14 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
- foreach (var @namespace in Namespaces) {
-  
+            #line 12 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
+ 
+    foreach (var @namespace in Namespaces) 
+    {
+
             
             #line default
             #line hidden
             this.Write("using ");
             
-            #line 15 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
+            #line 16 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@namespace));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 16 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
- } 
+            #line 17 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
+ 
+    } 
+
             
             #line default
             #line hidden
-            this.Write("\r\nnamespace ");
+            this.Write("using Bogus;\r\n\r\nnamespace ");
             
-            #line 18 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
+            #line 22 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(FakerNamespace));
             
             #line default
             #line hidden
             this.Write(" \r\n{\r\n    public class ");
             
-            #line 20 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
+            #line 24 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(classFakerName));
             
             #line default
             #line hidden
             this.Write(" : Faker<");
             
-            #line 20 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
+            #line 24 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
             this.Write("> \r\n    {\r\n        public ");
             
-            #line 22 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
+            #line 26 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(classFakerName));
             
             #line default
             #line hidden
-            this.Write("()\r\n        {\r\n            ");
+            this.Write("()\r\n        {\r\n");
             
-            #line 24 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
- foreach (var property in Properties) { 
-              var isFirst = useProperties.FirstOrDefault() == property;
-              var isLast = useProperties.LastOrDefault() == property;
-              var rowStringBuilder = new StringBuilder();
-              if (!isFirst) rowStringBuilder.Append(tab + tab + tab + tab);
-              if (property.Unsafe) rowStringBuilder.Append("// ");
-              if (!isFirst) rowStringBuilder.Append(".");
-              rowStringBuilder.Append($"RuleFor({expressionInitial} => {expressionInitial}.{property.Name}, {property.Expression})");
-              if (isLast) rowStringBuilder.Append(";");
-              rowStringBuilder.Append("\n");
-              
+            #line 28 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
+ 
+    foreach (var property in Properties) 
+    { 
+        PushIndent("            ");
+
+        var isFirst = useProperties.FirstOrDefault() == property;
+        var isLast = useProperties.LastOrDefault() == property;
+        var rowStringBuilder = new StringBuilder();
+        if (!isFirst) rowStringBuilder.Append("    ");
+        if (property.Unsafe) rowStringBuilder.Append("// ");
+        if (!isFirst) rowStringBuilder.Append(".");
+        rowStringBuilder.Append($"RuleFor({expressionInitial} => {expressionInitial}.{property.Name}, {property.Expression})");
+        if (isLast) rowStringBuilder.Append(";");
+
             
             #line default
             #line hidden
             
-            #line 34 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
+            #line 42 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(rowStringBuilder.ToString()));
             
             #line default
             #line hidden
+            this.Write("\r\n");
             
-            #line 34 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
+            #line 43 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
 
-            } 
+        ClearIndent();
+    } 
+
             
             #line default
             #line hidden
@@ -124,7 +132,7 @@ namespace TesTool.Infra.Templates.Fakers
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 39 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
+        #line 50 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Fakers\ModelFakerTemplate.tt"
 
     public string Name { get; set; }
     public string FakerNamespace { get; set; }
