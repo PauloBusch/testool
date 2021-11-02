@@ -10,7 +10,6 @@ namespace TesTool.Core.Interfaces.Services
     {
         string GetNamespace();
         string GetDirectoryBase();
-        string GetControllerName(string raw);
         string GetControllerTestName(string controller);
         string GetEntityName(string controller, string @default = default); 
         Task<DbSet> GetDbSetClassAsync(string dbContext, string entityName);

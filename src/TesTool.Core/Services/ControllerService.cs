@@ -62,12 +62,6 @@ namespace TesTool.Core.Services
             _deleteEndpointTestService = deleteEndpointTestService;
         }
 
-        public string GetControllerName(string raw)
-        {
-            if (string.IsNullOrWhiteSpace(raw)) return default;
-            return raw.Contains("Controller") ? raw : $"{raw}Controller";
-        }
-
         public async Task<ControllerTest> GetControllerTestAsync(Controller controller, DbSet dbSet)
         {
             var fixtureName = _fixtureService.GetFixtureName();

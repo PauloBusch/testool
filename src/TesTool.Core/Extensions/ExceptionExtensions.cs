@@ -6,12 +6,12 @@ namespace TesTool.Core.Extensions
     {
         public static string GetFullMessageString(this Exception exception)
         {
-            var error = $"{exception.GetType().Name}: {exception.Message}";
+            var error = exception.Message;
             var inner = exception.InnerException;
 
             while (inner != null)
             {
-                error = $"{error} - Inner - {inner.GetType().Name}: {inner.Message}";
+                error = $"\n{inner.Message}";
                 inner = inner.InnerException;
             }
 

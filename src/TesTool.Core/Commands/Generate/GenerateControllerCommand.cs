@@ -64,9 +64,8 @@ namespace TesTool.Core.Commands.Generate
                 if (!await _testScanInfraService.ClassExistAsync(HelpClassEnumerator.ENTITY_FAKER_FACTORY.Name))
                     throw new ClassNotFoundException(HelpClassEnumerator.ENTITY_FAKER_FACTORY.Name);
             }
-            var controllerName = _controllerService.GetControllerName(Controller);
-            var controllerClass = await _webApiScanInfraService.GetControllerAsync(controllerName);
-            if (controllerClass is null) throw new ClassNotFoundException(controllerName);
+            var controllerClass = await _webApiScanInfraService.GetControllerAsync(Controller);
+            if (controllerClass is null) throw new ClassNotFoundException(Controller);
             var dbContextName = _settingInfraService.DbContextName;
             if (string.IsNullOrWhiteSpace(dbContextName))
                 throw new ValidationException("Nenhuma classe de banco de dados configurada.");
@@ -76,12 +75,12 @@ namespace TesTool.Core.Commands.Generate
             if (!context.ExecutionCascade && !await _testScanInfraService.ClassExistAsync(fixtureClassName))
                 throw new ClassNotFoundException(fixtureClassName);
 
-            var controllerTestName = _controllerService.GetControllerTestName(controllerName);
+            var controllerTestName = _controllerService.GetControllerTestName(Controller);
             var filePath = GetControllerTestFilePath(controllerTestName);
             if (!context.ExecutionCascade && await _fileSystemInfraService.FileExistAsync(filePath))
                 throw new DuplicatedSourceFileException(controllerTestName);
 
-            var entityName = _controllerService.GetEntityName(controllerName, Entity);
+            var entityName = _controllerService.GetEntityName(Controller, Entity);
             var dbSet = await _controllerService.GetDbSetClassAsync(dbContextName, entityName);
             var templateModel = await _controllerService.GetControllerTestAsync(controllerClass, dbSet);
             var commands = await _controllerService.GetRequiredCommandsAsync(templateModel, Static);
