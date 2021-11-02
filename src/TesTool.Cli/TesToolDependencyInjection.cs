@@ -31,6 +31,7 @@ namespace TesTool.Cli
                 .AddSingleton<IConventionInfraService, ConventionInfraService>()
                 .AddSingleton<IExpressionInfraService, ExpressionInfraService>()
                 .AddSingleton<ISerializerInfraService, SerializerInfraService>()
+                .AddSingleton<ITesToolInfraService, TesToolInfraService>()
                 .AddSingleton<ICmdInfraService, CmdInfraService>()
 
                 .AddSingleton<IWebApiScanInfraService, WebApiScanInfraService>()

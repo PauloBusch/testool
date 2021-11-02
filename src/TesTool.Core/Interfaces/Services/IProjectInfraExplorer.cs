@@ -7,6 +7,7 @@ namespace TesTool.Core.Interfaces.Services
     {
         bool IsTestProjectFile(string projectPathFile);
         string GetCurrentProject(Func<string, bool> filter = null);
+        string GetProjectVersion(string projectPathFile);
         IEnumerable<string> GetProjectPackages(string projectPathFile);
     }
 }

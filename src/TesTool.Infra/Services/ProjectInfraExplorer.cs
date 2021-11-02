@@ -47,6 +47,12 @@ namespace TesTool.Infra.Services
             return default;
         }
 
+        public string GetProjectVersion(string projectPathFile)
+        {
+            var csprojXml = File.ReadAllText(projectPathFile);
+            return XDocument.Parse(csprojXml).XPathSelectElement("//Version").Value;
+        }
+
         public IEnumerable<string> GetProjectPackages(string projectPathFile)
         {
             var csprojXml = File.ReadAllText(projectPathFile);

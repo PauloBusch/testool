@@ -4,21 +4,18 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
 
-    <PackageId>testool</PackageId>
-    <Version>1.0.6</Version>
+    <PackageId>TesToolCli</PackageId>
+    <Version>1.0.0.6</Version>
     <Authors>Paulo Ricardo Busch</Authors>
     <PackageDescription>Ferramenta de teste de integração</PackageDescription>
     <RepositoryUrl>https://github.com/paulobusch/testool</RepositoryUrl>
+    <AssemblyName>testool</AssemblyName>
 
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TesTool.Core\TesTool.Core.csproj" />
