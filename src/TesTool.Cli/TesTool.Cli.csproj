@@ -4,13 +4,15 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
 
-    <PackageId>TesTool.Cli</PackageId>
-    <Version>1.0.0.13</Version>
+    <PackageId>dotnet-testool-globaltool</PackageId>
+    <Version>1.0.1.0</Version>
     <Authors>Paulo Ricardo Busch</Authors>
     <PackageDescription>Ferramenta de teste de integração</PackageDescription>
     <RepositoryUrl>https://github.com/paulobusch/testool</RepositoryUrl>
-    <AssemblyName>testool</AssemblyName>
 
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>testool</ToolCommandName>
+    <PackageOutputPath>./nupkg</PackageOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

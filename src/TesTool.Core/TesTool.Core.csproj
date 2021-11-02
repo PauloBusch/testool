@@ -2,12 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-
-    <PackageId>TesTool.Core</PackageId>
-    <Version>1.0.0.13</Version>
-    <Authors>Paulo Ricardo Busch</Authors>
-    <PackageDescription>Ferramenta de teste de integração</PackageDescription>
-    <RepositoryUrl>https://github.com/paulobusch/testool</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
