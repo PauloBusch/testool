@@ -17,7 +17,7 @@ Este trabalho propõe o desenvolvimento da ferramenta TesTool, com foco na gera�
 **INSTALAÇÃO**
 
 
-`dotnet tool install --global TesTool.Cli`
+`dotnet tool install --global dotnet-testool-globaltool`
 
 **COMANDOS**
 CLI | Descrição
