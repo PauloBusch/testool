@@ -13,3 +13,23 @@ Este trabalho propõe o desenvolvimento da ferramenta TesTool, com foco na gera�
 **Palavras-chave:** API Web. Teste de Integração. Geração de Teste. XUnit. TesTool. 
 
 [Trabalho completo](https://docs.google.com/document/d/1_pgkANoTmPB3E41MqEGHrdd9SxmrGToB/edit?usp=sharing&ouid=106272729077503414792&rtpof=true&sd=true)
+
+**INSTALAÇÃO**
+
+
+`dotnet tool install --global TesTool.Cli`
+
+**COMANDOS**
+CLI | Descrição
+--- | ---
+`testool -h` | Mostrar ajuda de linha de comando.
+`testool -v` | Exiba a versão do TesTool em uso.
+`testool configure project` | Definir globalmente um projeto de trabalho.
+`testool configure convention` | Definir arquivo de configuração de conveção.
+`testool generate project` | Gerar código de teste a partir de projeto.
+`testool generate controller` | Gerar código de teste a partir de controlador.
+`testool generate factory compare` | Gerar fábrica de objetos de comparação.
+`testool generate factory entity` | Gerar fábrica de entidades de banco de dados.
+`testool generate factory model` | Gerar fábrica de modelo de transporte de dados (DTO).
+`testool generate faker entity` | Gerar código de fabricação de entidade de banco de dados.
+`testool generate faker model` | Gerar código de fabricação de modelo de transporte de dados (DTO).
