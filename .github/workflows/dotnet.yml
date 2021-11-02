@@ -31,4 +31,4 @@ jobs:
         PROJECT_FILE_PATH: src/TesTool.Cli/TesTool.Cli.csproj
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
         VERSION_FILE_PATH: src/TesTool.Core/TesTool.Core.csproj
-        VERSION_REGEX: /<AssemblyVersion>(.*?)<\/AssemblyVersion>/
+        VERSION_REGEX: <AssemblyVersion>(.*?)<\/AssemblyVersion>
