@@ -5,9 +5,8 @@
     <TargetFramework>net5.0</TargetFramework>
 
     <PackageId>TesToolCli</PackageId>
-    <Version>1.0.0.6</Version>
+    <Version>1.0.6</Version>
     <Authors>Paulo Ricardo Busch</Authors>
-    <Company>Paulo Ricardo Busch</Company>
     <PackageDescription>Ferramenta de teste de integração</PackageDescription>
     <RepositoryUrl>https://github.com/paulobusch/testool</RepositoryUrl>
     <AssemblyName>testool</AssemblyName>
