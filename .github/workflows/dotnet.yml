@@ -18,17 +18,14 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
-        
-    - name: Restore dependencies
-      run: dotnet restore
       
     - name: Build
-      run: dotnet build --no-restore --configuration release
+      run: dotnet build --configuration release
       
     - name: Publish
       uses: brandedoutcast/publish-nuget@v2.5.2  
       with: 
         PROJECT_FILE_PATH: src/TesTool.Cli/TesTool.Cli.csproj
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
-        VERSION_FILE_PATH: src/TesTool.Core/TesTool.Core.csproj
-        VERSION_REGEX: <AssemblyVersion>(.*?)<\/AssemblyVersion>
+        
+        
