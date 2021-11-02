@@ -22,10 +22,20 @@ jobs:
     - name: Build
       run: dotnet build --configuration release
       
-    - name: Publish
+    - name: Publish TesTool.Cli
       uses: brandedoutcast/publish-nuget@v2.5.2  
       with: 
         PROJECT_FILE_PATH: src/TesTool.Cli/TesTool.Cli.csproj
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
-        
-        
+      
+    - name: Publish TesTool.Core
+      uses: brandedoutcast/publish-nuget@v2.5.2  
+      with: 
+        PROJECT_FILE_PATH: src/TesTool.Core/TesTool.Core.csproj
+        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+      
+    - name: Publish TesTool.Infra
+      uses: brandedoutcast/publish-nuget@v2.5.2  
+      with: 
+        PROJECT_FILE_PATH: src/TesTool.Infra/TesTool.Infra.csproj
+        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
