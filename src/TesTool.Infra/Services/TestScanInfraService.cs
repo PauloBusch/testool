@@ -59,9 +59,14 @@ namespace TesTool.Infra.Services
             if (!string.IsNullOrWhiteSpace(_cacheProjectPath)) return _cacheProjectPath;
 
             var settingProjectPathFile = _settingInfraService.ProjectIntegrationTestDirectory;
-            if (!string.IsNullOrWhiteSpace(settingProjectPathFile) && _projectExplorer.IsTestProjectFile(settingProjectPathFile)) return settingProjectPathFile;
+            if (!string.IsNullOrWhiteSpace(settingProjectPathFile) && _projectExplorer.IsTestProjectFile(settingProjectPathFile))
+            {
+                _cacheProjectPath = settingProjectPathFile;
+                return settingProjectPathFile;
+            }
 
-            return _projectExplorer.GetCurrentProject(_projectExplorer.IsTestProjectFile);
+            _cacheProjectPath = _projectExplorer.GetCurrentProject(_projectExplorer.IsTestProjectFile);
+            return _cacheProjectPath;
         }
     }
 }

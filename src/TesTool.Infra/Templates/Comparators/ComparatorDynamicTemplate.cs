@@ -29,12 +29,6 @@ namespace TesTool.Infra.Templates.Comparators
         {
             
             #line 5 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Comparators\ComparatorDynamicTemplate.tt"
- var tab = "    "; 
-            
-            #line default
-            #line hidden
-            
-            #line 6 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Comparators\ComparatorDynamicTemplate.tt"
  foreach (var @namespace in Namespaces) {
   
             
@@ -42,82 +36,82 @@ namespace TesTool.Infra.Templates.Comparators
             #line hidden
             this.Write("using ");
             
-            #line 7 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Comparators\ComparatorDynamicTemplate.tt"
+            #line 6 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Comparators\ComparatorDynamicTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@namespace));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 8 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Comparators\ComparatorDynamicTemplate.tt"
+            #line 7 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Comparators\ComparatorDynamicTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\r\nnamespace ");
             
-            #line 10 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Comparators\ComparatorDynamicTemplate.tt"
+            #line 9 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Comparators\ComparatorDynamicTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ComparatorNamespace));
             
             #line default
             #line hidden
             this.Write("\r\n{\r\n    public class ");
             
-            #line 12 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Comparators\ComparatorDynamicTemplate.tt"
+            #line 11 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Comparators\ComparatorDynamicTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ComparatorClassName));
             
             #line default
             #line hidden
             this.Write("\r\n    {\r\n");
             
-            #line 14 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Comparators\ComparatorDynamicTemplate.tt"
+            #line 13 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Comparators\ComparatorDynamicTemplate.tt"
       
             
             #line default
             #line hidden
             
-            #line 14 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Comparators\ComparatorDynamicTemplate.tt"
+            #line 13 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Comparators\ComparatorDynamicTemplate.tt"
  if (SourceClassName!=TargetClassName) { 
             
             #line default
             #line hidden
             this.Write("        public void Equals(");
             
-            #line 15 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Comparators\ComparatorDynamicTemplate.tt"
+            #line 14 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Comparators\ComparatorDynamicTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TargetClassName));
             
             #line default
             #line hidden
             this.Write(" source, ");
             
-            #line 15 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Comparators\ComparatorDynamicTemplate.tt"
+            #line 14 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Comparators\ComparatorDynamicTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(SourceClassName));
             
             #line default
             #line hidden
             this.Write(" target) => Equals(source, target);\r\n");
             
-            #line 16 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Comparators\ComparatorDynamicTemplate.tt"
+            #line 15 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Comparators\ComparatorDynamicTemplate.tt"
       
             
             #line default
             #line hidden
             
-            #line 16 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Comparators\ComparatorDynamicTemplate.tt"
+            #line 15 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Comparators\ComparatorDynamicTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("        public void Equals(");
             
-            #line 17 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Comparators\ComparatorDynamicTemplate.tt"
+            #line 16 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Comparators\ComparatorDynamicTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(SourceClassName));
             
             #line default
             #line hidden
             this.Write(" source, ");
             
-            #line 17 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Comparators\ComparatorDynamicTemplate.tt"
+            #line 16 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Comparators\ComparatorDynamicTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TargetClassName));
             
             #line default
@@ -127,7 +121,7 @@ namespace TesTool.Infra.Templates.Comparators
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 23 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Comparators\ComparatorDynamicTemplate.tt"
+        #line 22 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Comparators\ComparatorDynamicTemplate.tt"
 
     public string ComparatorNamespace { get; set; }
     public string ComparatorClassName { get; set; }

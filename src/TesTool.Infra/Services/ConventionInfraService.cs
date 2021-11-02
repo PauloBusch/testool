@@ -26,7 +26,7 @@ namespace TesTool.Infra.Services
             var conventionJson = File.ReadAllText(conventionPathFile);
             var conventions = JsonSerializer.Deserialize<List<Convention>>(conventionJson);
             conventions.AddRange(defaultConventions);
-            return conventions;
+            return await Task.FromResult(conventions);
         }
 
         private IEnumerable<Convention> GetDefaultConventions()

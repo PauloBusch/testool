@@ -46,6 +46,7 @@ namespace TesTool.Core.Commands.Configure
             } else throw new ProjectNotFoundException(ProjectTypeEnumerator.WEB_API);
 
             _settingsService.ProjectWebApiDirectory = ProjectPath;
+            await Task.CompletedTask;
         }
     }
 }
