@@ -30,6 +30,7 @@ namespace TesTool.Core.Commands.Generate
         private readonly ISettingInfraService _settingInfraService;
 
         public GenerateControllerCommand(
+            ILoggerInfraService loggerInfraService,
             IControllerService controllerService,
             ICommandHandler commandHandler,
             IFixtureService fixtureService,
@@ -38,7 +39,7 @@ namespace TesTool.Core.Commands.Generate
             ITemplateCodeInfraService templateCodeInfraService,
             IWebApiScanInfraService webApiScanInfraService,
             IFileSystemInfraService fileSystemInfraService
-        ) : base() 
+        ) : base(loggerInfraService) 
         {
             _commandHandler = commandHandler;
             _fixtureService = fixtureService;
@@ -50,7 +51,7 @@ namespace TesTool.Core.Commands.Generate
             _webApiScanInfraService = webApiScanInfraService;
         }
 
-        public override async Task ExecuteAsync(ICommandContext context)
+        public override async Task GenerateAsync(ICommandContext context)
         {
             if (!context.ExecutionCascade)
             {

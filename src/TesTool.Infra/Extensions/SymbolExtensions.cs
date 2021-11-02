@@ -8,130 +8,6 @@ namespace TesTool.Infra.Extensions
 {
     internal static class SymbolExtensions
     {
-        public static IEnumerable<IPropertySymbol> GetProperties(this INamedTypeSymbol symbol) => symbol.GetMembers().OfType<IPropertySymbol>();
-
-        public static IEnumerable<IEventSymbol> GetAllEvents(this INamedTypeSymbol symbol)
-        {
-            do
-            {
-                foreach (var member in GetEvents(symbol))
-                {
-                    yield return member;
-                }
-
-                symbol = symbol.BaseType;
-
-                if (symbol == null)
-                {
-                    break;
-                }
-
-            } while (symbol.Name != "Object");
-        }
-
-        public static IEnumerable<IEventSymbol> GetEvents(INamedTypeSymbol symbol) => symbol.GetMembers().OfType<IEventSymbol>();
-
-        /// <summary>
-        /// Determines if the symbol inherits from the specified type.
-        /// </summary>
-        /// <param name="symbol">The current symbol</param>
-        /// <param name="typeName">A potential base class.</param>
-        public static bool Is(this INamedTypeSymbol symbol, string typeName)
-        {
-            do
-            {
-                if (symbol.ToDisplayString() == typeName)
-                {
-                    return true;
-                }
-
-                symbol = symbol.BaseType;
-
-                if (symbol == null)
-                {
-                    break;
-                }
-
-            } while (symbol.Name != "Object");
-
-            return false;
-        }
-
-        /// <summary>
-        /// Determines if the symbol inherits from the specified type.
-        /// </summary>
-        /// <param name="symbol">The current symbol</param>
-        /// <param name="other">A potential base class.</param>
-        public static bool Is(this INamedTypeSymbol symbol, INamedTypeSymbol other)
-        {
-            do
-            {
-                if (SymbolEqualityComparer.Default.Equals(symbol, other))
-                {
-                    return true;
-                }
-
-                symbol = symbol.BaseType;
-
-                if (symbol == null)
-                {
-                    break;
-                }
-
-            } while (symbol.Name != "Object");
-
-            return false;
-        }
-
-        public static bool IsPublic(this ISymbol symbol) => symbol.DeclaredAccessibility == Accessibility.Public;
-
-        /// <summary>
-        /// Returns true if the symbol can be accessed from the current module
-        /// </summary>
-        /// <param name="symbol"></param>
-        /// <param name="currentSymbol"></param>
-        /// <returns></returns>
-        public static bool IsLocallyPublic(this ISymbol symbol, IModuleSymbol currentSymbol) =>
-            symbol.DeclaredAccessibility == Accessibility.Public
-            ||
-            (
-                symbol.Locations.Any(l => SymbolEqualityComparer.Default.Equals(l.MetadataModule, currentSymbol))
-                && symbol.DeclaredAccessibility == Accessibility.Internal
-            );
-
-        public static IEnumerable<IFieldSymbol> GetFields(this INamedTypeSymbol resolvedType)
-        {
-            return resolvedType.GetMembers().OfType<IFieldSymbol>();
-        }
-
-        public static IEnumerable<IFieldSymbol> GetFieldsWithAttribute(this ITypeSymbol resolvedType, string name)
-        {
-            return resolvedType
-                .GetMembers()
-                .OfType<IFieldSymbol>()
-                .Where(f => f.FindAttribute(name) != null);
-        }
-
-        public static AttributeData FindAttribute(this ISymbol property, string attributeClassFullName)
-        {
-            return property.GetAttributes().FirstOrDefault(a => a.AttributeClass.ToDisplayString() == attributeClassFullName);
-        }
-
-        public static AttributeData FindAttribute(this ISymbol property, INamedTypeSymbol attributeClassSymbol)
-        {
-            return property.GetAttributes().FirstOrDefault(a => SymbolEqualityComparer.Default.Equals(a.AttributeClass, attributeClassSymbol));
-        }
-
-        public static AttributeData FindAttributeFlattened(this ISymbol property, INamedTypeSymbol attributeClassSymbol)
-        {
-            return property.GetAllAttributes().FirstOrDefault(a => SymbolEqualityComparer.Default.Equals(a.AttributeClass, attributeClassSymbol));
-        }
-
-        /// <summary>
-        /// Returns the element type of the IEnumerable, if any.
-        /// </summary>
-        /// <param name="resolvedType"></param>
-        /// <returns></returns>
         public static ITypeSymbol EnumerableOf(this ITypeSymbol resolvedType)
         {
             var intf = resolvedType
@@ -300,11 +176,7 @@ namespace TesTool.Infra.Extensions
         {
             return s is INamespaceSymbol && ((INamespaceSymbol)s).IsGlobalNamespace;
         }
-        /// <summary>
-        /// Return attributes on the current type and all its ancestors
-        /// </summary>
-        /// <param name="symbol"></param>
-        /// <returns></returns>
+
         public static IEnumerable<AttributeData> GetAllAttributes(this ISymbol symbol)
         {
             while (symbol != null)
@@ -316,60 +188,6 @@ namespace TesTool.Infra.Extensions
 
                 symbol = (symbol as INamedTypeSymbol)?.BaseType;
             }
-        }
-
-        /// <summary>
-        /// Return properties of the current type and all of its ancestors
-        /// </summary>
-        /// <param name="symbol"></param>
-        /// <returns></returns>
-        public static IEnumerable<IPropertySymbol> GetAllProperties(this INamedTypeSymbol symbol)
-        {
-            while (symbol != null)
-            {
-                foreach (var property in symbol.GetMembers().OfType<IPropertySymbol>())
-                {
-                    yield return property;
-                }
-
-                symbol = symbol.BaseType;
-            }
-        }
-
-        /// <summary>
-        /// Converts declared accessibility on a symbol to a string usable in generated code.
-        /// </summary>
-        /// <param name="symbol">The symbol to get an accessibility string for.</param>
-        /// <returns>Accessibility in format "public", "protected internal", etc.</returns>
-        public static string GetAccessibilityAsCSharpCodeString(this ISymbol symbol)
-        {
-            switch (symbol.DeclaredAccessibility)
-            {
-                case Accessibility.Private:
-                    return "private";
-                case Accessibility.ProtectedOrInternal:
-                    return "protected internal";
-                case Accessibility.Protected:
-                    return "protected";
-                case Accessibility.Internal:
-                    return "internal";
-                case Accessibility.Public:
-                    return "public";
-            }
-
-            throw new ArgumentOutOfRangeException($"{symbol.DeclaredAccessibility} is not supported.");
-        }
-
-        /// <summary>
-        /// Returns a boolean value indicating whether the symbol is decorated with all the given attributes
-        /// </summary>
-        /// <param name="symbol">The extended symbol</param>
-        /// <param name="attributes">The given attributes</param>
-        /// <returns></returns>
-        public static bool HasAttributes(this ISymbol symbol, params INamedTypeSymbol[] attributes)
-        {
-            var currentSymbolAttributes = symbol.GetAttributes();
-            return currentSymbolAttributes.Any() && currentSymbolAttributes.All(x => attributes.Contains(x.AttributeClass, SymbolEqualityComparer.Default));
         }
     }
 }

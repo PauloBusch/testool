@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -49,11 +50,15 @@ namespace TesTool.Core.Services.Fakers
                 {
                     var bogusExpression = GetBogusExpression(property, field, conventions);
                     if (string.IsNullOrWhiteSpace(bogusExpression)) continue;
-                    if (@static) bogusExpression = await _expressionInfraService.BuildBogusExpressionAsync(bogusExpression);
+                    if (@static)
+                    {
+                        bogusExpression = await _expressionInfraService.BuildBogusExpressionAsync(bogusExpression);
+                        if (field.Name == nameof(Guid)) templateModel.AddNamespace(typeof(Guid).Namespace);
+                    }
 
                     templateModel.AddProperty(MapProperty<TProperty>(property.Name, bogusExpression, false));
                 }
-                else if (property.Type is Enum enumType)
+                else if (property.Type is Models.Metadata.Enum enumType)
                 {
                     templateModel.AddNamespace(enumType.Namespace);
                     if (@static)
@@ -77,7 +82,7 @@ namespace TesTool.Core.Services.Fakers
                     if (existingFaker is not null) templateModel.AddNamespace(existingFaker.Namespace);
                     templateModel.AddProperty(bogusProperty);
                 }
-                else if (property.Type is Array array && array.Type is Class arrayType)
+                else if (property.Type is Models.Metadata.Array array && array.Type is Class arrayType)
                 {
                     var fakerName = $"{arrayType.Name}Faker";
                     var existingFaker = await _testScanInfraService.GetClassAsync(fakerName);

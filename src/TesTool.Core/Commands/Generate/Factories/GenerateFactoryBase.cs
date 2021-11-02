@@ -19,10 +19,11 @@ namespace TesTool.Core.Commands.Generate.Factory
 
         protected GenerateFactoryBase(
             HelpClass testClass,
+            ILoggerInfraService loggerInfraService,
             ITestScanInfraService testScanInfraService,
             IFileSystemInfraService fileSystemInfraService,
             ITemplateCodeInfraService templateCodeInfraService
-        ) : base() 
+        ) : base(loggerInfraService) 
         {
             _testClass = testClass;
             _fileSystemInfraService = fileSystemInfraService;
@@ -34,6 +35,11 @@ namespace TesTool.Core.Commands.Generate.Factory
         protected abstract string GetOutputDirectory();
 
         public override async Task ExecuteAsync(ICommandContext context)
+        {
+            await GenerateAsync(context);
+        }
+
+        public override async Task GenerateAsync(ICommandContext context)
         {
             if (!context.ExecutionCascade)
             {

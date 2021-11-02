@@ -20,6 +20,7 @@ namespace TesTool.Core.Commands.Generate.Fakers
 
         public GenerateFakeEntityCommand(
             IFakeEntityService fakeEntityService,
+            ILoggerInfraService loggerInfraService,
             IFactoryEntityService factoryEntityService,
             ISettingInfraService settingInfraService,
             ITestCodeInfraService testCodeInfraService,
@@ -28,7 +29,7 @@ namespace TesTool.Core.Commands.Generate.Fakers
             ITestScanInfraService testScanInfraService, 
             ITemplateCodeInfraService templateCodeInfraService
         ) : base(
-            fileSystemInfraService, webApiScanInfraService, 
+            loggerInfraService, fileSystemInfraService, webApiScanInfraService, 
             testScanInfraService, templateCodeInfraService
         )
         { 
@@ -38,12 +39,12 @@ namespace TesTool.Core.Commands.Generate.Fakers
             _testCodeInfraService = testCodeInfraService;
         }
 
-        public override async Task ExecuteAsync(ICommandContext context)
+        public override async Task GenerateAsync(ICommandContext context)
         {
             if (!context.ExecutionCascade && !await _testScanInfraService.ClassExistAsync(HelpClassEnumerator.ENTITY_FAKER_BASE.Name))
                 throw new ClassNotFoundException(HelpClassEnumerator.ENTITY_FAKER_BASE.Name);
 
-            await base.ExecuteAsync(context);
+            await base.GenerateAsync(context);
         }
 
         protected override string GetFactoryName()

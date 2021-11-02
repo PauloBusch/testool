@@ -46,7 +46,8 @@ namespace TesTool.Core.Services.Endpoints
                 true, endpoint.Output is Class output && output.Generics.Any(),
                 (responseModel as Class)?.Properties.Any(p => p.Name == entityKey) ?? false,
                 GetPropertyData(endpoint.Output), dbSet?.Entity.Name, entityKey,
-                _compareService.GetComparatorNameOrDefault(dbSet?.Entity.Name, responseModel?.Name)
+                _compareService.IsComparableClasses(dbSet?.Entity, responseModel as Class) 
+                    ? _compareService.GetComparatorNameOrDefault(dbSet?.Entity.Name, responseModel?.Name) : default
             );
         }
 

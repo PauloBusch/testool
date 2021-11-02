@@ -29,7 +29,7 @@ namespace <#=Namespace#>
             return await Client.SendAsync(request);
         }
 
-        public async Task<(HttpResponseMessage response, TResult result)> GetAsync<TResult>(Uri uri, dynamic query = null) where TResult : class
+        public async Task<(HttpResponseMessage response, TResult result)> GetAsync<TResult>(Uri uri, dynamic query = null)
         {
             var request = new HttpRequestMessage
             {
@@ -47,7 +47,7 @@ namespace <#=Namespace#>
             return await Client.PostAsync(new Uri($"{uri}?{GetUrlString(query)}"), content);
         }
 
-        public async Task<(HttpResponseMessage response, TResult result)> PostAsync<TResult>(Uri uri, dynamic data, dynamic query = null) where TResult : class
+        public async Task<(HttpResponseMessage response, TResult result)> PostAsync<TResult>(Uri uri, dynamic data, dynamic query = null)
         {
             var content = new StringContent(JsonSerializer.Serialize(data), Encoding.Default, "application/json");
 
@@ -61,7 +61,7 @@ namespace <#=Namespace#>
             return await Client.PutAsync(new Uri($"{uri}?{GetUrlString(query)}"), content);
         }
 
-        public async Task<(HttpResponseMessage response, TResult result)> PutAsync<TResult>(Uri uri, dynamic data, dynamic query = null) where TResult : class
+        public async Task<(HttpResponseMessage response, TResult result)> PutAsync<TResult>(Uri uri, dynamic data, dynamic query = null)
         {
             var content = new StringContent(JsonSerializer.Serialize(data), Encoding.Default, "application/json");
 
@@ -76,7 +76,7 @@ namespace <#=Namespace#>
             return await Client.PatchAsync(new Uri($"{uri}?{GetUrlString(query)}"), content);
         }
 
-        public async Task<(HttpResponseMessage response, TResult result)> PatchAsync<TResult>(Uri uri, dynamic data = null, dynamic query = null) where TResult : class
+        public async Task<(HttpResponseMessage response, TResult result)> PatchAsync<TResult>(Uri uri, dynamic data = null, dynamic query = null)
         {
             var content = new StringContent(JsonSerializer.Serialize(data), Encoding.Default, "application/json");
 
@@ -89,7 +89,7 @@ namespace <#=Namespace#>
             return await Client.DeleteAsync(new Uri($"{uri}?{GetUrlString(query)}"));
         }
 
-        public async Task<(HttpResponseMessage response, TResult result)> DeleteAsync<TResult>(Uri uri, dynamic query = null) where TResult : class
+        public async Task<(HttpResponseMessage response, TResult result)> DeleteAsync<TResult>(Uri uri, dynamic query = null)
         {
             var response = await Client.DeleteAsync(new Uri($"{uri}?{GetUrlString(query)}"));
             return await GetResultAsync<TResult>(response);
@@ -123,7 +123,7 @@ namespace <#=Namespace#>
 
         #region Private Methods
 
-        private async Task<(HttpResponseMessage response, TResult result)> GetResultAsync<TResult>(HttpResponseMessage response) where TResult : class
+        private async Task<(HttpResponseMessage response, TResult result)> GetResultAsync<TResult>(HttpResponseMessage response)
         {
             var json = await response.Content.ReadAsStringAsync();
             try

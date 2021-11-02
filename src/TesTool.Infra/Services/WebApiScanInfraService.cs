@@ -15,10 +15,7 @@ namespace TesTool.Infra.Services
     {
         protected readonly ISettingInfraService _settingInfraService;
 
-        public WebApiScanInfraService(
-            ILoggerInfraService loggerInfraService,
-            ISettingInfraService settingInfraService
-        ) : base(ProjectTypeEnumerator.WEB_API, loggerInfraService)
+        public WebApiScanInfraService(ISettingInfraService settingInfraService) : base(ProjectTypeEnumerator.WEB_API)
         {
             _settingInfraService = settingInfraService;
         }

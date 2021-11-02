@@ -34,6 +34,7 @@ namespace TesTool.Core.Commands.Generate
 
         public GenerateCompareCommand(
             ICompareService compareService,
+            ILoggerInfraService loggerInfraService,
             IFactoryCompareService factoryCompareService,
             ITestScanInfraService testScanInfraService,
             ITestCodeInfraService testCodeInfraService,
@@ -41,7 +42,7 @@ namespace TesTool.Core.Commands.Generate
             ICommonAssertExtensionsService commonAssertExtensionsService,
             IWebApiScanInfraService webApiScanInfraService,
             IFileSystemInfraService fileSystemInfraService
-        ) : base()
+        ) : base(loggerInfraService)
         {
             _compareService = compareService;
             _factoryCompareService = factoryCompareService;
@@ -53,7 +54,7 @@ namespace TesTool.Core.Commands.Generate
             _webApiScanInfraService = webApiScanInfraService;
         }
 
-        public override async Task ExecuteAsync(ICommandContext context)
+        public override async Task GenerateAsync(ICommandContext context)
         {
             if (!context.ExecutionCascade)
             {

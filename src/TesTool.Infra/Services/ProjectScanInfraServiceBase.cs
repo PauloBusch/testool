@@ -22,15 +22,10 @@ namespace TesTool.Infra.Services
     public abstract class ProjectScanInfraServiceBase
     {
         private readonly ProjectType _projectType;
-        private readonly ILoggerInfraService _loggerInfraService;
 
-        protected ProjectScanInfraServiceBase(
-            ProjectType projectType,
-            ILoggerInfraService loggerInfraService
-        )
+        protected ProjectScanInfraServiceBase(ProjectType projectType)
         {
             _projectType = projectType;
-            _loggerInfraService = loggerInfraService;
         }
 
         public abstract string GetProjectPathFile();

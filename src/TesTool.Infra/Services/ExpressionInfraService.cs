@@ -1,6 +1,7 @@
 ﻿using Bogus;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
+using System;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -52,6 +53,7 @@ namespace TesTool.Infra.Services
         {
             var stringValue = JsonSerializer.Serialize(result);
             if (result is decimal) stringValue += "m";
+            if (result is Guid) stringValue = $"new Guid({stringValue})";
             return stringValue;
         }
     }

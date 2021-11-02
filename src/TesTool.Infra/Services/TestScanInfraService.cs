@@ -17,10 +17,9 @@ namespace TesTool.Infra.Services
 
         public TestScanInfraService(
             IProjectInfraExplorer projectExplorer,
-            ILoggerInfraService loggerInfraService,
             ISettingInfraService settingInfraService,
             IEnvironmentInfraService environmentInfraService
-        ) : base(ProjectTypeEnumerator.INTEGRATION_TESTS, loggerInfraService) 
+        ) : base(ProjectTypeEnumerator.INTEGRATION_TESTS) 
         { 
             _projectExplorer = projectExplorer;
             _settingInfraService = settingInfraService;

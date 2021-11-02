@@ -23,11 +23,12 @@ namespace TesTool.Core.Commands.Generate.Fakers
         protected readonly ITemplateCodeInfraService _templateCodeInfraService;
 
         public GenerateFakeBase(
+            ILoggerInfraService loggerInfraService,
             IFileSystemInfraService fileSystemInfraService,
             IWebApiScanInfraService webApiScanInfraService,
             ITestScanInfraService testScanInfraService,
             ITemplateCodeInfraService templateCodeInfraService
-        ) : base()
+        ) : base(loggerInfraService)
         {
             _webApiScanInfraService = webApiScanInfraService;
             _fileSystemInfraService = fileSystemInfraService;
@@ -41,7 +42,7 @@ namespace TesTool.Core.Commands.Generate.Fakers
         protected abstract Task<string> BuildSourceCodeAsync(Class @class, string fakerName);
         protected abstract Task AppendFactoryMethodAsync(Class @class, string fakerName, string factoryName);
 
-        public async override Task ExecuteAsync(ICommandContext context)
+        public async override Task GenerateAsync(ICommandContext context)
         {
             if (!context.ExecutionCascade)
             {

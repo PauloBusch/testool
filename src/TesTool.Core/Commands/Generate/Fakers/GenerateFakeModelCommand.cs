@@ -17,6 +17,7 @@ namespace TesTool.Core.Commands.Generate.Fakers
 
         public GenerateFakeModelCommand(
             IFakeModelService fakeEntityService,
+            ILoggerInfraService loggerInfraService,
             IFactoryModelService factoryModelService,
             ITestCodeInfraService testCodeInfraService,
             IFileSystemInfraService fileSystemInfraService, 
@@ -24,7 +25,7 @@ namespace TesTool.Core.Commands.Generate.Fakers
             ITestScanInfraService testScanInfraService, 
             ITemplateCodeInfraService templateCodeInfraService
         ) : base(
-            fileSystemInfraService, webApiScanInfraService, 
+            loggerInfraService, fileSystemInfraService, webApiScanInfraService, 
             testScanInfraService, templateCodeInfraService
         )
         {

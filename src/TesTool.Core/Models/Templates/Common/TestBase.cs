@@ -8,6 +8,7 @@ namespace TesTool.Core.Models.Templates.Common
         private List<string> _namespaces;
 
         public TestBase(
+            bool auth,
             string name,
             string @namespace,
             string fixtureName,
@@ -16,6 +17,7 @@ namespace TesTool.Core.Models.Templates.Common
         {
             _namespaces = new List<string>();
 
+            Auth = auth;
             Name = name;
             Namespace = @namespace;
             DbContext = dbContextClass.Name;
@@ -23,6 +25,7 @@ namespace TesTool.Core.Models.Templates.Common
             AddNamespace(dbContextClass.Namespace);
         }
 
+        public bool Auth { get; private set; }
         public string Name { get; private set; }
         public string Namespace { get; private set; }
         public string FixtureName { get; private set; }

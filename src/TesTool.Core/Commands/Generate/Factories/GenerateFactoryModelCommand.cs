@@ -11,12 +11,13 @@ namespace TesTool.Core.Commands.Generate.Factory
         private readonly IFactoryModelService _factoryModelService;
 
         public GenerateFactoryModelCommand(
+            ILoggerInfraService loggerInfraService,
             IFactoryModelService factoryModelService,
             ITestScanInfraService testScanInfraService,
             IFileSystemInfraService fileSystemInfraService,
             ITemplateCodeInfraService templateCodeInfraService
         ) : base(
-            HelpClassEnumerator.MODEL_FAKER_FACTORY,
+            HelpClassEnumerator.MODEL_FAKER_FACTORY, loggerInfraService,
             testScanInfraService, fileSystemInfraService, 
             templateCodeInfraService
         ) 

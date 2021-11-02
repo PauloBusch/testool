@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -50,6 +49,7 @@ namespace TesTool.Core.Commands.Generate
             ICommandHandler commandHandler,
             IFixtureService fixtureService,
             IServiceResolver serviceResolver,
+            ILoggerInfraService loggerInfraService,
             ISettingInfraService settingInfraService,
             ICommonRequestService commonRequestService,
             ITestScanInfraService testScanInfraService,
@@ -65,7 +65,7 @@ namespace TesTool.Core.Commands.Generate
             IWebApiScanInfraService webApiScanInfraService,
             IEnvironmentInfraService environmentInfraService,
             ITemplateCodeInfraService templateCodeInfraService
-        ) : base()
+        ) : base(loggerInfraService)
         {
             _commandHandler = commandHandler;
             _fixtureService = fixtureService;
@@ -87,7 +87,7 @@ namespace TesTool.Core.Commands.Generate
             _templateCodeInfraService = templateCodeInfraService;
         }
 
-        public override async Task ExecuteAsync(ICommandContext context)
+        public override async Task GenerateAsync(ICommandContext context)
         {
             _settingInfraService.CreateTemporarySetting();
             await _commandHandler.HandleManyAsync(GetBeforeCommands(), true);
@@ -95,23 +95,25 @@ namespace TesTool.Core.Commands.Generate
             if (!await _webApiScanInfraService.ProjectExistAsync())
                 throw new ProjectNotFoundException(ProjectTypeEnumerator.WEB_API);
 
+            var dbContextClass = await GetDbContextAsync();
             await _testCodeInfraService.CreateTestProjectAsync(_solutionInfraService.GetTestProjectName(), GetOutputDirectory());
 
+            _loggerInfraService.LogInformation($"Gerando arquivos.");
             await SaveRequestClassAsync();
             await SaveProjectExplorerClassAsync();
             await SaveConfigurationLoaderClassAsync();
             await SaveAssertExtensionsClassAsync();
-
-            var dbContextClass = await GetDbContextAsync();
+            
+            var controllers = await _webApiScanInfraService.GetControllersAsync();
+            await SaveTestBaseClassAsync(dbContextClass, controllers);
             await SaveFixtureClassAsync(dbContextClass);
-            await SaveTestBaseClassAsync(dbContextClass);
             await SaveEntityFakerBaseClassAsync(dbContextClass);
 
             _testScanInfraService.ClearCache();
             await _commandHandler.HandleManyAsync(GetAfterCommands(dbContextClass), true);
 
             _testScanInfraService.ClearCache();
-            await _commandHandler.HandleManyAsync(GetTestCommands(), true);
+            await _commandHandler.HandleManyAsync(GetTestCommands(controllers), true);
         }
 
         private IEnumerable<ICommand> GetBeforeCommands()
@@ -134,9 +136,9 @@ namespace TesTool.Core.Commands.Generate
             };
         }
 
-        private IEnumerable<ICommand> GetTestCommands()
+        private IEnumerable<ICommand> GetTestCommands(IEnumerable<Controller> controllers)
         {
-            return _webApiScanInfraService.GetControllersAsync().Result.Select(controller => {
+            return controllers.Select(controller => {
                 var generateControllerCommand = _serviceResolver.ResolveService<GenerateControllerCommand>();
                 generateControllerCommand.Controller = controller.Name;
                 generateControllerCommand.Static = Static;
@@ -199,10 +201,10 @@ namespace TesTool.Core.Commands.Generate
             await _fileSystemInfraService.SaveFileAsync(fixturePathFile, fixtureSourceCode);
         }
 
-        private async Task SaveTestBaseClassAsync(Class dbContextClass)
+        private async Task SaveTestBaseClassAsync(Class dbContextClass, IEnumerable<Controller> controllers)
         {
             var testBasePathFile = _commonTestBaseService.GetPathFile();
-            var testBaseModel = _commonTestBaseService.GetTestBaseModel(dbContextClass);
+            var testBaseModel = _commonTestBaseService.GetTestBaseModel(dbContextClass, controllers.Any(c => c.Authorize || c.Endpoints.Any(c => c.Authorize)));
             var testBaseSourceCode = _templateCodeInfraService.BuildTestBase(testBaseModel);
             if (await _fileSystemInfraService.FileExistAsync(testBasePathFile))
                 throw new DuplicatedSourceFileException(testBaseSourceCode);

@@ -32,10 +32,36 @@ namespace <#= Namespace #>
             ModelFactory = new ModelFakerFactory();
             EntityFactory = new EntityFakerFactory(this);
             CompareFactory = new CompareFactory();
+<#
+    if (Auth)
+    {
+#>
+            Login();
+<#
+    }
+#>
         }
+<#
+    if (Auth)
+    {
+#>
+        protected virtual void Login()
+        {
+            // TODO: add your auth flow
+            // Request.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer|Basic", token);
+        }
+
+        protected virtual void Logout()
+        {
+            Request.Client.DefaultRequestHeaders.Authorization = null;
+        }
+<#
+    }
+#>
     }
 }
 <#+
+    public bool Auth { get; set; }
     public string Name { get; set; }
     public string Namespace { get; set; }
     public string FixtureName { get; set; }

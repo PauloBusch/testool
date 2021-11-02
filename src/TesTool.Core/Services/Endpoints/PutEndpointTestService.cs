@@ -36,8 +36,10 @@ namespace TesTool.Core.Services.Endpoints
                 endpoint.Output is TypeBase type && type.Name != "Void",
                 endpoint.Output is Class output && output.Generics.Any(),
                 GetPropertyData(endpoint.Output), dbSet?.Entity.Name, requestModel?.Name,
-                _compareService.GetComparatorNameOrDefault(requestModel?.Name, responseModel?.Name),
-                _compareService.GetComparatorNameOrDefault(requestModel?.Name, dbSet?.Entity.Name)
+                _compareService.IsComparableClasses(requestModel, responseModel as Class) 
+                    ? _compareService.GetComparatorNameOrDefault(requestModel?.Name, responseModel?.Name) : default,
+                _compareService.IsComparableClasses(requestModel, dbSet?.Entity) 
+                    ? _compareService.GetComparatorNameOrDefault(requestModel?.Name, dbSet?.Entity.Name) : default
             );
         }
 

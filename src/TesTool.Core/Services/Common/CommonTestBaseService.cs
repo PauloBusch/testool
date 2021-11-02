@@ -35,10 +35,10 @@ namespace TesTool.Core.Services.Common
             _factoryCompareService = factoryCompareService;
         }
 
-        public TestBase GetTestBaseModel(Class dbContextClass)
+        public TestBase GetTestBaseModel(Class dbContextClass, bool auth)
         {
             var testBaseModel = new TestBase(
-                _helpClass.Name, GetNamespace(),
+                auth, _helpClass.Name, GetNamespace(),
                 _fixtureService.GetFixtureName(),
                 dbContextClass
             );

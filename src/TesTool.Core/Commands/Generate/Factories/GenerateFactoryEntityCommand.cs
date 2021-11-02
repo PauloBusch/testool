@@ -23,12 +23,13 @@ namespace TesTool.Core.Commands.Generate.Factory
             IFactoryEntityService factoryEntityService,
             ITestScanInfraService testScanInfraService,
             ISettingInfraService settingInfraService,
+            ILoggerInfraService loggerInfraService,
             IWebApiDbContextInfraService webApiDbContextInfraService,
             IWebApiScanInfraService webApiScanInfraService,
             IFileSystemInfraService fileSystemInfraService, 
             ITemplateCodeInfraService templateCodeInfraService
         ) : base(
-            HelpClassEnumerator.ENTITY_FAKER_FACTORY,
+            HelpClassEnumerator.ENTITY_FAKER_FACTORY, loggerInfraService,
             testScanInfraService, fileSystemInfraService, templateCodeInfraService
         ) 
         {

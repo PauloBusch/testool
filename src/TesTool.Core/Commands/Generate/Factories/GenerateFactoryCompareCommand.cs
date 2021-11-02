@@ -11,12 +11,13 @@ namespace TesTool.Core.Commands.Generate.Factory
         private readonly IFactoryCompareService _factoryCompareService;
 
         public GenerateFactoryCompareCommand(
+            ILoggerInfraService loggerInfraService,
             IFactoryCompareService factoryCompareService,
             ITestScanInfraService testScanInfraService,
             IFileSystemInfraService fileSystemInfraService,
             ITemplateCodeInfraService templateCodeInfraService
         ) : base(
-            HelpClassEnumerator.COMPARE_FACTORY,
+            HelpClassEnumerator.COMPARE_FACTORY, loggerInfraService,
             testScanInfraService, fileSystemInfraService, templateCodeInfraService
         ) 
         { 

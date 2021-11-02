@@ -3,15 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31410.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TesTool.Cli", "src\TesTool.Cli\TesTool.Cli.csproj", "{F3661B97-8C0E-43EB-A5A0-A687839BE050}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TesTool.Cli", "src\TesTool.Cli\TesTool.Cli.csproj", "{F3661B97-8C0E-43EB-A5A0-A687839BE050}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TesTool.UnitTests", "tests\TesTool.UnitTests\TesTool.UnitTests.csproj", "{26A412D3-E5E9-4003-8B58-8D459079FE34}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TesTool.IntegrationTests", "tests\TesTool.IntegrationTests\TesTool.IntegrationTests.csproj", "{A6B8A66E-50FC-49FB-A89A-322F6A5DB8E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TesTool.IntegrationTests", "tests\TesTool.IntegrationTests\TesTool.IntegrationTests.csproj", "{A6B8A66E-50FC-49FB-A89A-322F6A5DB8E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TesTool.Core", "src\TesTool.Core\TesTool.Core.csproj", "{1F2698F5-8569-49F2-ABAB-263EB6DD7E15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TesTool.Core", "src\TesTool.Core\TesTool.Core.csproj", "{1F2698F5-8569-49F2-ABAB-263EB6DD7E15}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TesTool.Infra", "src\TesTool.Infra\TesTool.Infra.csproj", "{E3DB9328-9DBF-4F35-8A26-BC589F70DA83}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TesTool.Infra", "src\TesTool.Infra\TesTool.Infra.csproj", "{E3DB9328-9DBF-4F35-8A26-BC589F70DA83}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +21,6 @@ Global
 		{F3661B97-8C0E-43EB-A5A0-A687839BE050}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3661B97-8C0E-43EB-A5A0-A687839BE050}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3661B97-8C0E-43EB-A5A0-A687839BE050}.Release|Any CPU.Build.0 = Release|Any CPU
-		{26A412D3-E5E9-4003-8B58-8D459079FE34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{26A412D3-E5E9-4003-8B58-8D459079FE34}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{26A412D3-E5E9-4003-8B58-8D459079FE34}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{26A412D3-E5E9-4003-8B58-8D459079FE34}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A6B8A66E-50FC-49FB-A89A-322F6A5DB8E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A6B8A66E-50FC-49FB-A89A-322F6A5DB8E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6B8A66E-50FC-49FB-A89A-322F6A5DB8E6}.Release|Any CPU.ActiveCfg = Release|Any CPU

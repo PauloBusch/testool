@@ -336,6 +336,7 @@ namespace TesTool.Infra.Services
         {
             var template = new TestBaseTemplate { 
                 Name = model.Name,
+                Auth = model.Auth,
                 Namespace = model.Namespace,
                 DbContext = model.DbContext,
                 FixtureName = model.FixtureName,

@@ -104,15 +104,61 @@ namespace TesTool.Infra.Templates.Common.Abstract
             ModelFactory = new ModelFakerFactory();
             EntityFactory = new EntityFakerFactory(this);
             CompareFactory = new CompareFactory();
-        }
-    }
-}
 ");
+            
+            #line 35 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
+
+    if (Auth)
+    {
+
+            
+            #line default
+            #line hidden
+            this.Write("            Login();\r\n");
+            
+            #line 40 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
+
+    }
+
+            
+            #line default
+            #line hidden
+            this.Write("        }\r\n");
+            
+            #line 44 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
+
+    if (Auth)
+    {
+
+            
+            #line default
+            #line hidden
+            this.Write(@"        protected virtual void Login()
+        {
+            // TODO: add your auth flow
+            // Request.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(""Bearer|Basic"", token);
+        }
+
+        protected virtual void Logout()
+        {
+            Request.Client.DefaultRequestHeaders.Authorization = null;
+        }
+");
+            
+            #line 58 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
+
+    }
+
+            
+            #line default
+            #line hidden
+            this.Write("    }\r\n}\r\n");
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 38 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
+        #line 63 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
 
+    public bool Auth { get; set; }
     public string Name { get; set; }
     public string Namespace { get; set; }
     public string FixtureName { get; set; }

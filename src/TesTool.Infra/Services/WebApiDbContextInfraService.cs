@@ -10,11 +10,8 @@ namespace TesTool.Infra.Services
 {
     public class WebApiDbContextInfraService : WebApiScanInfraService, IWebApiDbContextInfraService
     {
-        public WebApiDbContextInfraService(
-            ILoggerInfraService loggerInfraService, 
-            ISettingInfraService settingInfraService
-        ) : base(loggerInfraService, settingInfraService)
-        { }
+        public WebApiDbContextInfraService(ISettingInfraService settingInfraService) 
+            : base(settingInfraService) { }
 
         public async Task<bool> IsDbContextClassAsync(string className)
         {

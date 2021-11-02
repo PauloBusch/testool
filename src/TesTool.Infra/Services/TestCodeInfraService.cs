@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using TesTool.Core.Enumerations;
 using TesTool.Core.Exceptions;
 using TesTool.Core.Interfaces.Services;
 
@@ -14,6 +13,7 @@ namespace TesTool.Infra.Services
     public class TestCodeInfraService : TestScanInfraService, ITestCodeInfraService
     {
         private readonly ICmdInfraService _cmdInfraService;
+        private readonly ILoggerInfraService _loggerInfraService;
         private readonly IWebApiScanInfraService _webApiScanInfraService;
         private readonly ISolutionInfraService _solutionInfraService;
 
@@ -25,9 +25,10 @@ namespace TesTool.Infra.Services
             IWebApiScanInfraService webApiScanInfraService,
             ISolutionInfraService solutionInfraService,
             IEnvironmentInfraService environmentInfraService
-        ) : base(projectInfraExplorer, loggerInfraService, settingInfraService, environmentInfraService) 
+        ) : base(projectInfraExplorer, settingInfraService, environmentInfraService) 
         {
             _cmdInfraService = cmdInfraService;
+            _loggerInfraService = loggerInfraService;
             _webApiScanInfraService = webApiScanInfraService;
             _solutionInfraService = solutionInfraService;
         }
@@ -41,16 +42,24 @@ namespace TesTool.Infra.Services
 
             var solutionPathFile = _solutionInfraService.GetSolutionFilePath();
             var webApiProjectPathFile = _webApiScanInfraService.GetProjectPathFile();
-            var commands = new List<string> { 
+            var commandsCreateProject = new List<string> { 
                 @$"dotnet new xunit --name ""{name}"" --output ""{fullOutput}"" --no-restore",
                 @$"dotnet sln ""{solutionPathFile}"" add ""{fullOutput}""",
                 @$"dotnet add ""{name}"" reference ""{webApiProjectPathFile}""",
-                @$"dotnet add ""{fullOutput}"" package Microsoft.AspNetCore.TestHost",
-                @$"dotnet add ""{fullOutput}"" package bogus",
-                @$"dotnet restore ""{fullOutput}""",
                 @$"del /f ""{fullOutput}\*.cs"""
             };
-            await _cmdInfraService.ExecuteCommandsAsync(commands);
+            var commandsInstallPackages = new List<string> {
+                @$"dotnet add ""{fullOutput}"" package Microsoft.AspNetCore.TestHost",
+                @$"dotnet add ""{fullOutput}"" package bogus",
+                @$"dotnet restore ""{fullOutput}"""
+            };
+
+            _loggerInfraService.LogInformation($"Criando projeto {name}.");
+            await _cmdInfraService.ExecuteCommandsAsync(commandsCreateProject);
+
+            _loggerInfraService.LogInformation($"Instalando pacotes.");
+            await _cmdInfraService.ExecuteCommandsAsync(commandsInstallPackages);
+
             _settingInfraService.ProjectIntegrationTestDirectory = testProjectPathFile;
         }
 
