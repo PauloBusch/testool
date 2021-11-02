@@ -5,7 +5,7 @@
     <TargetFramework>net5.0</TargetFramework>
 
     <PackageId>dotnet-testool-globaltool</PackageId>
-    <Version>1.0.1.1</Version>
+    <Version>1.0.1.2</Version>
     <Authors>Paulo Ricardo Busch</Authors>
     <PackageDescription>Ferramenta de teste de integração</PackageDescription>
     <RepositoryUrl>https://github.com/paulobusch/testool</RepositoryUrl>
