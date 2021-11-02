@@ -8,6 +8,7 @@ using TesTool.Core.Models.Enumerators;
 
 namespace TesTool.Core.Commands.Generate.Factory
 {
+    [Ignore]
     [Command("factory", Order = 3, HelpText = "Gerar código de chamadas de fabricação.")]
     public abstract class GenerateFactoryBase : GenerateCommandBase
     {        

@@ -28,8 +28,6 @@ CLI | Descrição
 `testool configure convention` | Definir arquivo de configuração de conveção.
 `testool generate project` | Gerar código de teste a partir de projeto.
 `testool generate controller` | Gerar código de teste a partir de controlador.
-`testool generate factory compare` | Gerar fábrica de objetos de comparação.
-`testool generate factory entity` | Gerar fábrica de entidades de banco de dados.
-`testool generate factory model` | Gerar fábrica de modelo de transporte de dados (DTO).
 `testool generate faker entity` | Gerar código de fabricação de entidade de banco de dados.
 `testool generate faker model` | Gerar código de fabricação de modelo de transporte de dados (DTO).
+`testool generate compare` | Gerar código de comparação entre objetos.

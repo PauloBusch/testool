@@ -21,6 +21,7 @@ namespace TesTool.Core.Services
                 .SelectMany(a => a.GetTypes())
                 .Where(t => t.IsClass && !t.IsAbstract)
                 .Where(t => typeof(ICommand).IsAssignableFrom(t))
+                .Where(t => !t.GetCustomAttributes<IgnoreAttribute>().Any())
                 .ToList();
 
             return _commandTypes;

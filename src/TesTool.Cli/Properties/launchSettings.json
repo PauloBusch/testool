@@ -2,7 +2,7 @@
   "profiles": {
     "TesTool.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "g project \"C:\\Projetos\\Cip\\Dashboard.Api\""
+      "commandLineArgs": "generate -h"
     }
   }
 }
