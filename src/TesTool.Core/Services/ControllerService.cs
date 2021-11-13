@@ -64,7 +64,7 @@ namespace TesTool.Core.Services
 
         public async Task<ControllerTest> GetControllerTestAsync(Controller controller, DbSet dbSet)
         {
-            var fixtureName = _fixtureService.GetFixtureName();
+            var fixtureName = _fixtureService.GetName();
             var fixtureClass = await _testScanInfraService.GetClassAsync(fixtureName);
             var testBaseClass = await _testScanInfraService.GetClassAsync(HelpClassEnumerator.TEST_BASE.Name);
             var templateModel = new ControllerTest(

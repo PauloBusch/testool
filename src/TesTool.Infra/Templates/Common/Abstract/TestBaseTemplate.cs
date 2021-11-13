@@ -15,7 +15,7 @@ namespace TesTool.Infra.Templates.Common.Abstract
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
+    #line 1 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\TesTool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
     public partial class TestBaseTemplate : TestBaseTemplateBase
     {
@@ -26,7 +26,7 @@ namespace TesTool.Infra.Templates.Common.Abstract
         public virtual string TransformText()
         {
             
-            #line 3 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
+            #line 3 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\TesTool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
  
     foreach (var @namespace in Namespaces) 
     {
@@ -36,14 +36,14 @@ namespace TesTool.Infra.Templates.Common.Abstract
             #line hidden
             this.Write("using ");
             
-            #line 7 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
+            #line 7 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\TesTool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@namespace));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 8 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
+            #line 8 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\TesTool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
  
     } 
 
@@ -52,21 +52,21 @@ namespace TesTool.Infra.Templates.Common.Abstract
             #line hidden
             this.Write("using System;\r\nusing Xunit;\r\n\r\nnamespace ");
             
-            #line 14 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
+            #line 14 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\TesTool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
             #line hidden
             this.Write("\r\n{\r\n    public class ");
             
-            #line 16 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
+            #line 16 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\TesTool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
             this.Write(" : IClassFixture<");
             
-            #line 16 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
+            #line 16 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\TesTool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(FixtureName));
             
             #line default
@@ -74,7 +74,7 @@ namespace TesTool.Infra.Templates.Common.Abstract
             this.Write(">\r\n    {\r\n        public readonly Uri Uri;\r\n        public readonly Request Reque" +
                     "st;\r\n        public readonly ");
             
-            #line 20 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
+            #line 20 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\TesTool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(DbContext));
             
             #line default
@@ -83,14 +83,14 @@ namespace TesTool.Infra.Templates.Common.Abstract
                     "ublic readonly EntityFakerFactory EntityFactory;\r\n        public readonly Compar" +
                     "eFactory CompareFactory;\r\n\r\n        public ");
             
-            #line 26 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
+            #line 26 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\TesTool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Name));
             
             #line default
             #line hidden
             this.Write("(");
             
-            #line 26 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
+            #line 26 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\TesTool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(FixtureName));
             
             #line default
@@ -99,14 +99,14 @@ namespace TesTool.Infra.Templates.Common.Abstract
         {
             Request = fixture.Request;
             DbContext = fixture.DbContext;
-            Uri = new Uri($""{fixture.Client.BaseAddress}/{url}"");
+            Uri = new Uri($""{fixture.Client.BaseAddress}{url}"");
 
             ModelFactory = new ModelFakerFactory();
             EntityFactory = new EntityFakerFactory(this);
             CompareFactory = new CompareFactory();
 ");
             
-            #line 35 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
+            #line 35 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\TesTool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
 
     if (Auth)
     {
@@ -116,7 +116,7 @@ namespace TesTool.Infra.Templates.Common.Abstract
             #line hidden
             this.Write("            Login();\r\n");
             
-            #line 40 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
+            #line 40 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\TesTool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
 
     }
 
@@ -125,7 +125,7 @@ namespace TesTool.Infra.Templates.Common.Abstract
             #line hidden
             this.Write("        }\r\n");
             
-            #line 44 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
+            #line 44 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\TesTool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
 
     if (Auth)
     {
@@ -145,7 +145,7 @@ namespace TesTool.Infra.Templates.Common.Abstract
         }
 ");
             
-            #line 58 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
+            #line 58 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\TesTool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
 
     }
 
@@ -156,7 +156,7 @@ namespace TesTool.Infra.Templates.Common.Abstract
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 63 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\testool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
+        #line 63 "C:\Users\paulo_tjj0fgx\Desktop\Projetos\TesTool\src\TesTool.Infra\Templates\Common\Abstract\TestBaseTemplate.tt"
 
     public bool Auth { get; set; }
     public string Name { get; set; }

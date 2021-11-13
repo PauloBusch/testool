@@ -32,9 +32,10 @@ namespace TesTool.Core.Services.Endpoints
         protected override ControllerTestMethodSectionAssertBase GetAssertSection(Endpoint endpoint, DbSet dbSet)
         {
             var entityKey = GetEntityKey(dbSet?.Entity);
+            var responseModel = GetResponseModel(endpoint.Output);
             return new ControllerTestMethodSectionAssertDelete(
-                endpoint.Output is TypeBase type && type.Name != "Void",
-                endpoint.Output is Class output && output.Generics.Any(),
+                responseModel is TypeBase type && type.Name != "Void",
+                responseModel is Class output && output.Generics.Any(),
                 GetPropertyData(endpoint.Output), dbSet?.Entity.Name,
                 entityKey, dbSet?.Property
             );

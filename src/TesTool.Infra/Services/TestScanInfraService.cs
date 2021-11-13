@@ -10,13 +10,13 @@ namespace TesTool.Infra.Services
 {
     public class TestScanInfraService : ProjectScanInfraServiceBase, ITestScanInfraService
     {
-        private readonly IProjectInfraExplorer _projectExplorer;
+        private readonly IProjectInfraManager _projectExplorer;
 
         protected readonly ISettingInfraService _settingInfraService;
         protected readonly IEnvironmentInfraService _environmentInfraService;
 
         public TestScanInfraService(
-            IProjectInfraExplorer projectExplorer,
+            IProjectInfraManager projectExplorer,
             ISettingInfraService settingInfraService,
             IEnvironmentInfraService environmentInfraService
         ) : base(ProjectTypeEnumerator.INTEGRATION_TESTS) 

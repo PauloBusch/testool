@@ -8,11 +8,11 @@ using TesTool.Core.Interfaces.Services;
 
 namespace TesTool.Infra.Services
 {
-    public class ProjectInfraExplorer : IProjectInfraExplorer
+    public class ProjectInfraManager : IProjectInfraManager
     {
         private readonly IEnvironmentInfraService _environmentInfraService;
 
-        public ProjectInfraExplorer(IEnvironmentInfraService environmentInfraService)
+        public ProjectInfraManager(IEnvironmentInfraService environmentInfraService)
         {
             _environmentInfraService = environmentInfraService;
         }
@@ -66,6 +66,21 @@ namespace TesTool.Infra.Services
             if (!File.Exists(projectPathFile)) return false;
             var packages = GetProjectPackages(projectPathFile);
             return packages.Any(p => p == "Microsoft.NET.Test.Sdk");
+        }
+
+        public void AddFileCopyToOutput(string projectPathFile, string fileName)
+        {
+            var csprojXml = File.ReadAllText(projectPathFile);
+            var xDocument = XDocument.Parse(csprojXml);
+            var project = xDocument.Root;
+
+            var itemGroup = new XElement("ItemGroup");
+            var none = new XElement("None");
+            none.SetAttributeValue("Update", fileName);
+            none.Add(new XElement("CopyToOutputDirectory", "PreserveNewest"));
+            itemGroup.Add(none);
+            project.Add(itemGroup);
+            xDocument.Save(projectPathFile);
         }
     }
 }

@@ -32,16 +32,17 @@ namespace TesTool.Core.Services.Endpoints
         {
             var entityKey = GetEntityKey(dbSet?.Entity);
             var requestModel = GetModelComparableEntity(endpoint.Inputs, dbSet?.Entity);
-            var responseModel = GetOutputModel(endpoint.Output) as Class;
+            var responseModel = GetResponseModel(endpoint.Output);
+            var outputModel = GetOutputModel(endpoint.Output) as Class;
             return new ControllerTestMethodSectionAssertPost(
                 requestModel?.Properties.Any(p => p.Name == entityKey) ?? false,
-                responseModel?.Properties.Any(p => p.Name == entityKey) ?? false,
-                endpoint.Output is TypeBase type && type.Name != "Void",
-                endpoint.Output is Class output && output.Generics.Any(),
+                outputModel?.Properties.Any(p => p.Name == entityKey) ?? false,
+                responseModel is TypeBase type && type.Name != "Void",
+                responseModel is Class output && output.Generics.Any(),
                 GetPropertyData(endpoint.Output), dbSet?.Entity.Name, 
                 entityKey, dbSet?.Property, requestModel?.Name,
-                _compareService.IsComparableClasses(requestModel, responseModel) 
-                    ? _compareService.GetComparatorNameOrDefault(requestModel?.Name, responseModel?.Name) : default,
+                _compareService.IsComparableClasses(requestModel, outputModel) 
+                    ? _compareService.GetComparatorNameOrDefault(requestModel?.Name, outputModel?.Name) : default,
                 _compareService.IsComparableClasses(requestModel, dbSet?.Entity) 
                     ? _compareService.GetComparatorNameOrDefault(requestModel?.Name, dbSet?.Entity.Name) : default
             );

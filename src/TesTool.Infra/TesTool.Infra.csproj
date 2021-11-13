@@ -30,6 +30,10 @@
       <LastGenOutput>TestBaseTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
+    <None Update="Templates\Common\XUnitRunnerTemplate.tt">
+      <LastGenOutput>XUnitRunnerTemplate.cs</LastGenOutput>
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+    </None>
     <None Update="Templates\Common\FixtureTemplate.tt">
       <LastGenOutput>FixtureTemplate.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
@@ -167,6 +171,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ProjectExplorerTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Templates\Common\XUnitRunnerTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>XUnitRunnerTemplate.tt</DependentUpon>
     </Compile>
     <Compile Update="Templates\Comparators\ComparatorDynamicTemplate.cs">
       <DesignTime>True</DesignTime>

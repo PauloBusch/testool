@@ -71,7 +71,7 @@ namespace TesTool.Core.Commands.Generate
                 throw new ValidationException("Nenhuma classe de banco de dados configurada.");
             if (!await _webApiScanInfraService.ModelExistAsync(dbContextName)) 
                 throw new ClassNotFoundException(dbContextName);
-            var fixtureClassName = _fixtureService.GetFixtureName();
+            var fixtureClassName = _fixtureService.GetName();
             if (!context.ExecutionCascade && !await _testScanInfraService.ClassExistAsync(fixtureClassName))
                 throw new ClassNotFoundException(fixtureClassName);
 

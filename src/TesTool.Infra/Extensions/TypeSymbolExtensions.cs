@@ -79,8 +79,8 @@ namespace TesTool.Infra.Extensions
             var display = type.GetDisplayString();
             if (display.Contains("<")) display = display.Split("<").First();
             var displayParts = display.Split(".");
-            var name = displayParts.Last();
-            return string.Join(".", displayParts.Where(p => p != name));
+            if (!displayParts.Any()) return default;
+            return string.Join(".", displayParts.Take(displayParts.Count() - 1));
         }
 
         public static string GetDisplayString(this ITypeSymbol type)

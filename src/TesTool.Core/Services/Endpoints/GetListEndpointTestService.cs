@@ -41,13 +41,14 @@ namespace TesTool.Core.Services.Endpoints
         {
             var entityKey = GetEntityKey(dbSet?.Entity);
             var arrayModel = GetOutputModel(endpoint.Output) as Models.Metadata.Array;
-            var responseModel = arrayModel.Type as TypeBase;
+            var responseModel = GetResponseModel(endpoint.Output);
+            var outputModel = arrayModel.Type as TypeBase;
             return new ControllerTestMethodSectionAssertGetList(
-                true, endpoint.Output is Class output && output.Generics.Any(),
-                (responseModel as Class)?.Properties.Any(p => p.Name == entityKey) ?? false,
+                true, responseModel is Class output && output.Generics.Any(),
+                (outputModel as Class)?.Properties.Any(p => p.Name == entityKey) ?? false,
                 GetPropertyData(endpoint.Output), dbSet?.Entity.Name, entityKey,
-                _compareService.IsComparableClasses(dbSet?.Entity, responseModel as Class) 
-                    ? _compareService.GetComparatorNameOrDefault(dbSet?.Entity.Name, responseModel?.Name) : default
+                _compareService.IsComparableClasses(dbSet?.Entity, outputModel as Class) 
+                    ? _compareService.GetComparatorNameOrDefault(dbSet?.Entity.Name, outputModel?.Name) : default
             );
         }
 

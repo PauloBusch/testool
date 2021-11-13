@@ -18,6 +18,10 @@ namespace TesTool.Core.Enumerations
         public static readonly BogusMethod RANDOM_INT = new ("f => f.Random.Int()");
         public static readonly BogusMethod RANDOM_DECIMAL = new ("f => f.Random.Decimal(0, 100)");
         public static readonly BogusMethod RANDOM_ENUM = new ("f => f.Random.Enum<{ENUM_NAME}>()");
+        public static readonly BogusMethod RANDOM_FLOAT = new ("f => f.Random.Float()");
+
+        public static readonly BogusMethod DATE_PAST = new("f => f.Date.Past()");
+        public static readonly BogusMethod DATE_PAST_OFFSET = new("f => f.Date.PastOffset()");
 
         public static readonly BogusMethod INTERNET_PASSWORD = new ("f => f.Internet.Password()");
 
@@ -29,5 +33,6 @@ namespace TesTool.Core.Enumerations
 
         public static readonly BogusMethod COLLECTION = new("() => new {FAKER_NAME}().Generate(1)");
         public static readonly BogusMethod COMPLEX_OBJECT = new("new {FAKER_NAME}()");
+        public static readonly BogusMethod ENTITY_OBJECT = new("new {FAKER_NAME}(context)");
     }
 }

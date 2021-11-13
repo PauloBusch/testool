@@ -20,9 +20,6 @@ namespace TesTool.Infra.Services
                 WorkingDirectory = _environmentInfraService.GetWorkingDirectory(),
                 WindowStyle = ProcessWindowStyle.Hidden,
                 FileName = "cmd.exe",
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
                 CreateNoWindow = true,
                 Arguments = $"/C {string.Join(" && ", commands)}"
             };

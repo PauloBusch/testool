@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using TesTool.Core.Attributes;
@@ -30,15 +31,17 @@ namespace TesTool.Core.Commands.Generate
         private readonly IFixtureService _fixtureService;
         private readonly IServiceResolver _serviceResolver;
         private readonly IFileSystemInfraService _fileSystemInfraService;
-        private readonly ITestScanInfraService _testScanInfraService;
+        private readonly ICommonXUnitRunnerService _commonXUnitRunnerService;
         private readonly ICommonRequestService _commonRequestService;
         private readonly ICommonProjectExplorerService _commonProjectExplorerService;
         private readonly ICommonConfigurationLoaderService _commonConfigurationLoaderService;
         private readonly ICommonAssertExtensionsService _commonAssertExtensionsService;
         private readonly ICommonEntityFakerBaseService _commonEntityFakerBaseService;
         private readonly ICommonTestBaseService _commonTestBaseService;
+        private readonly IProjectInfraManager _projectInfraManager;
         private readonly ISolutionInfraService _solutionInfraService;
         private readonly ITestCodeInfraService _testCodeInfraService;
+        private readonly ITestScanInfraService _testScanInfraService;
         private readonly IWebApiScanInfraService _webApiScanInfraService;
         private readonly IWebApiDbContextInfraService _webApiDbContextInfraService;
         private readonly IEnvironmentInfraService _environmentInfraService;
@@ -53,11 +56,13 @@ namespace TesTool.Core.Commands.Generate
             ISettingInfraService settingInfraService,
             ICommonRequestService commonRequestService,
             ITestScanInfraService testScanInfraService,
+            ICommonXUnitRunnerService commonXUnitRunnerService,
             ICommonProjectExplorerService commonProjectExplorerService,
             ICommonConfigurationLoaderService commonConfigurationLoaderService,
             ICommonAssertExtensionsService commonAssertExtensionsService,
             ICommonEntityFakerBaseService commonEntityFakerBaseService,
             ICommonTestBaseService commonTestBaseService,
+            IProjectInfraManager projectInfraManager,
             ISolutionInfraService solutionInfraService,
             ITestCodeInfraService testCodeInfraService,
             IFileSystemInfraService fileSystemInfraService,
@@ -75,12 +80,14 @@ namespace TesTool.Core.Commands.Generate
             _testScanInfraService = testScanInfraService;
             _solutionInfraService = solutionInfraService;
             _testCodeInfraService = testCodeInfraService;
+            _commonXUnitRunnerService = commonXUnitRunnerService;
             _commonRequestService = commonRequestService;
             _commonProjectExplorerService = commonProjectExplorerService;
             _commonConfigurationLoaderService = commonConfigurationLoaderService;
             _commonAssertExtensionsService = commonAssertExtensionsService;
             _commonEntityFakerBaseService = commonEntityFakerBaseService;
             _commonTestBaseService = commonTestBaseService;
+            _projectInfraManager = projectInfraManager;
             _webApiDbContextInfraService = webApiDbContextInfraService;
             _webApiScanInfraService = webApiScanInfraService;
             _environmentInfraService = environmentInfraService;
@@ -99,6 +106,7 @@ namespace TesTool.Core.Commands.Generate
             await _testCodeInfraService.CreateTestProjectAsync(_solutionInfraService.GetTestProjectName(), GetOutputDirectory());
 
             _loggerInfraService.LogInformation($"Gerando arquivos.");
+            await SaveXUnitRunnerFileAsync();
             await SaveRequestClassAsync();
             await SaveProjectExplorerClassAsync();
             await SaveConfigurationLoaderClassAsync();
@@ -144,6 +152,17 @@ namespace TesTool.Core.Commands.Generate
                 generateControllerCommand.Static = Static;
                 return generateControllerCommand;
             });
+        }
+
+        private async Task SaveXUnitRunnerFileAsync()
+        {
+            var xunitRunnerPathFile = _commonXUnitRunnerService.GetPathFile();
+            var xunitRunnerSourceCode = _templateCodeInfraService.BuildXUnitRunner();
+            if (await _fileSystemInfraService.FileExistAsync(xunitRunnerPathFile))
+                throw new DuplicatedSourceFileException(xunitRunnerSourceCode);
+
+            await _fileSystemInfraService.SaveFileAsync(xunitRunnerPathFile, xunitRunnerSourceCode);
+            _projectInfraManager.AddFileCopyToOutput(_settingInfraService.ProjectIntegrationTestDirectory, Path.GetFileName(xunitRunnerPathFile));
         }
 
         private async Task SaveRequestClassAsync()
@@ -192,8 +211,8 @@ namespace TesTool.Core.Commands.Generate
 
         private async Task SaveFixtureClassAsync(Class dbContextClass)
         {
-            var fixturePathFile = _fixtureService.GetFixturePathFile();
-            var fixtureModel = _fixtureService.GetFixtureModel(dbContextClass);
+            var fixturePathFile = _fixtureService.GetPathFile();
+            var fixtureModel = _fixtureService.GetModel(dbContextClass);
             var fixtureSourceCode = _templateCodeInfraService.BuildFixture(fixtureModel);
             if (await _fileSystemInfraService.FileExistAsync(fixturePathFile))
                 throw new DuplicatedSourceFileException(fixtureSourceCode);

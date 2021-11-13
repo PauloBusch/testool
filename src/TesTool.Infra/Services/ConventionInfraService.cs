@@ -49,6 +49,18 @@ namespace TesTool.Infra.Services
                     typeMatch: $"^System.Decimal$"
                 ),
                 new Convention(
+                    BogusMethodEnumerator.RANDOM_FLOAT.Expression,
+                    typeMatch: $"^System.Single$"
+                ),
+                new Convention(
+                    BogusMethodEnumerator.DATE_PAST.Expression,
+                    typeMatch: $"^System.DateTime$"
+                ),
+                new Convention(
+                    BogusMethodEnumerator.DATE_PAST_OFFSET.Expression,
+                    typeMatch: $"^System.DateTimeOffset$"
+                ),
+                new Convention(
                     BogusMethodEnumerator.LOREM_WORD.Expression,
                     typeMatch: $"^System.String$"
                 ),

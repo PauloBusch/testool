@@ -12,11 +12,11 @@ namespace TesTool.Infra.Services
     public class SettingsInfraService : ISettingInfraService
     {
         private readonly string _filePath;
-        private readonly IProjectInfraExplorer _projectExplorer;
+        private readonly IProjectInfraManager _projectExplorer;
         
         private static IEnumerable<Setting> _cacheSetting;
 
-        public SettingsInfraService(IProjectInfraExplorer projectExplorer)
+        public SettingsInfraService(IProjectInfraManager projectExplorer)
         {
             _filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");
             _projectExplorer = projectExplorer;

@@ -137,7 +137,6 @@ namespace TesTool.Infra.Services
             if (systemType is not null) return new Field(systemType.Name, systemType.Namespace);
 
             if (_cacheDtos.ContainsKey(hash)) return _cacheDtos[hash];
-
             var @class = new Class(name, @namespace);
             var classMembers = typeSymbol.GetStackTypes().Reverse()
                 .SelectMany(t => t.GetMembers())

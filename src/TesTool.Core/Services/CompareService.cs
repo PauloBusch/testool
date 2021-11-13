@@ -47,6 +47,7 @@ namespace TesTool.Core.Services
                 GetComparatorName(sourceClassName, targetClassName), 
                 sourceClassName, targetClassName
             );
+
             templateModel.AddNamespace(source.Namespace);
             templateModel.AddNamespace(target.Namespace);
 

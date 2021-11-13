@@ -74,11 +74,15 @@ namespace TesTool.Core.Services.Endpoints
             if (wrapper is null) return default;
             if (wrapper is Class @class)
             {
+                var actionResultClassName = "ActionResult";
                 if (@class.Generics.Any())
                 {
+                    if (@class.Name == actionResultClassName)
+                        return GetReturnType(@class.Generics.First());
+
                     var generics = @class.Generics.Select(g => GetReturnType(g));
                     return $"{@class.Name}<{string.Join(", ", generics)}>";
-                }
+                } else if (@class.Name == actionResultClassName) return default;
 
                 return @class.Name;
             }
@@ -120,11 +124,13 @@ namespace TesTool.Core.Services.Endpoints
 
         private IEnumerable<string> GetOutputNamespaces(TypeWrapper output)
         {
+            var actionResultClassName = "ActionResult";
             var namespaces = new List<string>();
             if (output is null) return namespaces;
             if (output is Class @class)
             {
-                namespaces.Add(@class.Namespace);
+                if (@class.Name != actionResultClassName)
+                    namespaces.Add(@class.Namespace);
                 if (@class.Generics.Any())
                 {
                     foreach (var generic in @class.Generics)
@@ -138,7 +144,7 @@ namespace TesTool.Core.Services.Endpoints
             if (output is Models.Metadata.Array array)
                 namespaces.AddRange(GetOutputNamespaces(array.Type));
 
-            if (output is TypeBase type)
+            if (output is TypeBase type && type.Name != actionResultClassName)
                 namespaces.Add(type.Namespace);
             return namespaces;
         }
@@ -151,6 +157,8 @@ namespace TesTool.Core.Services.Endpoints
                 
                 var genericProperty = @class.Properties.FirstOrDefault(p => p.FromGeneric);
                 if (genericProperty is null) return default;
+                if (@class.Name == "ActionResult") 
+                    return GetPropertyData(genericProperty.Type);
 
                 var paths = new List<string> { genericProperty.Name };
                 var childProperties = GetPropertyData(genericProperty.Type);
@@ -163,9 +171,14 @@ namespace TesTool.Core.Services.Endpoints
 
         protected TypeBase GetOutputModel(TypeWrapper wrapper)
         {
+            var actionResultClassName = "ActionResult";
             if (wrapper is Class @class)
             {
-                if (!@class.Generics.Any()) return @class;
+                if (!@class.Generics.Any())
+                {
+                    if (@class.Name == actionResultClassName) return default;
+                    return @class;
+                }
 
                 var genericProperty = @class.Properties.FirstOrDefault(p => p.FromGeneric);
                 if (genericProperty is null) return @class;
@@ -252,12 +265,23 @@ namespace TesTool.Core.Services.Endpoints
             return replacedRoute;
         }
 
-        private string GetBaseRoute(string route)
+        private static string GetBaseRoute(string route)
         {
             var match = Regex.Match(route, "{(.*?)}");
             if (!match.Success || match.Groups.Count < 2) return string.Empty;
 
             return route.Substring(match.Index).Trim('/');
+        }
+
+        protected TypeWrapper GetResponseModel(TypeWrapper output)
+        {
+            if (output is Class @class)
+            {
+                if (@class.Name == "ActionResult") 
+                    return @class.Generics.FirstOrDefault();
+            }
+
+            return output;
         }
     }
 }

@@ -1,0 +1,6 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+{
+  "parallelizeAssembly": false,
+  "parallelizeTestCollections": false
+}

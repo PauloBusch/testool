@@ -27,7 +27,7 @@ namespace <#= Namespace #>
         {
             Request = fixture.Request;
             DbContext = fixture.DbContext;
-            Uri = new Uri($"{fixture.Client.BaseAddress}/{url}");
+            Uri = new Uri($"{fixture.Client.BaseAddress}{url}");
 
             ModelFactory = new ModelFakerFactory();
             EntityFactory = new EntityFakerFactory(this);

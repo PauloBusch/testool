@@ -39,9 +39,10 @@ namespace TesTool.Core.Services.Common
         {
             var testBaseModel = new TestBase(
                 auth, _helpClass.Name, GetNamespace(),
-                _fixtureService.GetFixtureName(),
+                _fixtureService.GetName(),
                 dbContextClass
             );
+            testBaseModel.AddNamespace(_fixtureService.GetNamespace());
             testBaseModel.AddNamespace(_commonRequestService.GetNamespace());
             testBaseModel.AddNamespace(_factoryModelService.GetNamespace());
             testBaseModel.AddNamespace(_factoryEntityService.GetNamespace());

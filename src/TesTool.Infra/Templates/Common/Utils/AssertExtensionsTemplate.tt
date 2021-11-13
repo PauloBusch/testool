@@ -70,6 +70,9 @@ namespace <#=Namespace#>
                 targetValue = Regex.Unescape(targetValue.ToString());
             }
 
+            if (sourceValue is DateTime sourceDate && targetValue is DateTime targetDate)
+                return Math.Truncate((sourceDate - targetDate).TotalMinutes) == 0;
+
             if (!sourceValue.Equals(targetValue)) return false;
             if (!targetValue.Equals(sourceValue)) return false;
             return true;

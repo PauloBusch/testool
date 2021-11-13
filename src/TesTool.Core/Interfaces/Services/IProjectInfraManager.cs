@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 namespace TesTool.Core.Interfaces.Services
 {
-    public interface IProjectInfraExplorer
+    public interface IProjectInfraManager
     {
+        void AddFileCopyToOutput(string projectPathFile, string fileName);
         bool IsTestProjectFile(string projectPathFile);
         string GetCurrentProject(Func<string, bool> filter = null);
         string GetProjectVersion(string projectPathFile);

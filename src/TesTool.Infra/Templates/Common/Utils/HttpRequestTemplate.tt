@@ -1,12 +1,13 @@
 ﻿<#@ template language="C#" #>
 <#@ assembly name="System.Core" #>
+using JsonNet.ContractResolvers;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -14,7 +15,7 @@ namespace <#=Namespace#>
 {
     public class Request
     {
-        public readonly HttpClient Client;
+                public readonly HttpClient Client;
 
         public Request(HttpClient client) => Client = client;
 
@@ -43,13 +44,13 @@ namespace <#=Namespace#>
 
         public async Task<HttpResponseMessage> PostAsync(Uri uri, dynamic data, dynamic query = null)
         {
-            var content = new StringContent(JsonSerializer.Serialize(data), Encoding.Default, "application/json");
+            var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.Default, "application/json");
             return await Client.PostAsync(new Uri($"{uri}?{GetUrlString(query)}"), content);
         }
 
         public async Task<(HttpResponseMessage response, TResult result)> PostAsync<TResult>(Uri uri, dynamic data, dynamic query = null)
         {
-            var content = new StringContent(JsonSerializer.Serialize(data), Encoding.Default, "application/json");
+            var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.Default, "application/json");
 
             var response = await Client.PostAsync(new Uri($"{uri}?{GetUrlString(query)}"), content);
             return await GetResultAsync<TResult>(response);
@@ -57,13 +58,13 @@ namespace <#=Namespace#>
 
         public async Task<HttpResponseMessage> PutAsync(Uri uri, dynamic data, dynamic query = null)
         {
-            var content = new StringContent(JsonSerializer.Serialize(data), Encoding.Default, "application/json");
+            var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.Default, "application/json");
             return await Client.PutAsync(new Uri($"{uri}?{GetUrlString(query)}"), content);
         }
 
         public async Task<(HttpResponseMessage response, TResult result)> PutAsync<TResult>(Uri uri, dynamic data, dynamic query = null)
         {
-            var content = new StringContent(JsonSerializer.Serialize(data), Encoding.Default, "application/json");
+            var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.Default, "application/json");
 
             var response = await Client.PutAsync(new Uri($"{uri}?{GetUrlString(query)}"), content);
             return await GetResultAsync<TResult>(response);
@@ -71,14 +72,14 @@ namespace <#=Namespace#>
 
         public async Task<HttpResponseMessage> PatchAsync(Uri uri, dynamic data = null, dynamic query = null)
         {
-            var content = new StringContent(JsonSerializer.Serialize(data), Encoding.Default, "application/json");
+            var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.Default, "application/json");
 
             return await Client.PatchAsync(new Uri($"{uri}?{GetUrlString(query)}"), content);
         }
 
         public async Task<(HttpResponseMessage response, TResult result)> PatchAsync<TResult>(Uri uri, dynamic data = null, dynamic query = null)
         {
-            var content = new StringContent(JsonSerializer.Serialize(data), Encoding.Default, "application/json");
+            var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.Default, "application/json");
 
             var response = await Client.PatchAsync(new Uri($"{uri}?{GetUrlString(query)}"), content);
             return await GetResultAsync<TResult>(response);
@@ -128,7 +129,11 @@ namespace <#=Namespace#>
             var json = await response.Content.ReadAsStringAsync();
             try
             {
-                var result = JsonSerializer.Deserialize<TResult>(json);
+                var settings = new JsonSerializerSettings { 
+                    ContractResolver = new PrivateSetterContractResolver(),
+                    ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor
+                };
+                var result = JsonConvert.DeserializeObject<TResult>(json, settings);
                 return (response, result);
             }
             catch (Exception e)
@@ -147,12 +152,9 @@ namespace <#=Namespace#>
             {
                 var value = property.GetValue(data);
                 if (value == null) continue;
-
-                var type = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
-                var valueJson = JsonSerializer.Serialize(value);
+                
+                var valueJson = value is string stringValue ? stringValue : JsonConvert.SerializeObject(value);
                 parameters.Add($"{HttpUtility.UrlEncode(property.Name)}={HttpUtility.UrlEncode(valueJson)}");
-
-                throw new InvalidOperationException($"Not configured conversion from type {property.PropertyType.Name}");
             }
 
             return string.Join("&", parameters);

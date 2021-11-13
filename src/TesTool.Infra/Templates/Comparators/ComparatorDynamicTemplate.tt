@@ -11,7 +11,7 @@ namespace <#=ComparatorNamespace#>
     public class <#=ComparatorClassName#>
     {
 <#      #><# if (SourceClassName!=TargetClassName) { #>
-        public void Equals(<#=TargetClassName#> source, <#=SourceClassName#> target) => Equals(source, target);
+        public void Equals(<#=TargetClassName#> source, <#=SourceClassName#> target) => Equals(target, source);
 <#      #><# } #>
         public void Equals(<#=SourceClassName#> source, <#=TargetClassName#> target)
         {

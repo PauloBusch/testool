@@ -31,13 +31,14 @@ namespace TesTool.Core.Services.Endpoints
         protected override ControllerTestMethodSectionAssertBase GetAssertSection(Endpoint endpoint, DbSet dbSet)
         {
             var requestModel = GetModelComparableEntity(endpoint.Inputs, dbSet?.Entity);
-            var responseModel = GetOutputModel(endpoint.Output);
+            var responseModel = GetResponseModel(endpoint.Output);
+            var outputModel = GetOutputModel(endpoint.Output);
             return new ControllerTestMethodSectionAssertPut(
-                endpoint.Output is TypeBase type && type.Name != "Void",
-                endpoint.Output is Class output && output.Generics.Any(),
+                responseModel is TypeBase type && type.Name != "Void",
+                responseModel is Class output && output.Generics.Any(),
                 GetPropertyData(endpoint.Output), dbSet?.Entity.Name, requestModel?.Name,
-                _compareService.IsComparableClasses(requestModel, responseModel as Class) 
-                    ? _compareService.GetComparatorNameOrDefault(requestModel?.Name, responseModel?.Name) : default,
+                _compareService.IsComparableClasses(requestModel, outputModel as Class) 
+                    ? _compareService.GetComparatorNameOrDefault(requestModel?.Name, outputModel?.Name) : default,
                 _compareService.IsComparableClasses(requestModel, dbSet?.Entity) 
                     ? _compareService.GetComparatorNameOrDefault(requestModel?.Name, dbSet?.Entity.Name) : default
             );

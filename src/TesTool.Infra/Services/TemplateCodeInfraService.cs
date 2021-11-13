@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TesTool.Core.Interfaces.Services;
 using TesTool.Core.Models.Templates.Common;
@@ -19,11 +20,10 @@ namespace TesTool.Infra.Services
 {
     public class TemplateCodeInfraService : ITemplateCodeInfraService
     {
-        private readonly ISolutionInfraService _solutionService;
-
-        public TemplateCodeInfraService(ISolutionInfraService solutionService)
+        public string BuildXUnitRunner()
         {
-            _solutionService = solutionService;
+            var template = new XUnitRunnerTemplate();
+            return TrimRows(template.TransformText());
         }
 
         public string BuildFixture(Fixture model)
@@ -347,11 +347,9 @@ namespace TesTool.Infra.Services
 
         private string[] PrepareNamespaces(IEnumerable<string> namespaces, string currentNamespace)
         {
-            var baseTestNamespace = _solutionService.GetTestProjectNamespace();
             return namespaces
                 .Distinct()
                 .Where(n => n != currentNamespace)
-                .Where(n => n != baseTestNamespace)
                 .Where(n => !string.IsNullOrWhiteSpace(n))
                 .OrderBy(n => n)
                 .ToArray();

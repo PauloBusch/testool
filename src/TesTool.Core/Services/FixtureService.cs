@@ -30,35 +30,36 @@ namespace TesTool.Core.Services
             _testScanInfraService = testScanInfraService;
         }
 
-        public string GetFixturePathFile()
+        public string GetPathFile()
         {
             var projectName = _webApiScanInfraService.GetName();
             var fixtureName = $"{Regex.Replace(projectName, @"\W", string.Empty)}Fixture";
             return @$"{_testScanInfraService.GetDirectoryBase()}\{fixtureName}.cs";
         }
 
-        public Fixture GetFixtureModel(Class dbContextClass)
+        public Fixture GetModel(Class dbContextClass)
         {
             var fixtureModel = new Fixture(
                 dbContextClass,
-                GetFixtureName(),
+                GetName(),
                 _webApiScanInfraService.GetName(),
-                GetFixtureNamespace()
+                GetNamespace()
             );
+            fixtureModel.AddNamespace(_webApiScanInfraService.GetNamespace());
             fixtureModel.AddNamespace(_commonRequestService.GetNamespace());
             fixtureModel.AddNamespace(_commonProjectExplorerService.GetNamespace());
             fixtureModel.AddNamespace(_commonConfigurationLoaderService.GetNamespace());
             return fixtureModel;
         }
 
-        public string GetFixtureName()
+        public string GetName()
         {
             var projectName = _webApiScanInfraService.GetName();
             var normalizedProjectName = Regex.Replace(projectName, @"\W", string.Empty);
             return HelpClassEnumerator.FIXTURE.Name.Replace("{PROJECT_NAME}", normalizedProjectName);
         }
 
-        public string GetFixtureNamespace()
+        public string GetNamespace()
         {
             return $"{_webApiScanInfraService.GetNamespace()}.IntegrationTests";
         }

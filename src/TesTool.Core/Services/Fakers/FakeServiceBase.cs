@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TesTool.Core.Enumerations;
 using TesTool.Core.Interfaces.Services;
 using TesTool.Core.Models.Configuration;
+using TesTool.Core.Models.Enumerators;
 using TesTool.Core.Models.Metadata;
 using TesTool.Core.Models.Templates.Faker;
 
@@ -38,7 +39,7 @@ namespace TesTool.Core.Services.Fakers
 
         protected abstract T MapProperty<T>(string name, string expression, bool @unsafe) where T : PropertyBase;
 
-        protected async Task<T> FillTemplateAsync<T, TProperty>(T templateModel, Class model, bool @static) 
+        protected async Task<T> FillTemplateAsync<T, TProperty>(T templateModel, Class model, BogusMethod bogusMethodFaker, bool @static) 
             where T : FakerBase<TProperty>
             where TProperty : PropertyBase
         {
@@ -77,7 +78,7 @@ namespace TesTool.Core.Services.Fakers
                 {
                     var fakerName = $"{propertyType.Name}Faker";
                     var existingFaker = await _testScanInfraService.GetClassAsync(fakerName);
-                    var expression = BogusMethodEnumerator.COMPLEX_OBJECT.Expression.Replace("{FAKER_NAME}", fakerName);
+                    var expression = bogusMethodFaker.Expression.Replace("{FAKER_NAME}", fakerName);
                     var bogusProperty = MapProperty<TProperty>(property.Name, expression, existingFaker is null);
                     if (existingFaker is not null) templateModel.AddNamespace(existingFaker.Namespace);
                     templateModel.AddProperty(bogusProperty);

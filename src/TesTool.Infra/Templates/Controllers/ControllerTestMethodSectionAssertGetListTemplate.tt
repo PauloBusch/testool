@@ -8,7 +8,7 @@
     if (ResponseIsGeneric)
     {
 #>
-    var <#= listVariable #> = result?.<#= PropertyData #>;
+    var <#= listVariable #> = result?.<#= PropertyData ?? string.Empty #>;
 <#
     }
 #>

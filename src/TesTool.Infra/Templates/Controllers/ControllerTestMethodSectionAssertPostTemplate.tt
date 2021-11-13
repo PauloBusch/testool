@@ -9,11 +9,11 @@
         if (ResponseIsGeneric)
         {
 #>
-    var <#= responseVariable #> = result?.<#= PropertyData #>;
+    var <#= responseVariable #> = result?.<#= PropertyData ?? string.Empty #>;
 <#
         }
 #>
-    Assert.NotEqual(default, <#= responseVariable #>);
+    Assert.NotNull(<#= responseVariable #>);
 <#
         if (!string.IsNullOrWhiteSpace(ComparatorModel))
         {

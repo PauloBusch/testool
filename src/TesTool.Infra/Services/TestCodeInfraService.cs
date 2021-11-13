@@ -19,7 +19,7 @@ namespace TesTool.Infra.Services
 
         public TestCodeInfraService(
             ICmdInfraService cmdInfraService,
-            IProjectInfraExplorer projectInfraExplorer,
+            IProjectInfraManager projectInfraExplorer,
             ILoggerInfraService loggerInfraService,
             ISettingInfraService settingInfraService,
             IWebApiScanInfraService webApiScanInfraService,
@@ -49,9 +49,11 @@ namespace TesTool.Infra.Services
                 @$"del /f ""{fullOutput}\*.cs"""
             };
             var commandsInstallPackages = new List<string> {
-                @$"dotnet add ""{fullOutput}"" package Microsoft.AspNetCore.TestHost",
-                @$"dotnet add ""{fullOutput}"" package bogus",
-                @$"dotnet restore ""{fullOutput}"""
+                @$"dotnet add ""{fullOutput}"" package bogus --no-restore",
+                @$"dotnet add ""{fullOutput}"" package Microsoft.AspNetCore.TestHost --no-restore",
+                @$"dotnet add ""{fullOutput}"" package Newtonsoft.Json --no-restore",
+                @$"dotnet add ""{fullOutput}"" package JsonNet.ContractResolvers --no-restore",
+                @$"dotnet restore ""{fullOutput}"" --disable-parallel"
             };
 
             _loggerInfraService.LogInformation($"Criando projeto {name}.");

@@ -58,7 +58,6 @@ namespace <#= FixtureNamespace #>
             try
             {
                 await DbContext.Database.EnsureCreatedAsync();
-                await DbContext.Database.MigrateAsync();
             }
             catch (Exception)
             {

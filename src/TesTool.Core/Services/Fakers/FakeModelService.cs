@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using TesTool.Core.Enumerations;
 using TesTool.Core.Interfaces.Services;
 using TesTool.Core.Interfaces.Services.Fakers;
 using TesTool.Core.Models.Metadata;
@@ -26,7 +27,7 @@ namespace TesTool.Core.Services.Fakers
         public async Task<ModelFaker> GetFakerModelAsync(Class model, bool @static)
         {
             var templateModel = new ModelFaker(model.Name, GetNamespace());
-            return await FillTemplateAsync<ModelFaker, ModelProperty>(templateModel, model, @static);
+            return await FillTemplateAsync<ModelFaker, ModelProperty>(templateModel, model, BogusMethodEnumerator.COMPLEX_OBJECT, @static);
         }
 
         public string GetNamespace()

@@ -36,6 +36,7 @@ namespace TesTool.Core.Interfaces.Services
         string BuildComparatorFactory(ComparatorFactory model);
         string BuildComparatorFactoryMethod(ComparatorFactoryMethod model);
 
+        string BuildXUnitRunner();
         string BuildFixture(Fixture model);
         string BuildAssertExtensions(string @namespace);
         string BuildHttpRequest(string @namespace);

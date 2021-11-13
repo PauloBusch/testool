@@ -38,7 +38,7 @@ namespace TesTool.Cli
                 .AddSingleton<IWebApiDbContextInfraService, WebApiDbContextInfraService>()
                 .AddSingleton<ITestScanInfraService, TestScanInfraService>()
                 .AddSingleton<ITestCodeInfraService, TestCodeInfraService>()
-                .AddSingleton<IProjectInfraExplorer, ProjectInfraExplorer>()
+                .AddSingleton<IProjectInfraManager, ProjectInfraManager>()
 
                 .AddSingleton<IFakeModelService, FakeModelService>()
                 .AddSingleton<IFakeEntityService, FakeEntityService>()
@@ -46,6 +46,7 @@ namespace TesTool.Cli
                 .AddSingleton<IControllerService, ControllerService>()
                 .AddSingleton<IFixtureService, FixtureService>()
                 .AddSingleton<ICommonRequestService, CommonRequestService>()
+                .AddSingleton<ICommonXUnitRunnerService, CommonXUnitRunnerService>()
                 .AddSingleton<ICommonProjectExplorerService, CommonProjectExplorerService>()
                 .AddSingleton<ICommonConfigurationLoaderService, CommonConfigurationLoaderService>()
                 .AddSingleton<ICommonAssertExtensionsService, CommonAssertExtensionsService>()

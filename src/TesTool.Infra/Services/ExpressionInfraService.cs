@@ -54,6 +54,8 @@ namespace TesTool.Infra.Services
             var stringValue = JsonSerializer.Serialize(result);
             if (result is decimal) stringValue += "m";
             if (result is Guid) stringValue = $"new Guid({stringValue})";
+            if (result is DateTime) stringValue = $"DateTime.Parse({stringValue})";
+            if (result is DateTimeOffset) stringValue = $"DateTimeOffset.Parse({stringValue})";
             return stringValue;
         }
     }
