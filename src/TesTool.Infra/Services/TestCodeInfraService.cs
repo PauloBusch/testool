@@ -45,8 +45,8 @@ namespace TesTool.Infra.Services
             var commandsCreateProject = new List<string> { 
                 @$"dotnet new xunit --name ""{name}"" --output ""{fullOutput}"" --no-restore",
                 @$"dotnet sln ""{solutionPathFile}"" add ""{fullOutput}""",
-                @$"dotnet add ""{name}"" reference ""{webApiProjectPathFile}""",
-                @$"del /f ""{fullOutput}\*.cs"""
+                @$"dotnet add ""{fullOutput}"" reference ""{webApiProjectPathFile}""",
+                @$"del ""{fullOutput}\*.cs"" /s /q"
             };
             var commandsInstallPackages = new List<string> {
                 @$"dotnet add ""{fullOutput}"" package bogus --no-restore",

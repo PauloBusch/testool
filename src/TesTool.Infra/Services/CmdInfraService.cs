@@ -21,7 +21,7 @@ namespace TesTool.Infra.Services
                 WindowStyle = ProcessWindowStyle.Hidden,
                 FileName = "cmd.exe",
                 CreateNoWindow = true,
-                Arguments = $"/C {string.Join(" && ", commands)}"
+                Arguments = $"/C {string.Join(" & ", commands)}"
             };
             var process = new Process { 
                 EnableRaisingEvents = true,
